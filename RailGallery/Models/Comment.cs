@@ -10,5 +10,8 @@ namespace RailGallery.Models
         public int CommentID { get; set; }
         public string CommentText { get; set; }
         public DateTime CommentDate { get; set; }
+
+        public ApplicationUser ApplicationUser { get; set; }
+        public Image Image { get; set; }
     }
 }

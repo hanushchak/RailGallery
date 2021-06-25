@@ -12,5 +12,7 @@ namespace RailGallery.Models
         public Privacy AlbumPrivacy { get; set; }
 
         public ICollection<Image> Images { get; set; }
+
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }
