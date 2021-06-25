@@ -1,0 +1,65 @@
+﻿@model RailGallery.Models.Image
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Image</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ImageID" />
+            <div class="form-group">
+                <label asp-for="ImageTitle" class="control-label"></label>
+                <input asp-for="ImageTitle" class="form-control" />
+                <span asp-validation-for="ImageTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageDescription" class="control-label"></label>
+                <input asp-for="ImageDescription" class="form-control" />
+                <span asp-validation-for="ImageDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageMetadata" class="control-label"></label>
+                <input asp-for="ImageMetadata" class="form-control" />
+                <span asp-validation-for="ImageMetadata" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageTakenDate" class="control-label"></label>
+                <input asp-for="ImageTakenDate" class="form-control" />
+                <span asp-validation-for="ImageTakenDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUploadedDate" class="control-label"></label>
+                <input asp-for="ImageUploadedDate" class="form-control" />
+                <span asp-validation-for="ImageUploadedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageStatus" class="control-label"></label>
+                <select asp-for="ImageStatus" class="form-control"></select>
+                <span asp-validation-for="ImageStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImagePrivacy" class="control-label"></label>
+                <select asp-for="ImagePrivacy" class="form-control"></select>
+                <span asp-validation-for="ImagePrivacy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
