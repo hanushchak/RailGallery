@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RailGallery.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,5 +13,19 @@ namespace RailGallery.Data
             : base(options)
         {
         }
+
+        // Image model
+        public DbSet<Image> Images { get; set; }
+        public DbSet<Album> Albums { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Like> Likes { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<Category> Categories { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
+
     }
 }
