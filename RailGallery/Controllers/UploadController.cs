@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -69,11 +71,45 @@ namespace RailGallery.Controllers
                 string fileExtenstion = Path.GetExtension(image.ImageFile.FileName);
                 string uniqueFileName = Guid.NewGuid().ToString() + fileExtenstion;
                 string filePath = Path.Combine(wwwRootPath, "photo", uniqueFileName);
+                
+                //TODO Check size
                 using (FileStream fileStream = new (filePath, FileMode.Create))
                 {
                     await image.ImageFile.CopyToAsync(fileStream);
                 }
 
+                // Create image thumbnail
+                int thumbnailSize = 300; // In px
+
+                System.Drawing.Image sourceImage = System.Drawing.Image.FromFile(filePath);
+
+                int width, height;
+
+                if(sourceImage.Width >= sourceImage.Height)
+                {
+                    height = (int)((thumbnailSize * sourceImage.Height) / sourceImage.Width);
+                    width = thumbnailSize;
+                }
+                else
+                {
+                    height = thumbnailSize;
+                    width = (int)((thumbnailSize * sourceImage.Width) / sourceImage.Height);
+                }
+                
+                System.Drawing.Bitmap thumbnailImage = new System.Drawing.Bitmap(width, height);
+                using (System.Drawing.Graphics gr = System.Drawing.Graphics.FromImage(thumbnailImage))
+                {
+                    gr.SmoothingMode = SmoothingMode.Default;
+                    gr.InterpolationMode = InterpolationMode.Default;
+                    gr.PixelOffsetMode = PixelOffsetMode.Default;
+                    gr.DrawImage(sourceImage, new System.Drawing.Rectangle(0, 0, width, height));
+                    sourceImage.Dispose();
+                }
+
+                thumbnailImage.Save(Path.Combine(wwwRootPath, "photo/thumbnails", "s_" + uniqueFileName));
+                thumbnailImage.Dispose();
+
+                // Save image to database
                 image.ImagePath = uniqueFileName;
 
                 _context.Add(image);
@@ -162,10 +198,16 @@ namespace RailGallery.Controllers
             // Delete the image from the folder
             if(image.ImagePath is not null)
             {
-                string file = Path.Combine(_webHostEnvironment.WebRootPath, "photo", image.ImagePath);
-                if (System.IO.File.Exists(file))
+                string imageFile = Path.Combine(_webHostEnvironment.WebRootPath, "photo", image.ImagePath);
+                if (System.IO.File.Exists(imageFile))
                 {
-                    System.IO.File.Delete(file);
+                    System.IO.File.Delete(imageFile);
+                }
+
+                string imageThumbnail = Path.Combine(_webHostEnvironment.WebRootPath, "photo/thumbnails", "s_" + image.ImagePath);
+                if (System.IO.File.Exists(imageThumbnail))
+                {
+                    System.IO.File.Delete(imageThumbnail);
                 }
             }
             

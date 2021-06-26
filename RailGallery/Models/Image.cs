@@ -58,6 +58,8 @@ namespace RailGallery.Models
         public ICollection<Favorite> Favorites { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
+
+        [Display(Name = "Category")]
         public Category Category { get; set; }
 
         public Image()

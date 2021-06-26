@@ -25,6 +25,12 @@ namespace RailGallery.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Category>().HasData(
+                    new Category { CategoryID = 1, CategoryTitle = "Night Shots" },
+                    new Category { CategoryID = 2, CategoryTitle = "Golden Hour" },
+                    new Category { CategoryID = 3, CategoryTitle = "Passanger Trains" }
+            );
         }
 
     }

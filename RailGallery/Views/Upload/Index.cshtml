@@ -28,20 +28,27 @@
                 <input asp-for="ImageTakenDate" class="form-control" />
                 <span asp-validation-for="ImageTakenDate" class="text-danger"></span>
             </div>
-@*            <div class="form-group">
-                <label asp-for="ImageStatus" class="control-label"></label>
-                <select asp-for="ImageStatus" class="form-control" asp-items="Html.GetEnumSelectList<Status>()"></select>
-                <span asp-validation-for="ImageStatus" class="text-danger"></span>
-            </div>*@
+            @*            <div class="form-group">
+            <label asp-for="ImageStatus" class="control-label"></label>
+            <select asp-for="ImageStatus" class="form-control" asp-items="Html.GetEnumSelectList<Status>()"></select>
+            <span asp-validation-for="ImageStatus" class="text-danger"></span>
+        </div>*@
             <div class="form-group">
                 <label asp-for="ImagePrivacy" class="control-label"></label>
                 <select asp-for="ImagePrivacy" class="form-control" asp-items="Html.GetEnumSelectList<Privacy>()"></select>
                 <span asp-validation-for="ImagePrivacy" class="text-danger"></span>
             </div>
+@*            <div class="form-group">
+                <label asp-for="Category" class="control-label"></label>
+                <select asp-for="Category" class="form-control" asp-items="">
+                    <option value="">Choose Category</option>
+                </select>
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>*@
             <div class="form-group">
 
                 <label asp-for="ImageFile" class="control-label"></label>
-                <input asp-for="ImageFile" accept="image/jpg"/>
+                <input asp-for="ImageFile" accept="image/jpg" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
             <div class="form-group">
