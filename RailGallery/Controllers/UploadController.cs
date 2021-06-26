@@ -69,7 +69,7 @@ namespace RailGallery.Controllers
                 string fileExtenstion = Path.GetExtension(image.ImageFile.FileName);
                 string uniqueFileName = Guid.NewGuid().ToString() + fileExtenstion;
                 string filePath = Path.Combine(wwwRootPath, "photo", uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                using (FileStream fileStream = new (filePath, FileMode.Create))
                 {
                     await image.ImageFile.CopyToAsync(fileStream);
                 }

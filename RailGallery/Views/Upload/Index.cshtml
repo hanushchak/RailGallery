@@ -20,29 +20,19 @@
             </div>
             <div class="form-group">
                 <label asp-for="ImageDescription" class="control-label"></label>
-                <input asp-for="ImageDescription" class="form-control" />
+                <textarea asp-for="ImageDescription" class="form-control"></textarea>
                 <span asp-validation-for="ImageDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageMetadata" class="control-label"></label>
-                <input asp-for="ImageMetadata" class="form-control" />
-                <span asp-validation-for="ImageMetadata" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ImageTakenDate" class="control-label"></label>
                 <input asp-for="ImageTakenDate" class="form-control" />
                 <span asp-validation-for="ImageTakenDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ImageUploadedDate" class="control-label"></label>
-                <input asp-for="ImageUploadedDate" class="form-control" />
-                <span asp-validation-for="ImageUploadedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+@*            <div class="form-group">
                 <label asp-for="ImageStatus" class="control-label"></label>
                 <select asp-for="ImageStatus" class="form-control" asp-items="Html.GetEnumSelectList<Status>()"></select>
                 <span asp-validation-for="ImageStatus" class="text-danger"></span>
-            </div>
+            </div>*@
             <div class="form-group">
                 <label asp-for="ImagePrivacy" class="control-label"></label>
                 <select asp-for="ImagePrivacy" class="form-control" asp-items="Html.GetEnumSelectList<Privacy>()"></select>

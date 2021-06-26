@@ -23,23 +23,32 @@ namespace RailGallery.Models
     {
         [Display(Name = "ID")]
         public int ImageID { get; set; }
-        [Required]
         [Display(Name = "Title")]
+        [Required]
         public string ImageTitle { get; set; }
         [Display(Name = "Description")]
         public string ImageDescription { get; set; }
         [Display(Name = "EXIF")]
         public string ImageMetadata { get; set; }
         [Display(Name = "Date Taken")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [Required]
         public DateTime ImageTakenDate { get; set; }
         [Display(Name = "Date Uploaded")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [Required]
         public DateTime ImageUploadedDate { get; set; }
         [Display(Name = "Status")]
+        [Required]
         public Status ImageStatus { get; set; }
         [Display(Name = "Privacy")]
+        [Required]
         public Privacy ImagePrivacy { get; set; }
         public String ImagePath { get; set; }
         [NotMapped]
+        [Required]
         [Display(Name = "Image File")]
         public IFormFile ImageFile { get; set; }
 
