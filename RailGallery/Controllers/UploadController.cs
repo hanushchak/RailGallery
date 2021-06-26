@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +17,12 @@ namespace RailGallery.Controllers
     public class UploadController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public UploadController(ApplicationDbContext context)
+        public UploadController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = hostEnvironment;
         }
 
         // GET: Upload
@@ -56,10 +60,22 @@ namespace RailGallery.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImageID,ImageTitle,ImageDescription,ImageMetadata,ImageTakenDate,ImageUploadedDate,ImageStatus,ImagePrivacy")] Image image)
+        public async Task<IActionResult> Create([Bind("ImageID,ImageTitle,ImageDescription,ImageMetadata,ImageTakenDate,ImageUploadedDate,ImageStatus,ImagePrivacy,ImageFile")] Image image)
         {
             if (ModelState.IsValid)
             {
+                // Upload image to wwwroot folder
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                string fileExtenstion = Path.GetExtension(image.ImageFile.FileName);
+                string uniqueFileName = Guid.NewGuid().ToString() + fileExtenstion;
+                string filePath = Path.Combine(wwwRootPath, "photo", uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.ImageFile.CopyToAsync(fileStream);
+                }
+
+                image.ImagePath = uniqueFileName;
+
                 _context.Add(image);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -142,6 +158,18 @@ namespace RailGallery.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var image = await _context.Images.FindAsync(id);
+
+            // Delete the image from the folder
+            if(image.ImagePath is not null)
+            {
+                string file = Path.Combine(_webHostEnvironment.WebRootPath, "photo", image.ImagePath);
+                if (System.IO.File.Exists(file))
+                {
+                    System.IO.File.Delete(file);
+                }
+            }
+            
+
             _context.Images.Remove(image);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

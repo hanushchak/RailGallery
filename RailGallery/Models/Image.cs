@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RailGallery.Models
 {
@@ -36,6 +38,10 @@ namespace RailGallery.Models
         public Status ImageStatus { get; set; }
         [Display(Name = "Privacy")]
         public Privacy ImagePrivacy { get; set; }
+        public String ImagePath { get; set; }
+        [NotMapped]
+        [Display(Name = "Image File")]
+        public IFormFile ImageFile { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
         public ICollection<Album> Albums { get; set; }
@@ -44,5 +50,11 @@ namespace RailGallery.Models
 
         public ApplicationUser ApplicationUser { get; set; }
         public Category Category { get; set; }
+
+        public Image()
+        {
+            this.ImageUploadedDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
+            this.ImageStatus = Status.Pending;
+        }
     }
 }
