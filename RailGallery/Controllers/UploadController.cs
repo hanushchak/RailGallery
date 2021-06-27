@@ -106,7 +106,7 @@ namespace RailGallery.Controllers
                     sourceImage.Dispose();
                 }
 
-                thumbnailImage.Save(Path.Combine(wwwRootPath, "photo/thumbnails", "s_" + uniqueFileName));
+                thumbnailImage.Save(Path.Combine(wwwRootPath, "photo/thumbnail", "s_" + uniqueFileName));
                 thumbnailImage.Dispose();
 
                 // Save image to database
@@ -204,7 +204,7 @@ namespace RailGallery.Controllers
                     System.IO.File.Delete(imageFile);
                 }
 
-                string imageThumbnail = Path.Combine(_webHostEnvironment.WebRootPath, "photo/thumbnails", "s_" + image.ImagePath);
+                string imageThumbnail = Path.Combine(_webHostEnvironment.WebRootPath, "photo/thumbnail", "s_" + image.ImagePath);
                 if (System.IO.File.Exists(imageThumbnail))
                 {
                     System.IO.File.Delete(imageThumbnail);

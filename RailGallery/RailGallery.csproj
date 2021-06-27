@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\photo\thumbnails\" />
+    <Folder Include="wwwroot\photo\thumbnail\" />
   </ItemGroup>
 
 </Project>
