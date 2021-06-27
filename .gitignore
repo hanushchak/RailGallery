@@ -452,3 +452,5 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+/RailGallery/wwwroot/photo/thumbnail/*.jpg
+/RailGallery/wwwroot/photo/*.jpg
