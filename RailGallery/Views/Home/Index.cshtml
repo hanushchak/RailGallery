@@ -1,8 +1,25 @@
-﻿@{
+﻿@model dynamic
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h3 class="display-4">Recently Added</h3>
 </div>
+
+    @foreach (var image in Model.LasestImages)
+    {
+
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="/api/Photo/@image.ImageID/Thumbnail" asp-append-version="true" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">@image.ImageTitle</h5>
+                <p class="card-text">Comments: @image.Comments.Count</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    }
+
+
+
+

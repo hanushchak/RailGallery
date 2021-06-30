@@ -14,6 +14,8 @@
     <thead>
         <tr>
             <th>
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.ImageTitle)
             </th>
             <th>
@@ -40,6 +42,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                <img src="/api/Photo/@item.ImageID/Thumbnail" asp-append-version="true" />
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ImageTitle)
             </td>
