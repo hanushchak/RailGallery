@@ -50,18 +50,18 @@ namespace RailGallery.Controllers
         // POST: View/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("View/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PostComment([Bind("CommentText")] Comment comment)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                comment.CommentDate = DateTime.UtcNow;
-                _context.Add(comment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(View));
+                return Content("Error");
             }
-            return View();
+            comment.CommentDate = DateTime.UtcNow;
+            _context.Add(comment);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("View", new { @id = 32 });
         }
 
         // GET: View/Edit/5

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,10 +22,14 @@ namespace RailGallery.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public UploadController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public UploadController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _webHostEnvironment = hostEnvironment;
+            _userManager = userManager;
+
         }
 
         // GET: Upload
@@ -111,6 +116,9 @@ namespace RailGallery.Controllers
 
                 // Save image to database
                 image.ImagePath = uniqueFileName;
+
+                // Add author
+                image.ApplicationUser = await _userManager.GetUserAsync(HttpContext.User);
 
                 _context.Add(image);
                 await _context.SaveChangesAsync();
