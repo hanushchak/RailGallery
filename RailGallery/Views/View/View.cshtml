@@ -9,7 +9,7 @@
     <h4>Image</h4>
     <hr />
     <dl class="row">
-        <img src="/api/Photo/@Model.ImageID" asp-append-version="true" max-width="100%"/>
+        <img src="/api/Photo/@Model.ImageID" asp-append-version="true" max-width="100%" />
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ImageTitle)
         </dt>
@@ -60,6 +60,11 @@
         </dd>
     </dl>
 </div>
+
+
+<partial name="_CommentForm" model="new Comment { Image = Model }" />
+
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ImageID">Edit</a> |
     <a asp-action="Index">Back to List</a>

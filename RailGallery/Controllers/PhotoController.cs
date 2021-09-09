@@ -28,7 +28,7 @@ namespace RailGallery.Controllers
 
         // GET Thumbnail
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPhoto(int id)
+        public async Task<IActionResult> GetPhoto(int? id)
         {
             if (id == null)
             {
@@ -53,7 +53,7 @@ namespace RailGallery.Controllers
 
         // GET Thumbnail
         [HttpGet("{id}/Thumbnail")]
-        public async Task<IActionResult> GetThumbnail(int id)
+        public async Task<IActionResult> GetThumbnail(int? id)
         {
             if (id == null)
             {

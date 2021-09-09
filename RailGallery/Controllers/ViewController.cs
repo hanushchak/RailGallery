@@ -19,12 +19,6 @@ namespace RailGallery.Controllers
             _context = context;
         }
 
-        // GET: View
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Images.ToListAsync());
-        }
-
         // GET: View/5
         [Route("View/{id}")]
         public async Task<IActionResult> View(int? id)
@@ -33,6 +27,7 @@ namespace RailGallery.Controllers
             {
                 return NotFound();
             }
+
 
             var image = await _context.Images
                 .Include(m => m.Comments)
@@ -52,30 +47,25 @@ namespace RailGallery.Controllers
             return View(image);
         }
 
-        /*// GET: View/Create
-        public IActionResult Create()
-        {
-            return View();
-        }*/
-
         // POST: View/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        /*[HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImageID,ImageTitle,ImageDescription,ImageMetadata,ImageTakenDate,ImageUploadedDate,ImageStatus,ImagePrivacy,ImagePath")] Image image)
+        public async Task<IActionResult> PostComment([Bind("CommentText")] Comment comment)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(image);
+                comment.CommentDate = DateTime.UtcNow;
+                _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(View));
             }
-            return View(image);
-        }*/
+            return View();
+        }
 
         // GET: View/Edit/5
-        /*public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -88,12 +78,12 @@ namespace RailGallery.Controllers
                 return NotFound();
             }
             return View(image);
-        }*/
+        }
 
         // POST: View/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        /*[HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ImageID,ImageTitle,ImageDescription,ImageMetadata,ImageTakenDate,ImageUploadedDate,ImageStatus,ImagePrivacy,ImagePath")] Image image)
         {
@@ -123,10 +113,10 @@ namespace RailGallery.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(image);
-        }*/
+        }
 
         // GET: View/Delete/5
-        /*public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -141,10 +131,10 @@ namespace RailGallery.Controllers
             }
 
             return View(image);
-        }*/
+        }
 
         // POST: View/Delete/5
-        /*[HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -152,7 +142,7 @@ namespace RailGallery.Controllers
             _context.Images.Remove(image);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }*/
+        }
 
         private bool ImageExists(int id)
         {
