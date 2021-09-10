@@ -29,7 +29,7 @@ namespace RailGallery
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     await ContextSeed.SeedRolesAsync(userManager, roleManager);
-                    await ContextSeed.SeedSuperAdminAsync(userManager, roleManager);
+                    await ContextSeed.SeedUsersAsyc(userManager, roleManager);
                 }
                 catch (Exception ex)
                 {
