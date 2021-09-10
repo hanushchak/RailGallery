@@ -29,6 +29,7 @@ namespace RailGallery
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     await ContextSeed.SeedRolesAsync(userManager, roleManager);
+                    await ContextSeed.SeedSuperAdminAsync(userManager, roleManager);
                 }
                 catch (Exception ex)
                 {
@@ -36,6 +37,7 @@ namespace RailGallery
                     logger.LogError(ex, "An error occurred seeding the DB.");
                 }
             }
+
             host.Run();
             
         }
