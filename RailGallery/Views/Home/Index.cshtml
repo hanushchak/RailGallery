@@ -3,22 +3,52 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h3 class="display-4">Recently Added</h3>
-</div>
 
-    @foreach (var image in Model.LasestImages)
-    {
-        <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID">
-            <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="/api/Photo/@image.ImageID/Thumbnail" asp-append-version="true" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">@image.ImageTitle</h5>
-                    <p class="card-text">Comments: @image.Comments.Count</p>
+<div class="row">
+    <div class="col-3 text-center border-right">
+        <h4>Top viewed</h4>
+        <h6 class="card-subtitle mb-2 text-muted">(in last 24 hours)</h6>
+        <div class="d-flex justify-content-center flex-wrap">
+            @foreach (var image in Model.Top24HoursImages)
+            {
+                <div class="d-inline-flex align-self-start p-2">
+                    <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID">
+                        <div class="card">
+                            <img class="card-img-top" src="/api/Photo/@image.ImageID/Thumbnail" asp-append-version="true" alt="Card image cap">
+                            <div class="card-body p-2">
+                                <h5 class="card-title">@image.ImageTitle</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">by <b>@image.ApplicationUser.UserName</b></h6>
+                                <p class="card-text"><b>141</b> views, <b>@image.Comments.Count</b> comments, <b>14</b> likes </p>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </div>
-        </a>
-    }
+            }
+        </div>
+    </div>
+
+
+    <div class="col-9 text-center border-left">
+        <h4>Most recent</h4>
+        <div class="d-flex justify-content-center flex-wrap">
+            @foreach (var image in Model.LasestImages)
+            {
+                <div class="d-inline-flex align-self-start p-2">
+                    <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID">
+                        <div class="card">
+                            <img class="card-img-top" src="/api/Photo/@image.ImageID/Thumbnail" asp-append-version="true" alt="Card image cap">
+                            <div class="card-body p-2">
+                                <h5 class="card-title">@image.ImageTitle</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">by <b>@image.ApplicationUser.UserName</b></h6>
+                                <p class="card-text"><b>@image.Comments.Count</b> comments, <b>14</b> likes </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
 
 
 

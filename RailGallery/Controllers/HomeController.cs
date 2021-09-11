@@ -26,8 +26,18 @@ namespace RailGallery.Controllers
         public IActionResult Index()
         {
             dynamic homeModel = new ExpandoObject();
-            homeModel.LasestImages = _context.Images.OrderBy(i => i.ImageUploadedDate)
+
+            // Most recent images
+            homeModel.LasestImages = _context.Images.OrderByDescending(i => i.ImageUploadedDate)
                 .Include(c => c.Comments)
+                .Include(c => c.ApplicationUser)
+                .Take(12)
+                .AsNoTracking();
+
+            homeModel.Top24HoursImages = _context.Images.OrderBy(i => i.ImageUploadedDate)
+                .Include(c => c.Comments)
+                .Include(c => c.ApplicationUser)
+                .Take(6)
                 .AsNoTracking();
 
             return View(homeModel);

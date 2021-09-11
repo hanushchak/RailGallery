@@ -7,19 +7,15 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CommentText" class="control-label"></label>
-                <input asp-for="CommentText" class="form-control" />
+                <textarea asp-for="CommentText" class="form-control"></textarea>
                 <span asp-validation-for="CommentText" class="text-danger"></span>
                 <input name="ImageID" type="hidden" value="@Model.Image.ImageID">
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Publish Comment" class="btn btn-primary" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
