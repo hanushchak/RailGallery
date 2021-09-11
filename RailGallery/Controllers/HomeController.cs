@@ -31,7 +31,7 @@ namespace RailGallery.Controllers
             homeModel.LasestImages = _context.Images.OrderByDescending(i => i.ImageUploadedDate)
                 .Include(c => c.Comments)
                 .Include(c => c.ApplicationUser)
-                .Take(12)
+                .Take(24)
                 .AsNoTracking();
 
             homeModel.Top24HoursImages = _context.Images.OrderBy(i => i.ImageUploadedDate)
