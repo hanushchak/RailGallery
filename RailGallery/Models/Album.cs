@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RailGallery.Models
 {
@@ -7,7 +8,11 @@ namespace RailGallery.Models
     public class Album
     {
         public int AlbumID { get; set; }
+        [Display(Name = "Album Title")]
+        [Required]
         public string AlbumTitle { get; set; }
+        [Display(Name = "Album Privacy")]
+        [Required]
         public Privacy AlbumPrivacy { get; set; }
 
         public ICollection<Image> Images { get; set; }

@@ -1,1 +1,64 @@
-﻿Search Controller
+﻿@{
+    ViewData["Title"] = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <form asp-controller="Search" asp-action="Results" method="get">
+            <h4>@ViewData["Title"]</h4>
+            <hr />
+
+            <div class="form-group">
+                <label for="ImageTitle" class="control-label">Photo Title</label>
+                <input id="ImageTitle" name="ImageTitle" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="ImageAuthor" class="control-label">Author Name</label>
+                <input id="ImageAuthor" name="ImageAuthor" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="ImageDescription" class="control-label">Photo Description</label>
+                <textarea id="ImageDescription" name="ImageDescription" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="LocomotiveModel" class="control-label">Locomotive Model</label>
+                <input id="LocomotiveModel" name="LocomotiveModel" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="LocomotiveBuilt" class="control-label">Locomotive Built</label>
+                <input id="LocomotiveBuilt" name="LocomotiveModel" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="ImageAlbum" class="control-label">Album</label>
+                <input id="ImageAlbum" name="ImageAlbum" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="ImageCategory" class="control-label">Category</label>
+                <input id="ImageCategory" name="ImageCategory" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="ImageTakenDate" class="control-label">Date Taken</label>
+                <input id="ImageTakenDate" name="ImageTakenDate" type="date" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="ImageLocation" class="control-label">Location</label>
+                <input id="ImageLocation" name="ImageLocation" class="form-control" />
+            </div>
+            <div class="form-group">
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <input type="submit" value="Search" class="btn btn-primary" />
+                    </div>
+                    <div class="col-auto">
+                        <a asp-controller="Search" asp-action="Results">Show All Photos</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

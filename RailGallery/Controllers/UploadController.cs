@@ -16,7 +16,7 @@ using RailGallery.Models;
 
 namespace RailGallery.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class UploadController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -41,7 +41,12 @@ namespace RailGallery.Controllers
         // GET: Upload/History
         public async Task<IActionResult> History()
         {
-            return View(await _context.Images.ToListAsync());
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            // Only retrieve images that belong to current user
+            var history = await _context.Images.Where(i => i.ApplicationUser.UserName.Equals(user.UserName)).OrderByDescending(i => i.ImageUploadedDate).ToListAsync();
+
+            return View(history);
         }
 
         // GET: Upload/Details/5

@@ -1,15 +1,12 @@
 ﻿@model IEnumerable<RailGallery.Models.Image>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Upload History";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<h4>@ViewData["Title"]</h4> <a asp-action="Index">Upload New Photo</a>
+<hr />
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Index">Upload New Photo</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -22,28 +19,26 @@
                 @Html.DisplayNameFor(model => model.ImageDescription)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ImageMetadata)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.ImageTakenDate)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ImageUploadedDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ImageStatus)
+                @Html.DisplayNameFor(model => model.ImagePrivacy)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ImagePrivacy)
+                @Html.DisplayNameFor(model => model.ImageStatus)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
-                <img src="/api/Photo/@item.ImageID/Thumbnail" asp-append-version="true" />
+                <a asp-action="Details" asp-route-id="@item.ImageID"><img src="/api/Photo/@item.ImageID/Thumbnail" asp-append-version="true" /></a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ImageTitle)
@@ -52,19 +47,16 @@
                 @Html.DisplayFor(modelItem => item.ImageDescription)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImageMetadata)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.ImageTakenDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ImageUploadedDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImageStatus)
+                @Html.DisplayFor(modelItem => item.ImagePrivacy)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImagePrivacy)
+                @Html.DisplayFor(modelItem => item.ImageStatus)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ImageID">Edit</a> |
@@ -72,6 +64,6 @@
                 <a asp-action="Delete" asp-route-id="@item.ImageID">Delete</a>
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>
