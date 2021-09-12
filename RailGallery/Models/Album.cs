@@ -8,7 +8,6 @@ namespace RailGallery.Models
     {
         public int AlbumID { get; set; }
         public string AlbumTitle { get; set; }
-        public string AlbumDescription { get; set; }
         public Privacy AlbumPrivacy { get; set; }
 
         public ICollection<Image> Images { get; set; }
