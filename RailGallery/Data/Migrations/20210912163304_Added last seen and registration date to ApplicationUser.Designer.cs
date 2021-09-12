@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RailGallery.Data;
 
 namespace RailGallery.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210912163304_Added last seen and registration date to ApplicationUser")]
+    partial class AddedlastseenandregistrationdatetoApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -210,8 +212,8 @@ namespace RailGallery.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastActivityDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("LastActivityDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -236,8 +238,8 @@ namespace RailGallery.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("RegisterationDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("RegisterationDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
