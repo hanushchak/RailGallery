@@ -1,17 +1,15 @@
 ﻿@model RailGallery.Models.Image
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Upload Photo";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Upload Photo</h1>
-
-<h4>Image</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 offset-md-4">
         <form asp-action="Create" enctype="multipart/form-data">
+            <h4>@ViewData["Title"]</h4>
+            <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ImageTitle" class="control-label"></label>
@@ -38,13 +36,13 @@
                 <select asp-for="ImagePrivacy" class="form-control" asp-items="Html.GetEnumSelectList<Privacy>()"></select>
                 <span asp-validation-for="ImagePrivacy" class="text-danger"></span>
             </div>
-@*            <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <select asp-for="Category" class="form-control" asp-items="">
-                    <option value="">Choose Category</option>
-                </select>
-                <span asp-validation-for="Category" class="text-danger"></span>
-            </div>*@
+            @*            <div class="form-group">
+            <label asp-for="Category" class="control-label"></label>
+            <select asp-for="Category" class="form-control" asp-items="">
+                <option value="">Choose Category</option>
+            </select>
+            <span asp-validation-for="Category" class="text-danger"></span>
+        </div>*@
             <div class="form-group">
 
                 <label asp-for="ImageFile" class="control-label"></label>
@@ -52,14 +50,18 @@
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <input type="submit" value="Upload" class="btn btn-primary" />
+                    </div>
+                    <div class="col-auto">
+                        <a asp-action="History">Upload History</a>
+                    </div>
+                </div>
             </div>
+            
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="History">Upload History</a>
 </div>
 
 @section Scripts {
