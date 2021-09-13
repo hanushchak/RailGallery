@@ -1,8 +1,8 @@
 ﻿@model RailGallery.Models.Comment
-<h4>Post Comment</h4>
+<h4>Comments</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-xl">
         <form asp-action="PostComment">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -11,7 +11,7 @@
                 <span asp-validation-for="CommentText" class="text-danger"></span>
                 <input name="ImageID" type="hidden" value="@Model.Image.ImageID">
             </div>
-            <div class="form-group">
+            <div class="form-group text-right">
                 <input type="submit" value="Publish Comment" class="btn btn-primary" />
             </div>
         </form>
