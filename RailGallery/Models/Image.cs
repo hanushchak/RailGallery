@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using RailGallery.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,19 +7,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RailGallery.Models
 {
-    public enum Status
-    {
-        Pending, 
-        Published, 
-        Rejected
-    }
-
-    public enum Privacy
-    {
-        Public, 
-        Private
-    }
-
     public class Image
     {
         [Display(Name = "ID")]
