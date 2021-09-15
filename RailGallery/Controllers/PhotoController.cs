@@ -27,16 +27,16 @@ namespace RailGallery.Controllers
         }
 
         // GET Thumbnail
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetPhoto(int? id)
+        [HttpGet("{ImagePath}")]
+        public async Task<IActionResult> GetPhoto(string? ImagePath)
         {
-            if (id == null)
+            if (ImagePath == null)
             {
                 return NotFound();
             }
 
             var image = await _context.Images
-                .FirstOrDefaultAsync(m => m.ImageID == id);
+                .FirstOrDefaultAsync(m => m.ImagePath == ImagePath);
 
             if (image == null)
             {
@@ -52,16 +52,16 @@ namespace RailGallery.Controllers
         }
 
         // GET Thumbnail
-        [HttpGet("{id}/Thumbnail")]
-        public async Task<IActionResult> GetThumbnail(int? id)
+        [HttpGet("{ImagePath}/Thumbnail")]
+        public async Task<IActionResult> GetThumbnail(string? ImagePath)
         {
-            if (id == null)
+            if (ImagePath == null)
             {
                 return NotFound();
             }
 
             var image = await _context.Images
-                .FirstOrDefaultAsync(m => m.ImageID == id);
+                .FirstOrDefaultAsync(m => m.ImagePath == ImagePath);
 
             if (image == null)
             {

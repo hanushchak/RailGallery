@@ -125,8 +125,8 @@ namespace RailGallery.Controllers
                 var currentUser = await _userManager.GetUserAsync(HttpContext.User);
                 var currentUserRoles = await _userManager.GetRolesAsync(currentUser);
                 
-                // If current user is Moderator, publish the poto without moderation
-                if(currentUserRoles.Contains(Enums.Roles.Moderator.ToString()))
+                // If current user is Moderator or the image is private, publish the poto without moderation
+                if(currentUserRoles.Contains(Enums.Roles.Moderator.ToString()) || image.ImagePrivacy == Enums.Privacy.Private)
                 {
                     image.ImageStatus = Enums.Status.Published;
                 }

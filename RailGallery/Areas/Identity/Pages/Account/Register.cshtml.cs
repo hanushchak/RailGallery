@@ -47,6 +47,7 @@ namespace RailGallery.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
+            [MaxLength(16)]
             [Display(Name = "Display Name")]
             public string UserName { get; set; }
 

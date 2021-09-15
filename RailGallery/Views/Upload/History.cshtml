@@ -38,7 +38,7 @@
         {
         <tr>
             <td>
-                <a asp-controller="View" asp-action="View" asp-route-id="@item.ImageID"><img src="/api/Photo/@item.ImageID/Thumbnail" asp-append-version="true" /></a>
+                <a asp-controller="View" asp-action="View" asp-route-id="@item.ImageID"><img src="/api/Photo/@item.ImagePath/Thumbnail" asp-append-version="true" /></a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ImageTitle)

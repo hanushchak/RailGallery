@@ -47,7 +47,7 @@
                     <div class="d-inline-flex align-self-start p-2">
                         <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
                             <div class="card btn-light">
-                                <img class="card-img-top" src="/api/Photo/@image.ImageID/Thumbnail" asp-append-version="true" alt="Card image cap">
+                                <img class="card-img-top" src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
                                 <div class="card-body p-2">
                                     <h5 class="card-title d-inline">@image.ImageTitle</h5>
                                     <h6 class="card-subtitle mb-1 text-muted d-inline">by <b>@image.ApplicationUser.UserName</b></h6>

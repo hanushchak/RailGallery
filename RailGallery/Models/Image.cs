@@ -12,9 +12,11 @@ namespace RailGallery.Models
         [Display(Name = "ID")]
         public int ImageID { get; set; }
         [Display(Name = "Title")]
+        [MaxLength(32)]
         [Required]
         public string ImageTitle { get; set; }
         [Display(Name = "Description")]
+        [MaxLength(120)]
         public string ImageDescription { get; set; }
         [Display(Name = "EXIF")]
         public string ImageMetadata { get; set; }

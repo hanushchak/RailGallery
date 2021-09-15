@@ -13,15 +13,19 @@
         @if (Model.ImageStatus == RailGallery.Enums.Status.Pending)
         {
             <div class="alert alert-warning" role="alert">
-                This photo is not published.
+                This photo has not been reviewed.
                 @if (User.IsInRole("Moderator"))
                 {
                     <br />
                     <button type="button" class="btn btn-success mr-2">Publish</button><button type="button" class="btn btn-danger">Decline</button>
                 }
             </div>
+        } else if (Model.ImagePrivacy == RailGallery.Enums.Privacy.Private){
+            <div class="alert alert-warning" role="alert">
+                This image is uploaded as <b>private</b> and only visible to you.
+            </div>
         }
-        <img src="/api/Photo/@Model.ImageID" asp-append-version="true" class="img-fluid shadow-sm p-1 bg-white " />
+        <img src="/api/Photo/@Model.ImagePath" asp-append-version="true" class="img-fluid shadow-sm p-1 bg-white " />
     </div>
     <div class="col-md-6 offset-md-3">
         <div>

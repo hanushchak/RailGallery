@@ -28,7 +28,11 @@ namespace RailGallery.Controllers
         public async Task<IActionResult> View(int? id)
         {
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-            var currentUserRoles = await _userManager.GetRolesAsync(currentUser);
+            IList<string> currentUserRoles = null;
+            if (currentUser != null)
+            {
+                currentUserRoles = await _userManager.GetRolesAsync(currentUser);
+            }
 
             if (id == null)
             {
@@ -44,8 +48,17 @@ namespace RailGallery.Controllers
                 .Include(m => m.ApplicationUser)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ImageID == id);
-            
-            if (image == null || (image.ImageStatus == Enums.Status.Pending && (!image.ApplicationUser.UserName.Equals(currentUser.UserName) && !currentUserRoles.Contains(Enums.Roles.Moderator.ToString()))))
+
+            bool userLoggedIn = currentUser != null;
+            bool imagePending = image.ImageStatus == Enums.Status.Pending;
+            bool imageIsPrivate = image.ImagePrivacy == Enums.Privacy.Private;
+            bool userIsAuthor = userLoggedIn && image.ApplicationUser.UserName.Equals(currentUser.UserName);
+            bool userIsModerator = userLoggedIn && currentUserRoles.Contains(Enums.Roles.Moderator.ToString());
+
+            // Only view if has the permissions
+            if ((image == null) ||
+                    (imagePending && !(userIsAuthor || userIsModerator)) ||
+                    (imageIsPrivate && !userIsAuthor))
             {
                 return NotFound();
             }
