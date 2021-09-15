@@ -121,8 +121,18 @@ namespace RailGallery.Controllers
                 // Save image to database
                 image.ImagePath = uniqueFileName;
 
+                // Get current user
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                var currentUserRoles = await _userManager.GetRolesAsync(currentUser);
+                
+                // If current user is Moderator, publish the poto without moderation
+                if(currentUserRoles.Contains(Enums.Roles.Moderator.ToString()))
+                {
+                    image.ImageStatus = Enums.Status.Published;
+                }
+
                 // Add author
-                image.ApplicationUser = await _userManager.GetUserAsync(HttpContext.User);
+                image.ApplicationUser = currentUser;
 
                 _context.Add(image);
                 await _context.SaveChangesAsync();

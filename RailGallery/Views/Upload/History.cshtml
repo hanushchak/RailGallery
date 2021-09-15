@@ -38,7 +38,7 @@
         {
         <tr>
             <td>
-                <a asp-action="Details" asp-route-id="@item.ImageID"><img src="/api/Photo/@item.ImageID/Thumbnail" asp-append-version="true" /></a>
+                <a asp-controller="View" asp-action="View" asp-route-id="@item.ImageID"><img src="/api/Photo/@item.ImageID/Thumbnail" asp-append-version="true" /></a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ImageTitle)
@@ -60,7 +60,6 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ImageID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ImageID">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.ImageID">Delete</a>
             </td>
         </tr>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,21 +15,25 @@ namespace RailGallery.Controllers
     public class ViewController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ViewController(ApplicationDbContext context)
+        public ViewController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: View/5
         [Route("View/{id}")]
         public async Task<IActionResult> View(int? id)
         {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            var currentUserRoles = await _userManager.GetRolesAsync(currentUser);
+
             if (id == null)
             {
                 return NotFound();
             }
-
 
             var image = await _context.Images
                 .Include(m => m.Comments)
@@ -40,7 +45,7 @@ namespace RailGallery.Controllers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ImageID == id);
             
-            if (image == null)
+            if (image == null || (image.ImageStatus == Enums.Status.Pending && (!image.ApplicationUser.UserName.Equals(currentUser.UserName) && !currentUserRoles.Contains(Enums.Roles.Moderator.ToString()))))
             {
                 return NotFound();
             }

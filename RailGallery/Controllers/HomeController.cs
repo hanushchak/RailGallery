@@ -32,12 +32,14 @@ namespace RailGallery.Controllers
                 .Include(c => c.Comments)
                 .Include(c => c.ApplicationUser)
                 .Take(24)
+                .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
                 .AsNoTracking();
 
             homeModel.Top24HoursImages = _context.Images.OrderBy(i => i.ImageUploadedDate)
                 .Include(c => c.Comments)
                 .Include(c => c.ApplicationUser)
                 .Take(6)
+                .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
                 .AsNoTracking();
 
             return View(homeModel);

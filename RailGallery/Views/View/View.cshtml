@@ -7,7 +7,20 @@
 }
 
 <div class="row">
+    
     <div class="w-100 text-center mb-2">
+
+        @if (Model.ImageStatus == RailGallery.Enums.Status.Pending)
+        {
+            <div class="alert alert-warning" role="alert">
+                This photo is not published.
+                @if (User.IsInRole("Moderator"))
+                {
+                    <br />
+                    <button type="button" class="btn btn-success mr-2">Publish</button><button type="button" class="btn btn-danger">Decline</button>
+                }
+            </div>
+        }
         <img src="/api/Photo/@Model.ImageID" asp-append-version="true" class="img-fluid shadow-sm p-1 bg-white " />
     </div>
     <div class="col-md-6 offset-md-3">
