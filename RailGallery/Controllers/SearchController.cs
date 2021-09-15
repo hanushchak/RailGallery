@@ -9,6 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
 
+#nullable enable
+
 namespace RailGallery.Controllers
 {
     public class SearchController : Controller
@@ -93,8 +95,9 @@ namespace RailGallery.Controllers
             }*/
 
 
-            int pageSize = 3;
-            int pageNumber = (page ?? 1);
+            int pageSize = 3; // TODO
+
+            int pageNumber = (int)((!page.HasValue || page == 0) ? 1 : page);
 
             return View(model.ToPagedList(pageNumber, pageSize));
         }
