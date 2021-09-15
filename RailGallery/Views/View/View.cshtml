@@ -10,7 +10,7 @@
     
     <div class="w-100 text-center mb-2">
 
-        @if (Model.ImageStatus == RailGallery.Enums.Status.Pending)
+        @if (ViewBag.isPending)
         {
             <div class="alert alert-warning" role="alert">
                 This photo has not been reviewed.
@@ -20,7 +20,8 @@
                     <button type="button" class="btn btn-success mr-2">Publish</button><button type="button" class="btn btn-danger">Decline</button>
                 }
             </div>
-        } else if (Model.ImagePrivacy == RailGallery.Enums.Privacy.Private){
+        } else if (ViewBag.isPrivate)
+        {
             <div class="alert alert-warning" role="alert">
                 This image is uploaded as <b>private</b> and only visible to you.
             </div>

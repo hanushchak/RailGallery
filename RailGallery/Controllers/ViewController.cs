@@ -63,6 +63,8 @@ namespace RailGallery.Controllers
                 return NotFound();
             }
 
+            ViewBag.isPending = imagePending;
+            ViewBag.isPrivate = imageIsPrivate;
             return View(image);
         }
 
