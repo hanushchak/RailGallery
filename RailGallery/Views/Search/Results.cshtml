@@ -1,0 +1,90 @@
+﻿@model IPagedList<RailGallery.Models.Image>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Web.Common;
+<link href="/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewData["Title"] = "Search Results";
+}
+
+
+<div class="row">
+    <div class="col text-center">
+        <h4>@ViewData["Title"]</h4>
+
+        @if (Model.Count() == 0)
+        {
+            <h5>No results found :(</h5>
+        }
+        else
+        {
+            <div class="mt-4">
+                @Html.PagedListPager(Model, page => Url.Action("Results", new
+                {
+                    page,
+                    ImageTitle = ViewBag.ImageTitle,
+                    ImageAuthor = ViewBag.ImageAuthor,
+                    ImageDescription = ViewBag.ImageDescription,
+                    LocomotiveModel = ViewBag.LocomotiveModel,
+                    LocomotiveBuilt = ViewBag.LocomotiveBuilt,
+                    ImageAlbum = ViewBag.ImageAlbum,
+                    ImageCategory = ViewBag.ImageCategory,
+                    ImageTakenDate = ViewBag.ImageTakenDate,
+                    ImageLocation = ViewBag.ImageLocation
+           }), new PagedListRenderOptions
+           {
+               ContainerDivClasses = new string[] { "pagination justify-content-center" },
+               LinkToPreviousPageFormat = "Previous",
+               LinkToNextPageFormat = "Next",
+               LiElementClasses = new string[] { "page-item" },
+               PageClasses = new string[] { "page-link" }
+           })
+            </div>
+
+            <div class="d-flex justify-content-center flex-wrap">
+                @foreach (var image in Model)
+                {
+                    <div class="d-inline-flex align-self-start p-2">
+                        <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
+                            <div class="card btn-light">
+                                <img class="card-img-top" src="/api/Photo/@image.ImageID/Thumbnail" asp-append-version="true" alt="Card image cap">
+                                <div class="card-body p-2">
+                                    <h5 class="card-title d-inline">@image.ImageTitle</h5>
+                                    <h6 class="card-subtitle mb-1 text-muted d-inline">by <b>@image.ApplicationUser.UserName</b></h6>
+                                    <p class="card-text"><small><b>@image.Comments.Count</b> comments, <b>14</b> likes</small></p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+            <div class="mt-4">
+                @Html.PagedListPager(Model, page => Url.Action("Results", new
+                {
+                    page,
+                    ImageTitle = ViewBag.ImageTitle,
+                    ImageAuthor = ViewBag.ImageAuthor,
+                    ImageDescription = ViewBag.ImageDescription,
+                    LocomotiveModel = ViewBag.LocomotiveModel,
+                    LocomotiveBuilt = ViewBag.LocomotiveBuilt,
+                    ImageAlbum = ViewBag.ImageAlbum,
+                    ImageCategory = ViewBag.ImageCategory,
+                    ImageTakenDate = ViewBag.ImageTakenDate,
+                    ImageLocation = ViewBag.ImageLocation
+                }), new PagedListRenderOptions
+                {
+                    ContainerDivClasses = new string[] { "pagination justify-content-center" },
+                    LinkToPreviousPageFormat = "Previous",
+                    LinkToNextPageFormat = "Next",
+                    LiElementClasses = new string[] { "page-item" },
+                    PageClasses = new string[] { "page-link" }
+                })
+            </div>
+        }
+    </div>
+</div>
+
+
+
+
+
