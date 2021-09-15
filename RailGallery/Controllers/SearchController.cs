@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RailGallery.Data;
+using RailGallery.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +19,13 @@ namespace RailGallery.Controllers
     {
         private readonly ILogger<SearchController> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public SearchController(ILogger<SearchController> logger, ApplicationDbContext context)
+        public SearchController(ILogger<SearchController> logger, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             _context = context;
+            _userManager = userManager;
         }
 
 
@@ -32,7 +36,7 @@ namespace RailGallery.Controllers
         }
 
         // GET: Results
-        public IActionResult Results(int? page,
+        public async Task<IActionResult> ResultsAsync(int? page,
                                     string? ImageTitle,
                                     string? ImageAuthor,
                                     string? ImageDescription,
@@ -43,9 +47,26 @@ namespace RailGallery.Controllers
                                     string? ImageTakenDate,
                                     string? ImageLocation)
         {
-            var model = _context.Images.OrderByDescending(i => i.ImageUploadedDate)
+
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            IList<string> currentUserRoles = null;
+            if (currentUser != null)
+            {
+                currentUserRoles = await _userManager.GetRolesAsync(currentUser);
+            }
+
+            bool userLoggedIn = currentUser != null;
+            bool userIsModerator = userLoggedIn && currentUserRoles.Contains(Enums.Roles.Moderator.ToString());
+
+            /*            if ((image == null) ||
+                                (imagePending && !(userIsAuthor || userIsModerator)) ||
+                                (imageIsPrivate && !userIsAuthor))
+                        {*/
+
+                var model = _context.Images.OrderByDescending(i => i.ImageUploadedDate)
                 .Include(c => c.Comments)
                 .Include(c => c.ApplicationUser)
+                .Where(i => !((i.ImageStatus == Enums.Status.Pending) || (i.ImagePrivacy == Enums.Privacy.Private && !(userLoggedIn && i.ApplicationUser.UserName.Equals(currentUser.UserName))) ))
                 .AsNoTracking();
 
             if (!String.IsNullOrEmpty(ImageTitle))

@@ -44,14 +44,28 @@
             <div class="d-flex justify-content-center flex-wrap">
                 @foreach (var image in Model)
                 {
+                    string css = "";
+                    bool imgPrivate = image.ImagePrivacy.Equals(RailGallery.Enums.Privacy.Private);
+                    if (imgPrivate)
+                    {
+                        css = "alert-warning";
+                    }
                     <div class="d-inline-flex align-self-start p-2">
                         <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
-                            <div class="card btn-light">
+                            <div class="card btn-light @css">
                                 <img class="card-img-top" src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
                                 <div class="card-body p-2">
                                     <h5 class="card-title d-inline">@image.ImageTitle</h5>
                                     <h6 class="card-subtitle mb-1 text-muted d-inline">by <b>@image.ApplicationUser.UserName</b></h6>
-                                    <p class="card-text"><small><b>@image.Comments.Count</b> comments, <b>14</b> likes</small></p>
+                                    @if (!imgPrivate)
+                                    {
+                                        <p class="card-text"><small><b>@image.Comments.Count</b> comments, <b>14</b> likes</small></p>
+                                    }
+                                    else
+                                    {
+                                        <p class="card-text text-muted"><small>(private photo)</small></p>
+                                    }
+
                                 </div>
                             </div>
                         </a>
