@@ -28,18 +28,20 @@ namespace RailGallery.Controllers
             dynamic homeModel = new ExpandoObject();
 
             // Most recent images
-            homeModel.LasestImages = _context.Images.OrderByDescending(i => i.ImageUploadedDate)
+            homeModel.LasestImages = _context.Images
+                .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
+                .Take(24)
+                .OrderByDescending(i => i.ImageUploadedDate)
                 .Include(c => c.Comments)
                 .Include(c => c.ApplicationUser)
-                .Take(24)
-                .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
                 .AsNoTracking();
 
-            homeModel.Top24HoursImages = _context.Images.OrderBy(i => i.ImageUploadedDate)
+            homeModel.Top24HoursImages = _context.Images
+                .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
+                .Take(6)
+                .OrderBy(i => i.ImageUploadedDate)
                 .Include(c => c.Comments)
                 .Include(c => c.ApplicationUser)
-                .Take(6)
-                .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
                 .AsNoTracking();
 
             return View(homeModel);
