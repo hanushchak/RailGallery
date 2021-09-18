@@ -5,7 +5,7 @@
 
 
 <div class="row">
-    <div class="col-3 text-center border-right">
+    <div class="col-xl-3 col-lg-6 text-center border-right">
         <h4>Top viewed</h4>
         <h6 class="card-subtitle mb-2 text-muted">(in last 24 hours)</h6>
         <div class="d-flex justify-content-center flex-wrap">
@@ -14,7 +14,7 @@
                 <div class="d-inline-flex align-self-start p-2">
                     <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
                         <div class="card btn-light" style="max-width: 302px;">
-                            <img class="card-img-top" style="object-fit: cover; width: 300px; max-height: 200px;" src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
+                            <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width: contain;" src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
                             <div class="card-body p-2">
                                 <h6 class="card-title">@image.ImageTitle</h6>
                                 <h6 class="card-subtitle mb-1 text-muted">by <b>@image.ApplicationUser.UserName</b></h6>
@@ -28,7 +28,7 @@
     </div>
 
 
-    <div class="col-9 text-center border-left">
+    <div class="col-xl-9 col-lg-6 text-center border-left">
         <h4>Most recent</h4>
         <div class="d-flex justify-content-center flex-wrap">
             @foreach (var image in Model.LasestImages)
@@ -36,7 +36,7 @@
                 <div class="d-inline-flex align-self-start p-2">
                     <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
                         <div class="card btn-light" style="max-width: 302px;">
-                            <img class="card-img-top" style="object-fit: cover; width: 300px; max-height: 200px;"  src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
+                            <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width: contain;"  src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
                             <div class="card-body p-2">
                                 <h6 class="card-title">@image.ImageTitle</h6>
                                 <h6 class="card-subtitle mb-1 text-muted">by <b>@image.ApplicationUser.UserName</b></h6>
