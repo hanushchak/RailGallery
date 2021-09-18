@@ -94,7 +94,10 @@ namespace RailGallery.Controllers
 
                 int width, height;
 
-                if(sourceImage.Width >= sourceImage.Height)
+                height = (int)((thumbnailSize * sourceImage.Height) / sourceImage.Width);
+                width = thumbnailSize;
+
+                /*if (sourceImage.Width >= sourceImage.Height)
                 {
                     height = (int)((thumbnailSize * sourceImage.Height) / sourceImage.Width);
                     width = thumbnailSize;
@@ -103,7 +106,7 @@ namespace RailGallery.Controllers
                 {
                     height = thumbnailSize;
                     width = (int)((thumbnailSize * sourceImage.Width) / sourceImage.Height);
-                }
+                }*/
                 
                 System.Drawing.Bitmap thumbnailImage = new System.Drawing.Bitmap(width, height);
                 using (System.Drawing.Graphics gr = System.Drawing.Graphics.FromImage(thumbnailImage))

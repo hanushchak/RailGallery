@@ -112,7 +112,7 @@ namespace RailGallery.Controllers
             }*/
 
 
-            int pageSize = 3; // TODO
+            int pageSize = 10; // TODO
 
             int pageNumber = (int)((!page.HasValue || page == 0) ? 1 : page);
 

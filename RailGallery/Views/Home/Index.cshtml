@@ -13,11 +13,11 @@
             {
                 <div class="d-inline-flex align-self-start p-2">
                     <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
-                        <div class="card btn-light">
-                            <img class="card-img-top" src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
+                        <div class="card btn-light" style="max-width: 302px;">
+                            <img class="card-img-top" style="object-fit: cover; width: 300px; max-height: 200px;" src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
                             <div class="card-body p-2">
-                                <h5 class="card-title d-inline">@image.ImageTitle</h5>
-                                <h6 class="card-subtitle mb-1 text-muted d-inline">by <b>@image.ApplicationUser.UserName</b></h6>
+                                <h6 class="card-title">@image.ImageTitle</h6>
+                                <h6 class="card-subtitle mb-1 text-muted">by <b>@image.ApplicationUser.UserName</b></h6>
                                 <p class="card-text"><small><b>141</b> views, <b>@image.Comments.Count</b> comments, <b>14</b> likes</small></p>
                             </div>
                         </div>
@@ -35,11 +35,11 @@
             {
                 <div class="d-inline-flex align-self-start p-2">
                     <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
-                        <div class="card btn-light">
-                            <img class="card-img-top" src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
+                        <div class="card btn-light" style="max-width: 302px;">
+                            <img class="card-img-top" style="object-fit: cover; width: 300px; max-height: 200px;"  src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
                             <div class="card-body p-2">
-                                <h5 class="card-title d-inline">@image.ImageTitle</h5>
-                                <h6 class="card-subtitle mb-1 text-muted d-inline">by <b>@image.ApplicationUser.UserName</b></h6>
+                                <h6 class="card-title">@image.ImageTitle</h6>
+                                <h6 class="card-subtitle mb-1 text-muted">by <b>@image.ApplicationUser.UserName</b></h6>
                                 <p class="card-text"><small><b>@image.Comments.Count</b> comments, <b>14</b> likes</small></p>
                             </div>
                         </div>
