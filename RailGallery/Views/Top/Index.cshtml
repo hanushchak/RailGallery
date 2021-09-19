@@ -1,1 +1,93 @@
-﻿Top Controller
+﻿@model IList<RailGallery.Models.Image>
+@{
+    ViewData["Title"] = "Top Photos";
+}
+
+
+<div class="row">
+    <div class="col text-center">
+        <h4 class="mb-3">@ViewData["Title"]</h4>
+
+        <div class="btn-group mb-3" role="group" aria-label="Basic example">
+                <a href="?type=24hours" type="button" class="btn btn-primary">Last 24 hours</a>
+                <a href="?type=week" type="button" class="btn btn-primary">Last week</a>
+                <a href="?type=month" type="button" class="btn btn-primary">Last month</a>
+</div>
+
+        @if (Model.Count() == 0)
+        {
+            <h5>No results found :(</h5>
+        }
+        else
+        {
+            @*<div class="mt-4">
+                 @Html.PagedListPager(Model, page => Url.Action("Results", new
+                 {
+                     page,
+                     ImageTitle = ViewBag.ImageTitle,
+                     ImageAuthor = ViewBag.ImageAuthor,
+                     ImageDescription = ViewBag.ImageDescription,
+                     LocomotiveModel = ViewBag.LocomotiveModel,
+                     LocomotiveBuilt = ViewBag.LocomotiveBuilt,
+                     ImageAlbum = ViewBag.ImageAlbum,
+                     ImageCategory = ViewBag.ImageCategory,
+                     ImageTakenDate = ViewBag.ImageTakenDate,
+                     ImageLocation = ViewBag.ImageLocation
+            }), new PagedListRenderOptions
+            {
+                ContainerDivClasses = new string[] { "pagination justify-content-center" },
+                LinkToPreviousPageFormat = "Previous",
+                LinkToNextPageFormat = "Next",
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+            })
+             </div>*@
+
+            <div class="d-flex justify-content-center flex-wrap">
+                @foreach (var image in Model)
+                {
+
+                    <div class="d-inline-flex align-self-start p-2">
+                        <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
+                            <div class="card btn-light" style="max-width: 302px;">
+                                <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width: fit-content;" src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
+                                <div class="card-body p-2">
+                                    <h6 class="card-title">@image.ImageTitle</h6>
+                                    <h6 class="card-subtitle mb-1 text-muted">by <b>@image.ApplicationUser.UserName</b></h6>
+                                    <p class="card-text"><small><b>@image.Comments.Count</b> comments, <b>14</b> likes</small></p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+            @*<div class="mt-4">
+                @Html.PagedListPager(Model, page => Url.Action("Results", new
+                {
+                    page,
+                    ImageTitle = ViewBag.ImageTitle,
+                    ImageAuthor = ViewBag.ImageAuthor,
+                    ImageDescription = ViewBag.ImageDescription,
+                    LocomotiveModel = ViewBag.LocomotiveModel,
+                    LocomotiveBuilt = ViewBag.LocomotiveBuilt,
+                    ImageAlbum = ViewBag.ImageAlbum,
+                    ImageCategory = ViewBag.ImageCategory,
+                    ImageTakenDate = ViewBag.ImageTakenDate,
+                    ImageLocation = ViewBag.ImageLocation
+                }), new PagedListRenderOptions
+                {
+                    ContainerDivClasses = new string[] { "pagination justify-content-center" },
+                    LinkToPreviousPageFormat = "Previous",
+                    LinkToNextPageFormat = "Next",
+                    LiElementClasses = new string[] { "page-item" },
+                    PageClasses = new string[] { "page-link" }
+                })
+            </div>*@
+        }
+    </div>
+</div>
+
+
+
+
+
