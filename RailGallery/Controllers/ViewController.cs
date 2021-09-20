@@ -40,7 +40,7 @@ namespace RailGallery.Controllers
             }
 
             var image = await _context.Images
-                .Include(m => m.Comments)
+                .Include(m => m.Comments.OrderByDescending(c => c.CommentDate)).ThenInclude(c => c.ApplicationUser)
                 .Include(m => m.Likes)
                 .Include(m => m.Albums)
                 .Include(m => m.Favorites)
@@ -68,21 +68,42 @@ namespace RailGallery.Controllers
             return View(image);
         }
 
-        // POST: View/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("View/{id}")]
+
+        [HttpPost]
+        [Authorize]
+        [Route("View/PostComment")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PostComment([Bind("CommentText")] Comment comment)
+        public async Task<IActionResult> PostComment([Bind("CommentText,Image")] Comment comment)
         {
-            if (!ModelState.IsValid)
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            if (currentUser == null)
             {
                 return Content("Error");
+            } else
+            {
+                comment.ApplicationUser = currentUser;
             }
+
+            var image = await _context.Images.FirstOrDefaultAsync(m => m.ImageID == comment.Image.ImageID);
+
+            if (image == null)
+            {
+                return Content("Error");
+            } else
+            {
+                comment.Image = image;
+            }
+
             comment.CommentDate = DateTime.UtcNow;
+
+/*            if (!ModelState.IsValid)
+            {
+                return Content("Error");
+            }*/
+
             _context.Add(comment);
             await _context.SaveChangesAsync();
-            return RedirectToAction("View", new { @id = 32 });
+            return RedirectToAction("View", new { @id = comment.Image.ImageID });
         }
 
         // GET: View/Edit/5
