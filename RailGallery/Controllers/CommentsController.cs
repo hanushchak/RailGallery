@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +15,12 @@ namespace RailGallery.Controllers
     public class CommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CommentsController(ApplicationDbContext context)
+        public CommentsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Comments
@@ -25,98 +29,43 @@ namespace RailGallery.Controllers
             return View(await _context.Comments.ToListAsync());
         }
 
-        // GET: Comments/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var comment = await _context.Comments
-                .FirstOrDefaultAsync(m => m.CommentID == id);
-            if (comment == null)
-            {
-                return NotFound();
-            }
-
-            return View(comment);
-        }
-
-        // GET: Comments/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         // POST: Comments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CommentID,CommentText,CommentDate")] Comment comment)
+        public async Task<IActionResult> Create([Bind("CommentID,CommentText,CommentDate,Image")] Comment comment)
         {
-            if (ModelState.IsValid)
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            if (currentUser == null)
             {
-                _context.Add(comment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Content("Error");
             }
-            return View(comment);
+            else
+            {
+                comment.ApplicationUser = currentUser;
+            }
+
+            var image = await _context.Images.FirstOrDefaultAsync(m => m.ImageID == comment.Image.ImageID);
+
+            if (image == null)
+            {
+                return Content("Error");
+            }
+            else
+            {
+                comment.Image = image;
+            }
+
+            _context.Add(comment);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("View", "View", new { @id = comment.Image.ImageID });
         }
 
-        // GET: Comments/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var comment = await _context.Comments.FindAsync(id);
-            if (comment == null)
-            {
-                return NotFound();
-            }
-            return View(comment);
-        }
-
-        // POST: Comments/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CommentID,CommentText,CommentDate")] Comment comment)
-        {
-            if (id != comment.CommentID)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(comment);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CommentExists(comment.CommentID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(comment);
-        }
 
         // GET: Comments/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -125,10 +74,25 @@ namespace RailGallery.Controllers
             }
 
             var comment = await _context.Comments
+                .Include(c => c.Image)
+                .Include(c => c.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.CommentID == id);
+
             if (comment == null)
             {
                 return NotFound();
+            }
+
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            IList<string> currentUserRoles = null;
+            if (currentUser != null)
+            {
+                currentUserRoles = await _userManager.GetRolesAsync(currentUser);
+            }
+
+            if (currentUser.UserName != comment.ApplicationUser.UserName && !currentUserRoles.Contains(Enums.Roles.Moderator.ToString()))
+            {
+                return RedirectToAction("View", "View", new { @id = comment.Image.ImageID });
             }
 
             return View(comment);
@@ -136,13 +100,14 @@ namespace RailGallery.Controllers
 
         // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var comment = await _context.Comments.FindAsync(id);
+            var comment = await _context.Comments.Include(c => c.Image).FirstAsync(m => m.CommentID == id);
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("View", "View", new { @id = comment.Image.ImageID });
         }
 
         private bool CommentExists(int id)

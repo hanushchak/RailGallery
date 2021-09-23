@@ -30,7 +30,7 @@
                                 {<span class='text-secondary font-weight-bold'>(You)</span>} on @comment.CommentDate
                             </div>
                             <div class="col-auto">
-                                <a asp-controller="View" asp-action="View" asp-route-id="@comment.Image.ImageID">View Photo</a> | <a asp-controller="View" asp-action="DeleteComment" asp-route-id="@comment.CommentID">Remove</a>
+                                <a asp-controller="View" asp-action="View" asp-route-id="@comment.Image.ImageID">View Photo</a> | <a asp-controller="Comments" asp-action="Delete" asp-route-id="@comment.CommentID">Remove</a>
                             </div>
                         </div>
                     </div>

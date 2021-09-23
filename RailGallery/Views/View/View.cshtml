@@ -69,7 +69,6 @@
             @foreach (var comment in Model.Comments)
             {
                 bool authorOrModerator = false;
-                string author = "";
                 if (User.Identity.Name == comment.ApplicationUser.UserName || User.IsInRole("Moderator"))
                 {
                     authorOrModerator = true;
@@ -84,7 +83,7 @@
                             @if (authorOrModerator)
                             {
                                 <div class="col-auto">
-                                    <a asp-action="DeleteComment" asp-route-id="@comment.CommentID">Remove</a>
+                                    <a asp-controller="Comments" asp-action="Delete" asp-route-id="@comment.CommentID">Remove</a>
                                 </div>
                             }
 

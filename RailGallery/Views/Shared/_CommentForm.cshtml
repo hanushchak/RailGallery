@@ -5,13 +5,14 @@
 {
     <div class="row">
         <div class="col-xl">
-            <form asp-action="PostComment" method="POST">
+            <form asp-controller="Comments" asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="CommentText" class="control-label"></label>
                     <textarea asp-for="CommentText" class="form-control"></textarea>
                     <span asp-validation-for="CommentText" class="text-danger"></span>
-                    <input type="hidden" asp-for="Image.ImageID" value="@Model.Image.ImageID" />
+                    <input type="hidden" asp-for="Image.ImageID" value="@Model.Image.ImageID" class="form-control" />
+                    <input type="hidden" asp-for="CommentDate" value="@DateTime.UtcNow" class="form-control" />
                 </div>
                 <div class="form-group text-right">
                     <input type="submit" value="Publish Comment" class="btn btn-primary" />
