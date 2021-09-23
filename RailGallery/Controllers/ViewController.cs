@@ -106,6 +106,52 @@ namespace RailGallery.Controllers
             return RedirectToAction("View", new { @id = comment.Image.ImageID });
         }
 
+        // GET: Comments/Delete/5
+        [Authorize]
+        public async Task<IActionResult> DeleteComment(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var comment = await _context.Comments
+                .Include(c => c.Image)
+                .Include(c => c.ApplicationUser)
+                .FirstOrDefaultAsync(m => m.CommentID == id);
+
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            IList<string> currentUserRoles = null;
+            if (currentUser != null)
+            {
+                currentUserRoles = await _userManager.GetRolesAsync(currentUser);
+            }
+
+            if (currentUser.UserName != comment.ApplicationUser.UserName && !currentUserRoles.Contains(Enums.Roles.Moderator.ToString()))
+            {
+                return RedirectToAction("View", new { @id = comment.Image.ImageID });
+            }
+
+            return View(comment);
+        }
+
+        // POST: Comments/Delete/5
+        [HttpPost, ActionName("DeleteComment")]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteCommentConfirmed(int id)
+        {
+            var comment = await _context.Comments.Include(c => c.Image).FirstAsync(m => m.CommentID == id);
+            _context.Comments.Remove(comment);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("View", new { @id = comment.Image.ImageID });
+        }
+
         // GET: View/Edit/5
         [Authorize(Roles = "Moderator")]
         public async Task<IActionResult> Edit(int? id)

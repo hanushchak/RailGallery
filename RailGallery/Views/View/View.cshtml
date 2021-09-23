@@ -62,32 +62,43 @@
         </div>
         <partial name="_CommentForm" model="new Comment { Image = Model }" />
 
-        @foreach (var comment in Model.Comments)
+        <h5>All Comments <span class="text-secondary">(@Model.Comments.Count)</span></h5>
+        <hr />
+        @if (Model.Comments.Count > 0)
         {
-            bool authorOrModerator = false;
-            @if(User.Identity.Name == comment.ApplicationUser.UserName)
+            @foreach (var comment in Model.Comments)
             {
-                authorOrModerator = true;
-            }
-            <div class="card border-primary mb-3">
-                <div class="card-header">
-                    <div class="row justify-content-between">
-                        <div class="col-auto">
-                            <a href=""><b>@comment.ApplicationUser.UserName</b></a> @(authorOrModerator ? "<span class='text-secondary'>(You)</span>" : "") on @comment.CommentDate
-                        </div>
-                        @if (authorOrModerator)
-                        {
+                bool authorOrModerator = false;
+                string author = "";
+                if (User.Identity.Name == comment.ApplicationUser.UserName || User.IsInRole("Moderator"))
+                {
+                    authorOrModerator = true;
+                }
+                
+                <div class="card border-primary mb-3">
+                    <div class="card-header">
+                        <div class="row justify-content-between">
                             <div class="col-auto">
-                                <a href=""><b>Remove</b></a>
+                                <a href=""><b>@comment.ApplicationUser.UserName</b></a> @if(User.Identity.Name == comment.ApplicationUser.UserName) { <span class='text-secondary font-weight-bold'>(You)</span> } on @comment.CommentDate
                             </div>
-                        }
+                            @if (authorOrModerator)
+                            {
+                                <div class="col-auto">
+                                    <a asp-action="DeleteComment" asp-route-id="@comment.CommentID">Remove</a>
+                                </div>
+                            }
 
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        @comment.CommentText
                     </div>
                 </div>
-                <div class="card-body">
-                    @comment.CommentText
-                </div>
-            </div>
-        }
+            }
+        } else
+            {
+                <p>This photo does not have any comments.</p>
+            }
+
     </div>
 </div>

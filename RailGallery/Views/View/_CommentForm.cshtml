@@ -1,22 +1,29 @@
 ﻿@model RailGallery.Models.Comment
-<h4>Comments</h4>
+<h4>New Comment</h4>
 <hr />
-<div class="row">
-    <div class="col-xl">
-        <form asp-action="PostComment" method="POST">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CommentText" class="control-label"></label>
-                <textarea asp-for="CommentText" class="form-control"></textarea>
-                <span asp-validation-for="CommentText" class="text-danger"></span>
-                <input type="hidden" asp-for="Image.ImageID" value="@Model.Image.ImageID" />
-            </div>
-            <div class="form-group text-right">
-                <input type="submit" value="Publish Comment" class="btn btn-primary" />
-            </div>
-        </form>
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="row">
+        <div class="col-xl">
+            <form asp-action="PostComment" method="POST">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="CommentText" class="control-label"></label>
+                    <textarea asp-for="CommentText" class="form-control"></textarea>
+                    <span asp-validation-for="CommentText" class="text-danger"></span>
+                    <input type="hidden" asp-for="Image.ImageID" value="@Model.Image.ImageID" />
+                </div>
+                <div class="form-group text-right">
+                    <input type="submit" value="Publish Comment" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+} else 
+{
+    <div><p><a asp-area="Identity" asp-page="/Account/Login">Log in</a> to post a comment.</p></div>
+}
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
