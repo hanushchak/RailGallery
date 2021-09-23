@@ -17,52 +17,33 @@
 
     <div class="col-5 border-left border-right">
         <h5 class="text-center">Recent Comments</h5>
-        <div class="card border-primary mb-3">
-            <div class="card-header">
-                <div class="row justify-content-between">
-                    <div class="col-auto">
-                        <a href=""><b>Maksym</b></a> on 2021-09-11 at 7:40 PM
-                    </div>
-                    <div class="col-auto">
-                        <a href=""><b>View Photo</b></a> | <a href=""><b>Remove</b></a>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-            </div>
-        </div>
-
-        <div class="card border-primary mb-3">
-            <div class="card-header">
-                <div class="row justify-content-between">
-                    <div class="col-auto">
-                        <a href=""><b>Maksym</b></a> <span class="text-secondary">(You)</span> on 2021-09-11 at 7:40 PM
-                    </div>
-                    <div class="col-auto">
-                        <a href=""><b>View Photo</b></a> | <a href=""><b>Remove</b></a>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-            </div>
-        </div>
-        @* @foreach (var image in Model.LatestComments)
+        @if (Model.RecentComments != null)
         {
-            <div class="d-inline-flex align-self-start p-2">
-                <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
-                    <div class="card btn-light" style="max-width: 302px;">
-                        <img class="card-img-top" style="object-fit: cover; width: 300px; max-height: 200px;" src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
-                        <div class="card-body p-2">
-                            <h6 class="card-title">@image.ImageTitle</h6>
-                            <h6 class="card-subtitle mb-1 text-muted">by <b>@image.ApplicationUser.UserName</b></h6>
-                            <p class="card-text"><small><b>@image.Comments.Count</b> comments, <b>14</b> likes</small></p>
+            @foreach (var comment in Model.RecentComments)
+            {
+
+                <div class="card border-primary mb-3">
+                    <div class="card-header">
+                        <div class="row justify-content-between">
+                            <div class="col-auto">
+                                <a href=""><b>@comment.ApplicationUser.UserName</b></a> @if (User.Identity.Name == comment.ApplicationUser.UserName)
+                                {<span class='text-secondary font-weight-bold'>(You)</span>} on @comment.CommentDate
+                            </div>
+                            <div class="col-auto">
+                                <a asp-controller="View" asp-action="View" asp-route-id="@comment.Image.ImageID">View Photo</a> | <a asp-controller="View" asp-action="DeleteComment" asp-route-id="@comment.CommentID">Remove</a>
+                            </div>
                         </div>
                     </div>
-                </a>
-            </div>
-        }*@
+                    <div class="card-body">
+                        @comment.CommentText
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No comments to display.</p>
+        }
 
     </div>
 
