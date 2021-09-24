@@ -11,7 +11,7 @@ namespace RailGallery.Models
         public int LocomotiveID { get; set; }
         [Required, Display(Name = "Locomotive Model")]
         public string LocomotiveModel { get; set; }
-        [Required, Display(Name = "Locomotive Built"), DataType(DataType.DateTime), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy}")]
+        [Required, Display(Name = "Locomotive Built"), DataType(DataType.DateTime), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:Y}")]
         public DateTime LocomotiveBuilt { get; set; }
         public ICollection<Image> Images { get; set; }
     }

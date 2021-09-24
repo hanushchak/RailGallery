@@ -23,27 +23,44 @@
                 <span asp-validation-for="ImageDescription" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Albums" class="control-label"></label>
+                <select asp-for="Albums" class="form-control">
+                    <option value="">Select Album</option>
+                </select>
+                <span asp-validation-for="Albums" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category" class="control-label"></label>
+                <select asp-for="Category" class="form-control">
+                    <option value="">Select Category</option>
+                </select>
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Locomotive.LocomotiveModel" class="control-label"></label>
+                <input asp-for="Locomotive.LocomotiveModel" class="form-control">
+                <span asp-validation-for="Locomotive.LocomotiveModel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Locomotive.LocomotiveBuilt" class="control-label"></label>
+                <input asp-for="Locomotive.LocomotiveBuilt" class="form-control">
+                <span asp-validation-for="Locomotive.LocomotiveBuilt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Location.LocationName" class="control-label"></label>
+                <input asp-for="Location.LocationName" class="form-control">
+                <span asp-validation-for="Location.LocationName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="ImageTakenDate" class="control-label"></label>
                 <input asp-for="ImageTakenDate" class="form-control" />
                 <span asp-validation-for="ImageTakenDate" class="text-danger"></span>
             </div>
-            @*            <div class="form-group">
-            <label asp-for="ImageStatus" class="control-label"></label>
-            <select asp-for="ImageStatus" class="form-control" asp-items="Html.GetEnumSelectList<Status>()"></select>
-            <span asp-validation-for="ImageStatus" class="text-danger"></span>
-        </div>*@
             <div class="form-group">
                 <label asp-for="ImagePrivacy" class="control-label"></label>
                 <select asp-for="ImagePrivacy" class="form-control" asp-items="Html.GetEnumSelectList<Privacy>()"></select>
                 <span asp-validation-for="ImagePrivacy" class="text-danger"></span>
             </div>
-            @*            <div class="form-group">
-            <label asp-for="Category" class="control-label"></label>
-            <select asp-for="Category" class="form-control" asp-items="">
-                <option value="">Choose Category</option>
-            </select>
-            <span asp-validation-for="Category" class="text-danger"></span>
-        </div>*@
             <div class="form-group">
 
                 <label asp-for="ImageFile" class="control-label"></label>
@@ -60,7 +77,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </form>
     </div>
 </div>

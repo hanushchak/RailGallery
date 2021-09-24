@@ -9,21 +9,29 @@
         <h4>Top viewed</h4>
         <h6 class="card-subtitle mb-2 text-muted">(in last 24 hours)</h6>
         <div class="d-flex justify-content-center flex-wrap">
-            @foreach (var image in Model.Top24HoursImages)
+            @if (((IEnumerable<Image>)Model.Top24HoursImages).Any())
             {
-                <div class="d-inline-flex align-self-start p-2">
-                    <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
-                        <div class="card btn-light" style="max-width: 302px;">
-                            <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width: contain;" src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
-                            <div class="card-body p-2">
-                                <h6 class="card-title">@image.ImageTitle</h6>
-                                <h6 class="card-subtitle mb-1 text-muted">by <b>@image.ApplicationUser.UserName</b></h6>
-                                <p class="card-text"><small><b>141</b> views, <b>@image.Comments.Count</b> comments, <b>14</b> likes</small></p>
+                @foreach (var image in Model.Top24HoursImages)
+                {
+                    <div class="d-inline-flex align-self-start p-2">
+                        <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
+                            <div class="card btn-light" style="max-width: 302px;">
+                                <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width: contain;" src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
+                                <div class="card-body p-2">
+                                    <h6 class="card-title">@image.ImageTitle</h6>
+                                    <h6 class="card-subtitle mb-1 text-muted">by <b>@image.ApplicationUser.UserName</b></h6>
+                                    <p class="card-text"><small><b>141</b> views, <b>@image.Comments.Count</b> comments, <b>14</b> likes</small></p>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
+                }
             }
+            else
+            {
+                <p class="mt-5 mb-5">No photos to display.</p>
+            }
+
         </div>
     </div>
 
@@ -31,21 +39,29 @@
     <div class="col-xl-9 col-lg-6 text-center border-left">
         <h4>Most recent</h4>
         <div class="d-flex justify-content-center flex-wrap">
-            @foreach (var image in Model.LasestImages)
+            @if (((IEnumerable<Image>)Model.LasestImages).Any())
             {
-                <div class="d-inline-flex align-self-start p-2">
-                    <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
-                        <div class="card btn-light" style="max-width: 302px;">
-                            <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width: contain;"  src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
-                            <div class="card-body p-2">
-                                <h6 class="card-title">@image.ImageTitle</h6>
-                                <h6 class="card-subtitle mb-1 text-muted">by <b>@image.ApplicationUser.UserName</b></h6>
-                                <p class="card-text"><small><b>@image.Comments.Count</b> comments, <b>14</b> likes</small></p>
+                @foreach (var image in Model.LasestImages)
+                {
+                    <div class="d-inline-flex align-self-start p-2">
+                        <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
+                            <div class="card btn-light" style="max-width: 302px;">
+                                <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width: contain;" src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
+                                <div class="card-body p-2">
+                                    <h6 class="card-title">@image.ImageTitle</h6>
+                                    <h6 class="card-subtitle mb-1 text-muted">by <b>@image.ApplicationUser.UserName</b></h6>
+                                    <p class="card-text"><small><b>@image.Comments.Count</b> comments, <b>14</b> likes</small></p>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
+                }
             }
+            else
+            {
+                <p class="mt-5 mb-5">No photos to display.</p>
+            }
+
         </div>
     </div>
 </div>
