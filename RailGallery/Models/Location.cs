@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace RailGallery.Models
 {
-    public class Category
+    public class Location
     {
-        public int CategoryID { get; set; }
-        [Required, Display(Name = "Category")]
-        public string CategoryTitle { get; set; }
+        public int LocationID { get; set; }
+        [Required, Display(Name = "Location")]
+        public string LocationName { get; set; }
         public ICollection<Image> Images { get; set; }
     }
 }

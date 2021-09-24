@@ -9,8 +9,7 @@ namespace RailGallery.Models
     public class Album
     {
         public int AlbumID { get; set; }
-        [Display(Name = "Album Title")]
-        [Required]
+        [Required, MaxLength(32), Display(Name = "Album Title")]
         public string AlbumTitle { get; set; }
         [Display(Name = "Album Privacy")]
         [Required]

@@ -11,35 +11,20 @@ namespace RailGallery.Models
     {
         [Display(Name = "ID")]
         public int ImageID { get; set; }
-        [Display(Name = "Title")]
-        [MaxLength(32)]
-        [Required]
+        [Display(Name = "Title"), MaxLength(32), Required]
         public string ImageTitle { get; set; }
-        [Display(Name = "Description")]
-        [MaxLength(120)]
+        [Display(Name = "Description"), MaxLength(120), Required]
         public string ImageDescription { get; set; }
-        [Display(Name = "EXIF")]
-        public string ImageMetadata { get; set; }
-        [Display(Name = "Date Taken")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        [Required]
+        [Display(Name = "Date Taken"), DataType(DataType.Date), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}"), Required]
         public DateTime ImageTakenDate { get; set; }
-        [Display(Name = "Date Uploaded")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        [Required]
+        [Display(Name = "Date Uploaded"), DataType(DataType.Date), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}"), Required]
         public DateTime ImageUploadedDate { get; set; }
-        [Display(Name = "Status")]
-        [Required]
+        [Display(Name = "Status"), Required]
         public Status ImageStatus { get; set; }
-        [Display(Name = "Privacy")]
-        [Required]
+        [Display(Name = "Privacy"), Required]
         public Privacy ImagePrivacy { get; set; }
-        public String ImagePath { get; set; }
-        [NotMapped]
-        [Required]
-        [Display(Name = "Image File")]
+        public string ImagePath { get; set; }
+        [Display(Name = "Image File"), NotMapped, Required]
         public IFormFile ImageFile { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
@@ -49,13 +34,17 @@ namespace RailGallery.Models
 
         public ApplicationUser ApplicationUser { get; set; }
 
-        [Display(Name = "Category")]
+        [Display(Name = "Category"), Required]
         public Category Category { get; set; }
+        [Display(Name = "Location"), Required]
+        public Location Location { get; set; }
+        [Display(Name = "Locomotive")]
+        public Locomotive Locomotive { get; set; }
 
         public Image()
         {
-            this.ImageUploadedDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
-            this.ImageStatus = Status.Pending;
+            ImageUploadedDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
+            ImageStatus = Status.Pending;
         }
     }
 }

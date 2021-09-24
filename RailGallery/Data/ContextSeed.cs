@@ -7,34 +7,15 @@ namespace RailGallery.Data
 {
     public class ContextSeed
     {
-        public static async Task SeedRolesAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
         {
             // Seed Roles
             await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Moderator.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Enums.Roles.BasicUser.ToString()));
         }
 
-        public static async Task SeedUsersAsyc(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task SeedUsersAsyc(UserManager<ApplicationUser> userManager)
         {
-            // Seed Super Admin User
-/*            var adminUser = new ApplicationUser
-            {
-                UserName = "Admin",
-                Email = "admin@railgallery.org",
-                EmailConfirmed = true,
-                PhoneNumberConfirmed = true
-            };
-            if (userManager.Users.All(u => u.Id != adminUser.Id))
-            {
-                var user = await userManager.FindByEmailAsync(adminUser.Email);
-                if (user == null)
-                {
-                    await userManager.CreateAsync(adminUser, "Password1!");
-                    await userManager.AddToRoleAsync(adminUser, Enums.Roles.BasicUser.ToString());
-                    await userManager.AddToRoleAsync(adminUser, Enums.Roles.Moderator.ToString());
-                }
-
-            }*/
 
             // Seed Moderator User
             var moderatorUser = new ApplicationUser

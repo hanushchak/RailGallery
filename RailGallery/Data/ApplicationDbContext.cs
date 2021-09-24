@@ -22,6 +22,8 @@ namespace RailGallery.Data
         public DbSet<Like> Likes { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Locomotive> Locomotives { get; set; }
+        public DbSet<Location> Locations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,7 +32,12 @@ namespace RailGallery.Data
             modelBuilder.Entity<Category>().HasData(
                     new Category { CategoryID = 1, CategoryTitle = "Night Shots" },
                     new Category { CategoryID = 2, CategoryTitle = "Golden Hour" },
-                    new Category { CategoryID = 3, CategoryTitle = "Passanger Trains" }
+                    new Category { CategoryID = 3, CategoryTitle = "Accidents" },
+                    new Category { CategoryID = 4, CategoryTitle = "In-Cab Photos" },
+                    new Category { CategoryID = 5, CategoryTitle = "Passenger Trains" },
+                    new Category { CategoryID = 6, CategoryTitle = "Freight Trains" },
+                    new Category { CategoryID = 7, CategoryTitle = "Steam Locomotives" },
+                    new Category { CategoryID = 8, CategoryTitle = "Bridges" }
             );
 
             modelBuilder.Entity<ApplicationUser>(entity =>
