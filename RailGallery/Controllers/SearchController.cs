@@ -63,6 +63,9 @@ namespace RailGallery.Controllers
                 .OrderByDescending(i => i.ImageUploadedDate)
                 .Include(c => c.Comments)
                 .Include(c => c.ApplicationUser)
+                .Include(c => c.Category)
+                .Include(c => c.Location)
+                .Include(c => c.Locomotive)
                 .AsNoTracking();
 
             if (!String.IsNullOrEmpty(ImageTitle))
@@ -80,36 +83,36 @@ namespace RailGallery.Controllers
                 model = model.Where(i => i.ImageDescription.Contains(ImageDescription));
                 ViewBag.ImageDescription = ImageDescription;
             }
-/*            if (!String.IsNullOrEmpty(LocomotiveModel))
+            if (!String.IsNullOrEmpty(LocomotiveModel))
             {
-                model = model.Where(i => i.LocomotiveModel.Contains(LocomotiveModel));
+                model = model.Where(i => i.Locomotive.LocomotiveModel.Contains(LocomotiveModel));
                 ViewBag.LocomotiveModel = LocomotiveModel;
-            }*/
-/*            if (!String.IsNullOrEmpty(LocomotiveBuilt))
+            }
+            if (!String.IsNullOrEmpty(LocomotiveBuilt))
             {
-                model = model.Where(i => i.LocomotiveBuilt.Contains(LocomotiveBuilt));
+                model = model.Where(i => i.Locomotive.LocomotiveBuilt.ToString().Contains(LocomotiveBuilt));
                 ViewBag.LocomotiveBuilt = LocomotiveBuilt;
-            }*/
-/*            if (!String.IsNullOrEmpty(ImageAlbum))
+            }
+            /*if (!String.IsNullOrEmpty(ImageAlbum))
             {
                 model = model.Where(i => i.Albums.Contains(ImageAlbum));
                 ViewBag.ImageAlbum = ImageAlbum;
             }*/
-/*            if (!String.IsNullOrEmpty(ImageCategory))
+            if (!String.IsNullOrEmpty(ImageCategory))
             {
-                model = model.Where(i => i.Category.Contains(ImageCategory));
+                model = model.Where(i => i.Category.CategoryTitle.Contains(ImageCategory));
                 ViewBag.ImageCategory = ImageCategory;
-            }*/
+            }
             if (!String.IsNullOrEmpty(ImageTakenDate))
             {
                 model = model.Where(i => i.ImageTakenDate.ToString().Contains(ImageTakenDate));
                 ViewBag.ImageTakenDate = ImageTakenDate;
             }
-/*            if (!String.IsNullOrEmpty(ImageLocation))
+            if (!String.IsNullOrEmpty(ImageLocation))
             {
-                model = model.Where(i => i.Location.Contains(ImageLocation));
+                model = model.Where(i => i.Location.LocationName.Contains(ImageLocation));
                 ViewBag.ImageLocation = ImageLocation;
-            }*/
+            }
 
 
             int pageSize = 10; // TODO

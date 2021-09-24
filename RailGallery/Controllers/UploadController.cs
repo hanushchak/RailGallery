@@ -173,7 +173,7 @@ namespace RailGallery.Controllers
 
                 _context.Add(image);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("View", "View", image);
+                return RedirectToAction("View", "View", new { @id = image.ImageID });
             }
             return Content("Error");
         }
