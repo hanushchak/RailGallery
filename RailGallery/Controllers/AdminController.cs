@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RailGallery.Data;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace RailGallery.Controllers
 {
+    [Authorize(Roles = "Moderator")]
     public class AdminController : Controller
     {
 

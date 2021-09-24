@@ -35,10 +35,11 @@ namespace RailGallery.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CommentID,CommentText,CommentDate,Image")] Comment comment)
+        public async Task<IActionResult> Create([Bind("CommentID,CommentText,CommentImageID")] Comment comment)
         {
             if (ModelState.IsValid)
             {
+                comment.Image = await _context.Images.FirstOrDefaultAsync(i => i.ImageID == Convert.ToInt32(comment.CommentImageID));
                 var currentUser = await _userManager.GetUserAsync(HttpContext.User);
                 if (currentUser == null)
                 {
