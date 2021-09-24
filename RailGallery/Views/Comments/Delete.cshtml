@@ -33,7 +33,7 @@
                 Comment Author
             </div>
             <div class="col-auto">
-                @Html.DisplayFor(model => model.ApplicationUser.UserName)
+                <a asp-controller="Author" asp-action="Index" asp-route-username="@Model.ApplicationUser.UserName">@Html.DisplayFor(model => model.ApplicationUser.UserName)</a>
             </div>
         </div>
         <br />

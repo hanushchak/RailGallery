@@ -36,7 +36,7 @@ namespace RailGallery.Controllers
         }
 
         // GET: Results
-        public async Task<IActionResult> ResultsAsync(int? page,
+        public async Task<IActionResult> Results(int? page,
                                     string? ImageTitle,
                                     string? ImageAuthor,
                                     string? ImageDescription,

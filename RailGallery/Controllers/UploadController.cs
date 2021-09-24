@@ -43,7 +43,7 @@ namespace RailGallery.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
 
             // Only retrieve images that belong to current user
-            var history = await _context.Images.Where(i => i.ApplicationUser.UserName.Equals(user.UserName)).OrderByDescending(i => i.ImageUploadedDate).ToListAsync();
+            var history = await _context.Images.Where(i => i.ApplicationUser.UserName.Equals(user.UserName)).OrderByDescending(i => i.ImageUploadedDate).AsNoTracking().ToListAsync();
 
             return View(history);
         }

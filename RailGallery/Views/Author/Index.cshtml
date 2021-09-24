@@ -1,23 +1,44 @@
 ﻿@model dynamic
 @{
-    ViewData["Title"] = "Admin Panel";
+    ViewData["Title"] = Model.User.UserName;
 }
 
 
 <div class="row">
-    <div class="col-2 text-center border-right">
+    <div class="col-lg-2 col-md-12 text-center border-right mb-4">
         <h4>@ViewData["Title"]</h4>
+        <hr />
         <div class="justify-content-center">
-            <a asp-controller="Admin" asp-action="Statistics">Photo Statistics</a>
+            @if (User.Identity.Name == Model.User.UserName)
+            {
+                <a asp-area="Identity" asp-page="/Account/Manage/Index">Edit Profile</a>
+                <br />
+                <a asp-controller="Upload" asp-action="Index">Upload Photo</a>
+                <br />
+                <a asp-controller="Albums" asp-action="Create">Add New Album</a>
+                <br />
+                <a asp-controller="Admin" asp-action="Statistics">Photos You've Liked</a> @*TODO*@
+                <br />
+                <a asp-controller="Admin" asp-action="Users">Your Favorites</a> @*TODO*@
+                <br />
+                <a asp-controller="Upload" asp-action="History">Upload History</a>
+                <br />
+                @if (User.IsInRole("Moderator"))
+                {
+                    <a asp-controller="Admin" asp-action="Users" class="text-danger">Admin Panel</a>
+                }
+                <hr />
+            }
+            <a asp-controller="Search" asp-action="Results" asp-route-imageauthor="@Model.User.UserName">Show all @Model.User.UserName's photos</a>
             <br />
-            <a asp-controller="Admin" asp-action="Users">User List</a>
+            <a asp-controller="Admin" asp-action="Statistics">Show all @Model.User.UserName's albums</a> @*TODO*@
         </div>
     </div>
 
 
-    <div class="col-5 border-left border-right">
-        <h5 class="text-center">Recent Comments</h5>
-        @if (Model.RecentComments != null)
+    <div class="col-lg-5 col-md-12 border-left border-right mb-4">
+        <h5 class="text-center">@Model.User.UserName's Recent Albums</h5>
+        @*@if (Model.RecentComments != null)
         {
             @foreach (var comment in Model.RecentComments)
             {
@@ -26,7 +47,7 @@
                     <div class="card-header">
                         <div class="row justify-content-between">
                             <div class="col-auto">
-                                <a asp-controller="Author" asp-action="Index" asp-route-username="@comment.ApplicationUser.UserName"><b>@comment.ApplicationUser.UserName</b></a> @if (User.Identity.Name == comment.ApplicationUser.UserName)
+                                <a href=""><b>@comment.ApplicationUser.UserName</b></a> @if (User.Identity.Name == comment.ApplicationUser.UserName)
                                 {<span class='text-secondary font-weight-bold'>(You)</span>} on @comment.CommentDate
                             </div>
                             <div class="col-auto">
@@ -43,15 +64,15 @@
         else
         {
             <p>No comments to display.</p>
-        }
+        }*@
 
     </div>
 
 
-    <div class="col-5 text-center border-left">
-        <h5>Pending Uploads</h5>
+    <div class="col-lg-5 col-md-12 text-center border-left">
+        <h5>@Model.User.UserName's Recent Photos</h5>
         <div class="d-flex justify-content-center flex-wrap">
-            @foreach (var image in Model.PendingImages)
+            @foreach (var image in Model.RecentPhotos)
             {
                 <div class="d-inline-flex align-self-start p-2">
                     <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
@@ -59,7 +80,7 @@
                             <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width:contain;" src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
                             <div class="card-body p-2">
                                 <h6 class="card-title">@image.ImageTitle</h6>
-                                <h6 class="card-subtitle mb-1 text-muted">by <b>@image.ApplicationUser.UserName</b></h6>
+                                <p class="card-text"><small><b>@image.Comments.Count</b> comments, <b>14</b> likes</small></p>
                             </div>
                         </div>
                     </a>

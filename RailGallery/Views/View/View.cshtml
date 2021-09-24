@@ -1,4 +1,5 @@
 ﻿@model RailGallery.Models.Image
+@using RailGallery.Enums;
 
 @{
     ViewData["Title"] = "View " + Model.ImageTitle;
@@ -45,19 +46,22 @@
                 <h5>@Html.DisplayFor(model => model.ImageTitle)</h5>
             </div>
             <div class="col text-right">
-                by @Html.DisplayFor(model => model.ApplicationUser.UserName)
+                by <a asp-controller="Author" asp-action="Index" asp-route-username="@Model.ApplicationUser.UserName">@Html.DisplayFor(model => model.ApplicationUser.UserName)</a>
                 <br />
                 in Hamilton, ON on @Html.DisplayFor(model => model.ImageTakenDate)
             </div>
         </div>
-        <div class="row mt-2 mb-2">
-            <div class="col text-center">
-                <a href="" class="text-decoration-none"><h5><i class="far fa-heart"><i class="fas fa-heart"></i></i> Like Photo</h5></a>
+        @if (Model.ImagePrivacy != Privacy.Private && Model.ImageStatus == Status.Published)
+        {
+            <div class="row mt-2 mb-2">
+                <div class="col text-center">
+                    <a href="" class="text-decoration-none"><h5><i class="far fa-heart"><i class="fas fa-heart"></i></i> Like Photo</h5></a>
+                </div>
+                <div class="col text-center">
+                    <a href="" class="text-decoration-none"><h5><i class="far fa-star"></i><i class="fas fa-star"></i>Add to Favorites</h5></a>
+                </div>
             </div>
-            <div class="col text-center">
-                <a href="" class="text-decoration-none"><h5><i class="far fa-star"></i><i class="fas fa-star"></i>Add to Favorites</h5></a>
-            </div>
-        </div>
+        }
         <div class="row mb-3 mt-3">
             <div class="col-4 border-right">
                 <h6>Details</h6>
@@ -71,47 +75,49 @@
             </div>
         </div>
 
-        <partial name="_CommentForm" model="new Comment { Image = Model }" />
-
-        <h5>Comments <span class="text-secondary">(@Model.Comments.Count)</span></h5>
-        <hr />
-        @if (Model.Comments.Count > 0)
+        @if (Model.ImagePrivacy != Privacy.Private && Model.ImageStatus == Status.Published)
         {
-            @foreach (var comment in Model.Comments)
+            <partial name="_CommentForm" model="new Comment { Image = Model }" />
+
+            <h5>Comments <span class="text-secondary">(@Model.Comments.Count)</span></h5>
+            <hr />
+            @if (Model.Comments.Count > 0)
             {
-                bool authorOrModerator = false;
-                if (User.Identity.Name == comment.ApplicationUser.UserName || User.IsInRole("Moderator"))
+                @foreach (var comment in Model.Comments)
                 {
-                    authorOrModerator = true;
-                }
+                    bool authorOrModerator = false;
+                    if (User.Identity.Name == comment.ApplicationUser.UserName || User.IsInRole("Moderator"))
+                    {
+                        authorOrModerator = true;
+                    }
 
-                <div class="card border-primary mb-3">
-                    <div class="card-header">
-                        <div class="row justify-content-between">
-                            <div class="col-auto">
-                                <a href=""><b>@comment.ApplicationUser.UserName</b></a> @if (User.Identity.Name == comment.ApplicationUser.UserName)
-                                {<span class='text-secondary font-weight-bold'>(You)</span>} on @comment.CommentDate
-                            </div>
-                            @if (authorOrModerator)
-                            {
+                    <div class="card border-primary mb-3">
+                        <div class="card-header">
+                            <div class="row justify-content-between">
                                 <div class="col-auto">
-                                    <a asp-controller="Comments" asp-action="Delete" asp-route-id="@comment.CommentID">Remove</a>
+                                    <a asp-controller="Author" asp-action="Index" asp-route-username="@comment.ApplicationUser.UserName"><b>@comment.ApplicationUser.UserName</b></a> @if (User.Identity.Name == comment.ApplicationUser.UserName)
+                                    {<span class='text-secondary font-weight-bold'>(You)</span>} on @comment.CommentDate
                                 </div>
-                            }
+                                @if (authorOrModerator)
+                                {
+                                    <div class="col-auto">
+                                        <a asp-controller="Comments" asp-action="Delete" asp-route-id="@comment.CommentID">Remove</a>
+                                    </div>
+                                }
 
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            @comment.CommentText
                         </div>
                     </div>
-                    <div class="card-body">
-                        @comment.CommentText
-                    </div>
-                </div>
+                }
+            }
+            else
+            {
+                <p>This photo does not have any comments.</p>
             }
         }
-        else
-        {
-            <p>This photo does not have any comments.</p>
-        }
-
     </div>
 </div>
 

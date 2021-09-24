@@ -9,14 +9,14 @@ namespace RailGallery.Models
     public class Comment
     {
         public int CommentID { get; set; }
-        [Required,Display(Name ="Comment Text")]
+        [Required, Display(Name ="Comment Text")]
+        [MaxLength(5000)]
         public string CommentText { get; set; }
-        [Required, Display(Name = "Comment Date")]
-        public DateTime CommentDate { get; set; }
+        [Display(Name = "Comment Date")]
+        public DateTime? CommentDate { get; set; }
 
-        [Required, Display(Name = "Comment Author")]
+        [Display(Name = "Comment Author")]
         public ApplicationUser ApplicationUser { get; set; }
-        [Required]
         public Image Image { get; set; }
     }
 }

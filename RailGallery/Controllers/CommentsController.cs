@@ -37,30 +37,34 @@ namespace RailGallery.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CommentID,CommentText,CommentDate,Image")] Comment comment)
         {
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-            if (currentUser == null)
+            if (ModelState.IsValid)
             {
-                return Content("Error");
-            }
-            else
-            {
-                comment.ApplicationUser = currentUser;
-            }
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                if (currentUser == null)
+                {
+                    return Content("Error");
+                }
+                else
+                {
+                    comment.ApplicationUser = currentUser;
+                }
 
-            var image = await _context.Images.FirstOrDefaultAsync(m => m.ImageID == comment.Image.ImageID);
+                var image = await _context.Images.FirstOrDefaultAsync(m => m.ImageID == comment.Image.ImageID);
 
-            if (image == null)
-            {
-                return Content("Error");
-            }
-            else
-            {
-                comment.Image = image;
-            }
+                if (image == null)
+                {
+                    return Content("Error");
+                }
+                else
+                {
+                    comment.Image = image;
+                }
 
-            _context.Add(comment);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("View", "View", new { @id = comment.Image.ImageID });
+                _context.Add(comment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("View", "View", new { @id = comment.Image.ImageID });
+            }
+            return Content("Error");
         }
 
 
