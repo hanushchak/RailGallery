@@ -34,15 +34,14 @@ namespace RailGallery.Controllers
         // GET: Upload
         public async Task<IActionResult> Index()
         {
-            /*List<SelectListItem> categories =*/
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
             ViewBag.Categories = await _context.Categories.Select(c =>
                                   new SelectListItem
                                   {
                                       Value = c.CategoryID.ToString(),
                                       Text = c.CategoryTitle
                                   }).AsNoTracking().ToListAsync();
-
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
             ViewBag.Albums = await _context.Albums.Where(a => a.ApplicationUser.UserName == currentUser.UserName).Select(a =>
                                   new SelectListItem
@@ -55,8 +54,15 @@ namespace RailGallery.Controllers
                                   new SelectListItem
                                   {
                                       Value = l.LocomotiveID.ToString(),
-                                      Text = l.LocomotiveModel + " (built: " + l.LocomotiveBuilt.ToString() + ")"
+                                      Text = l.LocomotiveModel + " (built: " + l.LocomotiveBuilt.ToShortDateString() + ")"
                                   }).AsNoTracking().ToListAsync();
+
+            ViewBag.Locations = await _context.Locations.Select(l =>
+                                 new SelectListItem
+                                 {
+                                     Value = l.LocationID.ToString(),
+                                     Text = l.LocationName
+                                 }).AsNoTracking().ToListAsync();
 
             return View();
         }
@@ -95,10 +101,14 @@ namespace RailGallery.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImageID,ImageTitle,ImageDescription,ImageTakenDate,ImageUploadedDate,ImageStatus,ImagePrivacy,ImageFile")] Image image)
+        public async Task<IActionResult> Create([Bind("ImageID,ImageTitle,ImageDescription,ImageTakenDate,ImageUploadedDate,ImageStatus,ImagePrivacy,ImageFile,ImageCategoryID,ImageLocomotiveID,ImageLocationID")] Image image)
         {
             if (ModelState.IsValid)
             {
+                image.Location = await _context.Locations.FirstOrDefaultAsync(l => l.LocationID == Convert.ToInt32(image.ImageLocationID));
+                image.Category = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryID == Convert.ToInt32(image.ImageCategoryID));
+                image.Locomotive = await _context.Locomotives.FirstOrDefaultAsync(l => l.LocomotiveID == Convert.ToInt32(image.ImageLocomotiveID));
+
                 // Upload image to wwwroot folder
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
                 string fileExtenstion = Path.GetExtension(image.ImageFile.FileName);
@@ -163,9 +173,9 @@ namespace RailGallery.Controllers
 
                 _context.Add(image);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("View", "View", image);
             }
-            return View(image);
+            return Content("Error");
         }
 
         // GET: Upload/Edit/5

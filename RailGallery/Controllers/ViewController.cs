@@ -46,6 +46,8 @@ namespace RailGallery.Controllers
                 .Include(m => m.Favorites)
                 .Include(m => m.Category)
                 .Include(m => m.ApplicationUser)
+                .Include(m => m.Location)
+                .Include(m => m.Locomotive)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ImageID == id);
 

@@ -41,14 +41,25 @@ namespace RailGallery.Data
             );
 
             modelBuilder.Entity<Locomotive>().HasData(
-                    new Locomotive { LocomotiveID = 1, LocomotiveModel = "Steam 4-6-0", LocomotiveBuilt = new DateTime(1964) },
-                    new Locomotive { LocomotiveID = 2, LocomotiveModel = "GE ES44AC", LocomotiveBuilt = new DateTime(1997) },
-                    new Locomotive { LocomotiveID = 3, LocomotiveModel = "GE AC4400CWM", LocomotiveBuilt = new DateTime(2000) },
-                    new Locomotive { LocomotiveID = 4, LocomotiveModel = "R160", LocomotiveBuilt = new DateTime(1956) },
-                    new Locomotive { LocomotiveID = 5, LocomotiveModel = "GE P42DC", LocomotiveBuilt = new DateTime(1994) },
-                    new Locomotive { LocomotiveID = 6, LocomotiveModel = "GC 546", LocomotiveBuilt = new DateTime(2007) },
-                    new Locomotive { LocomotiveID = 7, LocomotiveModel = "Steam 2-8-4", LocomotiveBuilt = new DateTime(1956) },
-                    new Locomotive { LocomotiveID = 8, LocomotiveModel = "AMT 1325", LocomotiveBuilt = new DateTime(2009) }
+                    new Locomotive { LocomotiveID = 1, LocomotiveModel = "Steam 4-6-0", LocomotiveBuilt = new DateTime(1964, 8, 14) },
+                    new Locomotive { LocomotiveID = 2, LocomotiveModel = "GE ES44AC", LocomotiveBuilt = new DateTime(1997, 3, 9) },
+                    new Locomotive { LocomotiveID = 3, LocomotiveModel = "GE AC4400CWM", LocomotiveBuilt = new DateTime(2000, 2, 29) },
+                    new Locomotive { LocomotiveID = 4, LocomotiveModel = "R160", LocomotiveBuilt = new DateTime(1956, 5, 15) },
+                    new Locomotive { LocomotiveID = 5, LocomotiveModel = "GE P42DC", LocomotiveBuilt = new DateTime(1994, 1, 3) },
+                    new Locomotive { LocomotiveID = 6, LocomotiveModel = "GC 546", LocomotiveBuilt = new DateTime(2007, 8, 26) },
+                    new Locomotive { LocomotiveID = 7, LocomotiveModel = "Steam 2-8-4", LocomotiveBuilt = new DateTime(1956, 1, 5) },
+                    new Locomotive { LocomotiveID = 8, LocomotiveModel = "AMT 1325", LocomotiveBuilt = new DateTime(2009, 6, 20) }
+            );
+
+            modelBuilder.Entity<Location>().HasData(
+                    new Location { LocationID = 1, LocationName = "Ontario, Canada" },
+                    new Location { LocationID = 2, LocationName = "New York, USA" },
+                    new Location { LocationID = 3, LocationName = "New Jersey, USA" },
+                    new Location { LocationID = 4, LocationName = "British Columbia, Canada" },
+                    new Location { LocationID = 5, LocationName = "Nova Scotia, Canada" },
+                    new Location { LocationID = 6, LocationName = "Virginia, USA" },
+                    new Location { LocationID = 7, LocationName = "Manitoba, Canada" },
+                    new Location { LocationID = 8, LocationName = "Alberta, Canada" }
             );
 
             modelBuilder.Entity<ApplicationUser>(entity =>

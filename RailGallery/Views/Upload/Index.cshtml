@@ -13,57 +13,104 @@
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ImageTitle" class="control-label"></label>
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <label asp-for="ImageTitle" class="control-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <span asp-validation-for="ImageTitle" class="text-danger"></span>
+                    </div>
+                </div>
                 <input asp-for="ImageTitle" class="form-control" />
-                <span asp-validation-for="ImageTitle" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ImageDescription" class="control-label"></label>
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <label asp-for="ImageDescription" class="control-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <span asp-validation-for="ImageDescription" class="text-danger"></span>
+                    </div>
+                </div>
                 <textarea asp-for="ImageDescription" class="form-control"></textarea>
-                <span asp-validation-for="ImageDescription" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Albums" class="control-label"></label>
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <label asp-for="Albums" class="control-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <a asp-controller="Albums" asp-action="Create">Add New Album</a>
+                        <span asp-validation-for="Albums" class="text-danger"></span>
+                    </div>
+                </div>
                 <select asp-for="Albums" class="form-control" asp-items="@ViewBag.Albums">
                 </select>
-                <span asp-validation-for="Albums" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <select asp-for="Category" class="form-control" asp-items="@ViewBag.Categories">
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <label asp-for="ImageCategoryID" class="control-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <span asp-validation-for="ImageCategoryID" class="text-danger"></span>
+                    </div>
+                </div>
+                <select asp-for="ImageCategoryID" class="form-control" asp-items="@ViewBag.Categories">
                     <option value="">Select Category</option>
                 </select>
-                <span asp-validation-for="Category" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Locomotive" class="control-label"></label>
-                <select asp-for="Locomotive" class="form-control" asp-items="@ViewBag.Locomotives">
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <label asp-for="ImageLocomotiveID" class="control-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <a asp-controller="Locomotive" asp-action="Create">Add New Locomotive</a>
+                        <span asp-validation-for="ImageLocomotiveID" class="text-danger"></span>
+                    </div>
+                </div>
+                <select asp-for="ImageLocomotiveID" class="form-control" asp-items="@ViewBag.Locomotives">
                     <option value="">Select Locomotive</option>
                 </select>
-                <span asp-validation-for="Locomotive" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Locomotive.LocomotiveBuilt" class="control-label"></label>
-                <input asp-for="Locomotive.LocomotiveBuilt" class="form-control">
-                <span asp-validation-for="Locomotive.LocomotiveBuilt" class="text-danger"></span>
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <label asp-for="ImageLocationID" class="control-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <a asp-controller="Location" asp-action="Create">Add New Location</a>
+                        <span asp-validation-for="ImageLocationID" class="text-danger"></span>
+                    </div>
+                </div>
+                <select asp-for="ImageLocationID" class="form-control" asp-items="@ViewBag.Locations">
+                    <option value="">Select Location</option>
+                </select>
             </div>
             <div class="form-group">
-                <label asp-for="Location.LocationName" class="control-label"></label>
-                <input asp-for="Location.LocationName" class="form-control">
-                <span asp-validation-for="Location.LocationName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageTakenDate" class="control-label"></label>
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <label asp-for="ImageTakenDate" class="control-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <span asp-validation-for="ImageTakenDate" class="text-danger"></span>
+                    </div>
+                </div>
                 <input asp-for="ImageTakenDate" class="form-control" />
-                <span asp-validation-for="ImageTakenDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ImagePrivacy" class="control-label"></label>
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <label asp-for="ImagePrivacy" class="control-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <span asp-validation-for="ImagePrivacy" class="text-danger"></span>
+                    </div>
+                </div>
                 <select asp-for="ImagePrivacy" class="form-control" asp-items="Html.GetEnumSelectList<Privacy>()"></select>
-                <span asp-validation-for="ImagePrivacy" class="text-danger"></span>
             </div>
             <div class="form-group">
-
                 <label asp-for="ImageFile" class="control-label"></label>
                 <input asp-for="ImageFile" accept="image/jpg" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
@@ -78,7 +125,6 @@
                     </div>
                 </div>
             </div>
-
         </form>
     </div>
 </div>

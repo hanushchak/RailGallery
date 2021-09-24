@@ -24,6 +24,7 @@ namespace RailGallery.Models
         [Display(Name = "Privacy"), Required]
         public Privacy ImagePrivacy { get; set; }
         public string ImagePath { get; set; }
+
         [Display(Name = "Image File"), NotMapped, Required]
         public IFormFile ImageFile { get; set; }
 
@@ -34,12 +35,18 @@ namespace RailGallery.Models
 
         public ApplicationUser ApplicationUser { get; set; }
 
-        [Display(Name = "Category"), Required]
+        [Display(Name = "Category")]
         public Category Category { get; set; }
-        [Display(Name = "Location"), Required]
+        [Display(Name = "Category"), Required, NotMapped]
+        public string ImageCategoryID { get; set; }
+        [Display(Name = "Location")]
         public Location Location { get; set; }
+        [Display(Name = "Location"), Required, NotMapped]
+        public string ImageLocationID { get; set; }
         [Display(Name = "Locomotive")]
         public Locomotive Locomotive { get; set; }
+        [Display(Name = "Locomotive"), Required, NotMapped]
+        public string ImageLocomotiveID { get; set; }
 
         public Image()
         {

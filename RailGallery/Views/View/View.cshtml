@@ -38,9 +38,9 @@
     <div class="col-md-6 offset-md-3">
         <div class="row mt-3 mb-3">
             <div class="col">
-                Album: Night Shots
+                Album:
                 <br />
-                Category: Freight Trains
+                Category:  <a asp-controller="Search" asp-action="Results" asp-route-imagecategory="@Model.Category.CategoryTitle">@Html.DisplayFor(model => model.Category.CategoryTitle)</a>
             </div>
             <div class="col text-center">
                 <h5>@Html.DisplayFor(model => model.ImageTitle)</h5>
@@ -48,8 +48,8 @@
             <div class="col text-right">
                 by <a asp-controller="Author" asp-action="Index" asp-route-username="@Model.ApplicationUser.UserName">@Html.DisplayFor(model => model.ApplicationUser.UserName)</a>
                 <br />
-                in Hamilton, ON on @Html.DisplayFor(model => model.ImageTakenDate)
-            </div>
+                in <a asp-controller="Search" asp-action="Results" asp-route-imagelocation="@Model.Location.LocationName">@Html.DisplayFor(model => model.Location.LocationName)</a> on <a asp-controller="Search" asp-action="Results" asp-route-imagetakendate="@Model.ImageTakenDate.ToShortDateString()">@Html.DisplayFor(model => model.ImageTakenDate)</a>
+        </div>
         </div>
         @if (Model.ImagePrivacy != Privacy.Private && Model.ImageStatus == Status.Published)
         {
@@ -65,9 +65,9 @@
         <div class="row mb-3 mt-3">
             <div class="col-4 border-right">
                 <h6>Details</h6>
-                Locomotive:
+                Locomotive: <a asp-controller="Search" asp-action="Results" asp-route-locomotivemodel="@Model.Locomotive.LocomotiveModel">@Html.DisplayFor(model => model.Locomotive.LocomotiveModel)</a>
                 <br />
-                Built:
+                Built: <a asp-controller="Search" asp-action="Results" asp-route-locomotivebuilt="@Model.Locomotive.LocomotiveBuilt.ToShortDateString()">@Html.DisplayFor(model => model.Locomotive.LocomotiveBuilt.Year)</a>
             </div>
             <div class="col-8 border-left">
                 <h6>Description</h6>
