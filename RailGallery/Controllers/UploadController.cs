@@ -32,8 +32,32 @@ namespace RailGallery.Controllers
         }
 
         // GET: Upload
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            /*List<SelectListItem> categories =*/
+            ViewBag.Categories = await _context.Categories.Select(c =>
+                                  new SelectListItem
+                                  {
+                                      Value = c.CategoryID.ToString(),
+                                      Text = c.CategoryTitle
+                                  }).AsNoTracking().ToListAsync();
+
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            ViewBag.Albums = await _context.Albums.Where(a => a.ApplicationUser.UserName == currentUser.UserName).Select(a =>
+                                  new SelectListItem
+                                  {
+                                      Value = a.AlbumID.ToString(),
+                                      Text = a.AlbumTitle
+                                  }).AsNoTracking().ToListAsync();
+
+            ViewBag.Locomotives = await _context.Locomotives.Select(l =>
+                                  new SelectListItem
+                                  {
+                                      Value = l.LocomotiveID.ToString(),
+                                      Text = l.LocomotiveModel + " (built: " + l.LocomotiveBuilt.ToString() + ")"
+                                  }).AsNoTracking().ToListAsync();
+
             return View();
         }
 
@@ -71,7 +95,7 @@ namespace RailGallery.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImageID,ImageTitle,ImageDescription,ImageMetadata,ImageTakenDate,ImageUploadedDate,ImageStatus,ImagePrivacy,ImageFile")] Image image)
+        public async Task<IActionResult> Create([Bind("ImageID,ImageTitle,ImageDescription,ImageTakenDate,ImageUploadedDate,ImageStatus,ImagePrivacy,ImageFile")] Image image)
         {
             if (ModelState.IsValid)
             {
@@ -165,7 +189,7 @@ namespace RailGallery.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ImageID,ImageTitle,ImageDescription,ImageMetadata,ImageTakenDate,ImageUploadedDate,ImageStatus,ImagePrivacy")] Image image)
+        public async Task<IActionResult> Edit(int id, [Bind("ImageID,ImageTitle,ImageDescription,ImageTakenDate,ImageUploadedDate,ImageStatus,ImagePrivacy")] Image image)
         {
             if (id != image.ImageID)
             {

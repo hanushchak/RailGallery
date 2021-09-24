@@ -40,6 +40,17 @@ namespace RailGallery.Data
                     new Category { CategoryID = 8, CategoryTitle = "Bridges" }
             );
 
+            modelBuilder.Entity<Locomotive>().HasData(
+                    new Locomotive { LocomotiveID = 1, LocomotiveModel = "Steam 4-6-0", LocomotiveBuilt = new DateTime(1964) },
+                    new Locomotive { LocomotiveID = 2, LocomotiveModel = "GE ES44AC", LocomotiveBuilt = new DateTime(1997) },
+                    new Locomotive { LocomotiveID = 3, LocomotiveModel = "GE AC4400CWM", LocomotiveBuilt = new DateTime(2000) },
+                    new Locomotive { LocomotiveID = 4, LocomotiveModel = "R160", LocomotiveBuilt = new DateTime(1956) },
+                    new Locomotive { LocomotiveID = 5, LocomotiveModel = "GE P42DC", LocomotiveBuilt = new DateTime(1994) },
+                    new Locomotive { LocomotiveID = 6, LocomotiveModel = "GC 546", LocomotiveBuilt = new DateTime(2007) },
+                    new Locomotive { LocomotiveID = 7, LocomotiveModel = "Steam 2-8-4", LocomotiveBuilt = new DateTime(1956) },
+                    new Locomotive { LocomotiveID = 8, LocomotiveModel = "AMT 1325", LocomotiveBuilt = new DateTime(2009) }
+            );
+
             modelBuilder.Entity<ApplicationUser>(entity =>
             {
                 entity.ToTable(name: "Users");
