@@ -7,7 +7,7 @@
 }
 
 <div class="row">
-    
+
     <div class="w-100 text-center mb-2">
 
         @if (ViewBag.isPending)
@@ -20,7 +20,8 @@
                     <button type="button" class="btn btn-success mr-2">Publish</button><button type="button" class="btn btn-danger">Decline</button>
                 }
             </div>
-        } else if (ViewBag.isPrivate)
+        }
+        else if (ViewBag.isPrivate)
         {
             <div class="alert alert-warning" role="alert">
                 This image is uploaded as <b>private</b> and only visible to you.
@@ -28,41 +29,51 @@
         }
         <img src="/api/Photo/@Model.ImagePath" asp-append-version="true" class="img-fluid shadow-sm p-1 bg-white " />
     </div>
+    
+    
+       
+    
+    
     <div class="col-md-6 offset-md-3">
-        <div>
-            <dl class="row">
-                <dt class="col-auto">
-                    @Html.DisplayNameFor(model => model.ImageTitle)
-                </dt>
-                <dd class="col-auto">
-                    @Html.DisplayFor(model => model.ImageTitle)
-                </dd>
-                <dt class="col-auto">
-                    By
-                </dt>
-                <dd class="col-auto">
-                    @Html.DisplayFor(model => model.ApplicationUser.UserName)
-                </dd>
-                <dt class="col-auto">
-                    @Html.DisplayNameFor(model => model.ImageDescription)
-                </dt>
-                <dd class="col-auto">
-                    @Html.DisplayFor(model => model.ImageDescription)
-                </dd>
-                <dt class="col-auto">
-                    @Html.DisplayNameFor(model => model.ImageTakenDate)
-                </dt>
-                <dd class="col-auto">
-                    @Html.DisplayFor(model => model.ImageTakenDate)
-                </dd>
-                <dd class="col-auto">
-                    <a asp-action="Edit" asp-route-id="@Model.ImageID">Edit Photo</a>
-                </dd>
-            </dl>
+        <div class="row mt-3 mb-3">
+            <div class="col">
+                Album: Night Shots
+                <br />
+                Category: Freight Trains
+            </div>
+            <div class="col text-center">
+                <h5>@Html.DisplayFor(model => model.ImageTitle)</h5>
+            </div>
+            <div class="col text-right">
+                by @Html.DisplayFor(model => model.ApplicationUser.UserName)
+                <br />
+                in Hamilton, ON on @Html.DisplayFor(model => model.ImageTakenDate)
+            </div>
         </div>
+        <div class="row mt-2 mb-2">
+            <div class="col text-center">
+                <a href="" class="text-decoration-none"><h5><i class="far fa-heart"><i class="fas fa-heart"></i></i> Like Photo</h5></a>
+            </div>
+            <div class="col text-center">
+                <a href="" class="text-decoration-none"><h5><i class="far fa-star"></i><i class="fas fa-star"></i>Add to Favorites</h5></a>
+            </div>
+        </div>
+        <div class="row mb-3 mt-3">
+            <div class="col-4 border-right">
+                <h6>Details</h6>
+                Locomotive:
+                <br />
+                Built:
+            </div>
+            <div class="col-8 border-left">
+                <h6>Description</h6>
+                @Html.DisplayFor(model => model.ImageDescription)
+            </div>
+        </div>
+
         <partial name="_CommentForm" model="new Comment { Image = Model }" />
 
-        <h5>All Comments <span class="text-secondary">(@Model.Comments.Count)</span></h5>
+        <h5>Comments <span class="text-secondary">(@Model.Comments.Count)</span></h5>
         <hr />
         @if (Model.Comments.Count > 0)
         {
@@ -73,12 +84,13 @@
                 {
                     authorOrModerator = true;
                 }
-                
+
                 <div class="card border-primary mb-3">
                     <div class="card-header">
                         <div class="row justify-content-between">
                             <div class="col-auto">
-                                <a href=""><b>@comment.ApplicationUser.UserName</b></a> @if(User.Identity.Name == comment.ApplicationUser.UserName) { <span class='text-secondary font-weight-bold'>(You)</span> } on @comment.CommentDate
+                                <a href=""><b>@comment.ApplicationUser.UserName</b></a> @if (User.Identity.Name == comment.ApplicationUser.UserName)
+                                {<span class='text-secondary font-weight-bold'>(You)</span>} on @comment.CommentDate
                             </div>
                             @if (authorOrModerator)
                             {
@@ -94,10 +106,13 @@
                     </div>
                 </div>
             }
-        } else
-            {
-                <p>This photo does not have any comments.</p>
-            }
+        }
+        else
+        {
+            <p>This photo does not have any comments.</p>
+        }
 
     </div>
 </div>
+
+<script src="https://kit.fontawesome.com/d3137ef294.js" crossorigin="anonymous"></script>
