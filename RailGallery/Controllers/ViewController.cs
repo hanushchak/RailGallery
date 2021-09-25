@@ -56,10 +56,12 @@ namespace RailGallery.Controllers
             bool imageIsPrivate = image.ImagePrivacy == Enums.Privacy.Private;
             bool userIsAuthor = userLoggedIn && image.ApplicationUser.UserName.Equals(currentUser.UserName);
             bool userIsModerator = userLoggedIn && currentUserRoles.Contains(Enums.Roles.Moderator.ToString());
+            bool imageRejected = image.ImageStatus == Enums.Status.Rejected;
 
             // Only view if has the permissions
             if ((image == null) ||
                     (imagePending && !(userIsAuthor || userIsModerator)) ||
+                    (imageRejected && !(userIsAuthor || userIsModerator)) ||
                     (imageIsPrivate && !userIsAuthor))
             {
                 return NotFound();
@@ -67,6 +69,7 @@ namespace RailGallery.Controllers
 
             ViewBag.isPending = imagePending;
             ViewBag.isPrivate = imageIsPrivate;
+            ViewBag.isRejected = imageRejected;
             return View(image);
         }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -44,6 +45,42 @@ namespace RailGallery.Controllers
                 .AsNoTracking();
 
             return View(adminModel);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReviewPhoto([Bind("decision,ImageID")]IFormCollection collection)
+        {
+            string imageID = collection["ImageID"];
+
+            if (String.IsNullOrEmpty(imageID))
+            {
+                return Content("Error");
+            }
+            
+            var image = await _context.Images.FirstOrDefaultAsync(m => m.ImageID.ToString() == imageID);
+
+            if (collection["decision"] == "Reject")
+            {
+                image.ImageStatus = Enums.Status.Rejected;
+                _context.Update(image);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("View", "View", new { @id = image.ImageID });
+            }
+
+            if (collection["decision"] == "Approve")
+            {
+                image.ImageStatus = Enums.Status.Published;
+                _context.Update(image);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("View", "View", new { @id = image.ImageID });
+            }
+
+
+            return Content("Error");
         }
     }
 }

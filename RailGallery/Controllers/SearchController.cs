@@ -59,7 +59,7 @@ namespace RailGallery.Controllers
             bool userIsModerator = userLoggedIn && currentUserRoles.Contains(Enums.Roles.Moderator.ToString());
 
                 var model = _context.Images
-                .Where(i => !((i.ImageStatus == Enums.Status.Pending) || (i.ImagePrivacy == Enums.Privacy.Private && !(userLoggedIn && i.ApplicationUser.UserName.Equals(currentUser.UserName)))))
+                .Where(i => !((i.ImageStatus == Enums.Status.Pending) || (i.ImageStatus == Enums.Status.Rejected) || (i.ImagePrivacy == Enums.Privacy.Private && !(userLoggedIn && i.ApplicationUser.UserName.Equals(currentUser.UserName)))))
                 .OrderByDescending(i => i.ImageUploadedDate)
                 .Include(c => c.Comments)
                 .Include(c => c.ApplicationUser)
