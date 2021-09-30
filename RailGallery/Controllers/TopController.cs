@@ -65,7 +65,7 @@ namespace RailGallery.Controllers
 
             ViewBag.Time = time;
 
-            int pageSize = 5;
+            int pageSize = 15;
 
             int pageNumber = (int)((!page.HasValue || page == 0) ? 1 : page);
 
