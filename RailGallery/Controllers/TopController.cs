@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RailGallery.Models;
+using X.PagedList;
 
 namespace RailGallery.Controllers
 {
@@ -23,15 +24,14 @@ namespace RailGallery.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string? time)
+        public async Task<IActionResult> Index(string time, int? page)
         {
             List<Image> images = null;
 
-            if (String.IsNullOrEmpty(time) || time.ToLower() == "24hour")
+            if (String.IsNullOrEmpty(time) || time.ToLower() == "24hours")
             {
                 images = await _context.Images
                 .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
-                /*.Take(24)*/
                 .OrderByDescending(i => i.ImageUploadedDate)
                 .Include(c => c.Likes)
                 .Include(c => c.Comments)
@@ -42,7 +42,6 @@ namespace RailGallery.Controllers
             {
                 images = await _context.Images
                 .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
-                /*.Take(24)*/
                 .OrderByDescending(i => i.ImageUploadedDate)
                 .Include(c => c.Likes)
                 .Include(c => c.Comments)
@@ -53,7 +52,6 @@ namespace RailGallery.Controllers
             {
                 images = await _context.Images
                 .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
-                /*.Take(24)*/
                 .OrderByDescending(i => i.ImageUploadedDate)
                 .Include(c => c.Likes)
                 .Include(c => c.Comments)
@@ -63,9 +61,15 @@ namespace RailGallery.Controllers
             } else
             {
                 return NotFound();
-            }   
+            }
 
-            return View(images);
+            ViewBag.Time = time;
+
+            int pageSize = 5;
+
+            int pageNumber = (int)((!page.HasValue || page == 0) ? 1 : page);
+
+            return View(images.ToPagedList(pageNumber, pageSize));
         }
     }
 }
