@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace RailGallery.Controllers
 {
@@ -25,7 +26,7 @@ namespace RailGallery.Controllers
         }
 
         [Route("Saved/{type}")]
-        public async Task<ActionResult> Index(string type)
+        public async Task<ActionResult> Index(string type, int? page)
         {
             List<Image> images = null;
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
@@ -59,7 +60,13 @@ namespace RailGallery.Controllers
                 return NotFound();
             }
 
-            return View(images);
+            ViewBag.Action = type;
+
+            int pageSize = 5; // TODO
+
+            int pageNumber = (int)((!page.HasValue || page == 0) ? 1 : page);
+
+            return View(images.ToPagedList(pageNumber, pageSize));
         }
 
         [HttpPost]

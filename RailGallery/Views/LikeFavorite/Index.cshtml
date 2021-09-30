@@ -1,6 +1,10 @@
-﻿@model IList<RailGallery.Models.Image>
+﻿@model IPagedList<RailGallery.Models.Image>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Web.Common;
 @{
     ViewData["Title"] = ViewBag.Title;
+    string action = ViewBag.Action;
 }
 
 
@@ -19,19 +23,10 @@
         }
         else
         {
-            @*<div class="mt-4">
-                     @Html.PagedListPager(Model, page => Url.Action("Results", new
-                     {
-                         page,
-                         ImageTitle = ViewBag.ImageTitle,
-                         ImageAuthor = ViewBag.ImageAuthor,
-                         ImageDescription = ViewBag.ImageDescription,
-                         LocomotiveModel = ViewBag.LocomotiveModel,
-                         LocomotiveBuilt = ViewBag.LocomotiveBuilt,
-                         ImageAlbum = ViewBag.ImageAlbum,
-                         ImageCategory = ViewBag.ImageCategory,
-                         ImageTakenDate = ViewBag.ImageTakenDate,
-                         ImageLocation = ViewBag.ImageLocation
+            <div class="mt-2">
+                     @Html.PagedListPager(Model, page => Url.Action(action, "Saved", new
+                {
+                    page
                 }), new PagedListRenderOptions
                 {
                     ContainerDivClasses = new string[] { "pagination justify-content-center" },
@@ -40,7 +35,7 @@
                     LiElementClasses = new string[] { "page-item" },
                     PageClasses = new string[] { "page-link" }
                 })
-                 </div>*@
+                 </div>
 
             <div class="d-flex justify-content-center flex-wrap">
                 @foreach (var image in Model)
@@ -60,28 +55,19 @@
                     </div>
                 }
             </div>
-            @*<div class="mt-4">
-                    @Html.PagedListPager(Model, page => Url.Action("Results", new
-                    {
-                        page,
-                        ImageTitle = ViewBag.ImageTitle,
-                        ImageAuthor = ViewBag.ImageAuthor,
-                        ImageDescription = ViewBag.ImageDescription,
-                        LocomotiveModel = ViewBag.LocomotiveModel,
-                        LocomotiveBuilt = ViewBag.LocomotiveBuilt,
-                        ImageAlbum = ViewBag.ImageAlbum,
-                        ImageCategory = ViewBag.ImageCategory,
-                        ImageTakenDate = ViewBag.ImageTakenDate,
-                        ImageLocation = ViewBag.ImageLocation
-                    }), new PagedListRenderOptions
-                    {
-                        ContainerDivClasses = new string[] { "pagination justify-content-center" },
-                        LinkToPreviousPageFormat = "Previous",
-                        LinkToNextPageFormat = "Next",
-                        LiElementClasses = new string[] { "page-item" },
-                        PageClasses = new string[] { "page-link" }
-                    })
-                </div>*@
+            <div class="mt-4">
+                @Html.PagedListPager(Model, page => Url.Action(action, "Saved", new
+           {
+               page
+           }), new PagedListRenderOptions
+           {
+               ContainerDivClasses = new string[] { "pagination justify-content-center" },
+               LinkToPreviousPageFormat = "Previous",
+               LinkToNextPageFormat = "Next",
+               LiElementClasses = new string[] { "page-item" },
+               PageClasses = new string[] { "page-link" }
+           })
+            </div>
         }
     </div>
 </div>

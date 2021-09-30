@@ -48,7 +48,7 @@ namespace RailGallery.Controllers
             authorModel.RecentPhotos = await _context.Images
                 .Where(i => i.ApplicationUser.UserName.Equals(user.UserName) && i.ImageStatus == Enums.Status.Published && i.ImagePrivacy == Enums.Privacy.Public)
                 .OrderByDescending(i => i.ImageUploadedDate)
-                .Take(10)
+                .Take(15)
                 .Include(c => c.Comments)
                 .Include(c => c.Likes)
                 .AsNoTracking()
