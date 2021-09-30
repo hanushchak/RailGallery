@@ -60,18 +60,39 @@
                 by <a asp-controller="Author" asp-action="Index" asp-route-username="@Model.ApplicationUser.UserName">@Html.DisplayFor(model => model.ApplicationUser.UserName)</a>
                 <br />
                 in <a asp-controller="Search" asp-action="Results" asp-route-imagelocation="@Model.Location.LocationName">@Html.DisplayFor(model => model.Location.LocationName)</a> on <a asp-controller="Search" asp-action="Results" asp-route-imagetakendate="@Model.ImageTakenDate.ToShortDateString()">@Html.DisplayFor(model => model.ImageTakenDate)</a>
-        </div>
-        </div>
-        @if (Model.ImagePrivacy != Privacy.Private && Model.ImageStatus == Status.Published)
-        {
-            <div class="row mt-2 mb-2">
-                <div class="col text-center">
-                    <a href="" class="text-decoration-none"><h5><i class="far fa-heart"></i>@*<i class="fas fa-heart"></i>*@ Like Photo</h5></a>
-                </div>
-                <div class="col text-center">
-                    <a href="" class="text-decoration-none"><h5><i class="far fa-star"></i>@*<i class="fas fa-star"></i>*@ Add to Favorites</h5></a>
-                </div>
             </div>
+        </div>
+        @if (Model.ImagePrivacy != Privacy.Private && Model.ImageStatus == Status.Published && User.Identity.IsAuthenticated)
+        {
+            <form asp-controller="LikeFavorite" asp-action="LikeOrFavorite" method="post">
+                <input type="hidden" name="ImageID" value="@Model.ImageID" />
+                <div class="row mt-2 mb-2">
+                    <div class="col text-center">
+                        <button value="Like" name="action" type="submit" class="btn btn-link text-decoration-none">
+                            @if (ViewBag.isLiked)
+                            {
+                                <h5><i class="fas fa-heart"></i> Liked</h5>
+                            }
+                            else
+                            {
+                                <h5><i class="far fa-heart"></i> Like Photo</h5>
+                            }
+                        </button>
+                    </div>
+                    <div class="col text-center">
+                        <button value="Favorite" name="action" type="submit" class="btn btn-link text-decoration-none">
+                            @if (ViewBag.isFavorited)
+                            {
+                                <h5><i class="fas fa-star"></i> Added to Favorites</h5>
+                            }
+                            else
+                            {
+                                <h5><i class="far fa-star"></i> Add to Favorites</h5>
+                            }
+                        </button>
+                    </div>
+                </div>
+            </form>
         }
         <div class="row mb-3 mt-3">
             <div class="col-4 border-right">
