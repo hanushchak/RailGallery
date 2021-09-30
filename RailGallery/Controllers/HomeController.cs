@@ -30,16 +30,16 @@ namespace RailGallery.Controllers
             // Most recent images
             homeModel.LasestImages = _context.Images
                 .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
-                /*.Take(24)*/
                 .OrderByDescending(i => i.ImageUploadedDate)
+                .Take(20)
                 .Include(c => c.Comments)
                 .Include(c => c.ApplicationUser)
                 .AsNoTracking();
 
             homeModel.Top24HoursImages = _context.Images
                 .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
-                /*.Take(6)*/
                 .OrderByDescending(i => i.ImageUploadedDate)
+                .Take(10)
                 .Include(c => c.Comments)
                 .Include(c => c.ApplicationUser)
                 .AsNoTracking();

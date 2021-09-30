@@ -46,9 +46,9 @@ namespace RailGallery.Controllers
             authorModel.User = user;
 
             authorModel.RecentPhotos = await _context.Images
-                .Take(10)
                 .Where(i => i.ApplicationUser.UserName.Equals(user.UserName) && i.ImageStatus == Enums.Status.Published && i.ImagePrivacy == Enums.Privacy.Public)
                 .OrderByDescending(i => i.ImageUploadedDate)
+                .Take(10)
                 .Include(c => c.Comments)
                 .AsNoTracking()
                 .ToListAsync();

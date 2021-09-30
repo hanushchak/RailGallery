@@ -40,7 +40,7 @@ namespace RailGallery.Controllers
             }
 
             var image = await _context.Images
-                .Include(m => m.Comments.OrderByDescending(c => c.CommentDate)).ThenInclude(c => c.ApplicationUser)
+                .Include(m => m.Comments.OrderBy(c => c.CommentDate)).ThenInclude(c => c.ApplicationUser)
                 .Include(m => m.Likes)
                 .Include(m => m.Albums)
                 .Include(m => m.Favorites)
