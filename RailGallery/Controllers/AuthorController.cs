@@ -50,6 +50,7 @@ namespace RailGallery.Controllers
                 .OrderByDescending(i => i.ImageUploadedDate)
                 .Take(10)
                 .Include(c => c.Comments)
+                .Include(c => c.Likes)
                 .AsNoTracking()
                 .ToListAsync();
 

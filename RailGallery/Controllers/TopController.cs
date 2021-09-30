@@ -33,6 +33,7 @@ namespace RailGallery.Controllers
                 .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
                 /*.Take(24)*/
                 .OrderByDescending(i => i.ImageUploadedDate)
+                .Include(c => c.Likes)
                 .Include(c => c.Comments)
                 .Include(c => c.ApplicationUser)
                 .AsNoTracking()
@@ -43,6 +44,7 @@ namespace RailGallery.Controllers
                 .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
                 /*.Take(24)*/
                 .OrderByDescending(i => i.ImageUploadedDate)
+                .Include(c => c.Likes)
                 .Include(c => c.Comments)
                 .Include(c => c.ApplicationUser)
                 .AsNoTracking()
@@ -53,6 +55,7 @@ namespace RailGallery.Controllers
                 .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
                 /*.Take(24)*/
                 .OrderByDescending(i => i.ImageUploadedDate)
+                .Include(c => c.Likes)
                 .Include(c => c.Comments)
                 .Include(c => c.ApplicationUser)
                 .AsNoTracking()

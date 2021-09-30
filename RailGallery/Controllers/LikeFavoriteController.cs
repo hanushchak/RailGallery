@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace RailGallery.Controllers
 {
+    [Authorize]
     public class LikeFavoriteController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -23,9 +24,45 @@ namespace RailGallery.Controllers
             _userManager = userManager;
         }
 
+        [Route("Saved/{type}")]
+        public async Task<ActionResult> Index(string type)
+        {
+            List<Image> images = null;
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (String.IsNullOrEmpty(type) || type.ToLower() == "liked")
+            {
+                ViewBag.Title = "Photos You've Liked";
+                images = await _context.Images
+                .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private && i.Likes.Where(l=>l.ApplicationUser.UserName == currentUser.UserName).Any())
+                .OrderByDescending(i => i.Likes.FirstOrDefault().LikeID)
+                .Include(c => c.Comments)
+                .Include(c => c.Likes)
+                .Include(c => c.ApplicationUser)
+                .AsNoTracking()
+                .ToListAsync();
+            }
+            else if (type.ToLower() == "favorite")
+            {
+                ViewBag.Title = "Your Favoirte Photos";
+                images = await _context.Images
+                .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private && i.Favorites.Where(l => l.ApplicationUser.UserName == currentUser.UserName).Any())
+                .OrderByDescending(i => i.Favorites.FirstOrDefault().FavoriteID)
+                .Include(c => c.Comments)
+                .Include(c => c.Likes)
+                .Include(c => c.ApplicationUser)
+                .AsNoTracking()
+                .ToListAsync();
+            }
+            else
+            {
+                return NotFound();
+            }
+
+            return View(images);
+        }
 
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LikeOrFavorite([Bind("action,ImageID")] IFormCollection collection)
         {

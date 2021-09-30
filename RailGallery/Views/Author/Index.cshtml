@@ -17,9 +17,9 @@
                 <br />
                 <a asp-controller="Albums" asp-action="Create">Add New Album</a>
                 <br />
-                <a asp-controller="Admin" asp-action="Statistics">Photos You've Liked</a> @*TODO*@
+                <a asp-controller="Saved" asp-action="Liked" >Photos You've Liked</a>
                 <br />
-                <a asp-controller="Admin" asp-action="Users">Your Favorites</a> @*TODO*@
+                <a asp-controller="Saved" asp-action="Favorite" >Your Favorites</a>
                 <br />
                 <a asp-controller="Upload" asp-action="History">Upload History</a>
                 <br />
@@ -82,7 +82,7 @@
                                 <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width:contain;" src="/api/Photo/@image.ImagePath/Thumbnail" asp-append-version="true" alt="Card image cap">
                                 <div class="card-body p-2">
                                     <h6 class="card-title">@image.ImageTitle</h6>
-                                    <p class="card-text"><small><b>@image.Comments.Count</b> comments, <b>14</b> likes</small></p>
+                                    <p class="card-text"><small><b>@image.Comments.Count</b> comments, <b>@image.Likes.Count</b> likes</small></p>
                                 </div>
                             </div>
                         </a>

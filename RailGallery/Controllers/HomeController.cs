@@ -33,6 +33,7 @@ namespace RailGallery.Controllers
                 .OrderByDescending(i => i.ImageUploadedDate)
                 .Take(20)
                 .Include(c => c.Comments)
+                .Include(c => c.Likes)
                 .Include(c => c.ApplicationUser)
                 .AsNoTracking();
 
@@ -41,6 +42,7 @@ namespace RailGallery.Controllers
                 .OrderByDescending(i => i.ImageUploadedDate)
                 .Take(10)
                 .Include(c => c.Comments)
+                .Include(c => c.Likes)
                 .Include(c => c.ApplicationUser)
                 .AsNoTracking();
 
