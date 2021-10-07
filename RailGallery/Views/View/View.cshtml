@@ -49,8 +49,29 @@
     <div class="col-md-6 offset-md-3">
         <div class="row mt-3 mb-3">
             <div class="col">
-                Album:
-                <br />
+                @if (Model.Albums.Count > 0)
+                {
+                    if (Model.Albums.Count == 1)
+                    {
+                        if (Model.Albums.ElementAt(0).AlbumPrivacy != Privacy.Private || User.Identity.Name == Model.Albums.ElementAt(0).ApplicationUser.UserName)
+                        {
+                            <div>Album: <a href="">@Model.Albums.ElementAt(0).AlbumTitle</a></div>
+                        }
+                    }
+                    else
+                    {
+                        <div>Albums:</div>
+                        <ul>
+                            @foreach (Album album in Model.Albums)
+                            {
+                                if (album.AlbumPrivacy != Privacy.Private || User.Identity.Name == album.ApplicationUser.UserName)
+                                {
+                                    <li><a href="">@album.AlbumTitle</a></li>
+                                }
+                            }
+                        </ul>
+                    }
+                }
                 Category:  <a asp-controller="Search" asp-action="Results" asp-route-imagecategory="@Model.Category.CategoryTitle">@Html.DisplayFor(model => model.Category.CategoryTitle)</a>
             </div>
             <div class="col text-center">
