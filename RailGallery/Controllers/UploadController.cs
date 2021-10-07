@@ -115,32 +115,66 @@ namespace RailGallery.Controllers
                 string uniqueFileName = Guid.NewGuid().ToString() + fileExtenstion;
                 string filePath = Path.Combine(wwwRootPath, "photo", uniqueFileName);
                 
-                //TODO Check size
+
                 using (FileStream fileStream = new (filePath, FileMode.Create))
                 {
                     await image.ImageFile.CopyToAsync(fileStream);
                 }
 
-                // Create image thumbnail
-                int thumbnailSize = 300; // In px
+                if(Path.GetExtension(filePath).ToLowerInvariant() != "jpg")
+                {
+                    System.IO.File.Delete(filePath);
+                    return Content("Non-image files are not supported.");
+                }
 
                 System.Drawing.Image sourceImage = System.Drawing.Image.FromFile(filePath);
 
-                int width, height;
+                int sourceWidth = sourceImage.Width;
+                int sourceHeight = sourceImage.Height;
+                int maximumAllowedSize = 1380;
 
-                height = (int)((thumbnailSize * sourceImage.Height) / sourceImage.Width);
-                width = thumbnailSize;
-
-                /*if (sourceImage.Width >= sourceImage.Height)
+                if(sourceWidth > maximumAllowedSize || sourceHeight > maximumAllowedSize)
                 {
-                    height = (int)((thumbnailSize * sourceImage.Height) / sourceImage.Width);
-                    width = thumbnailSize;
+                    int newWidth = maximumAllowedSize;
+                    int newHeight = maximumAllowedSize;
+
+                    if(sourceWidth > sourceHeight)
+                    {
+
+                        newHeight = (newHeight * sourceHeight) / sourceWidth;
+                    }
+                    else
+                    {
+                        newWidth = (newWidth * sourceWidth) / sourceHeight;
+                    }
+
+                    System.Drawing.Bitmap newImage = new System.Drawing.Bitmap(newWidth, newHeight);
+
+                    using (System.Drawing.Graphics gr = System.Drawing.Graphics.FromImage(newImage))
+                    {
+                        gr.SmoothingMode = SmoothingMode.Default;
+                        gr.InterpolationMode = InterpolationMode.Default;
+                        gr.PixelOffsetMode = PixelOffsetMode.Default;
+                        gr.DrawImage(sourceImage, new System.Drawing.Rectangle(0, 0, newWidth, newHeight));
+                    }
+
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        sourceImage.Dispose();
+                        System.IO.File.Delete(filePath);
+                    }
+
+                    newImage.Save(filePath);
+                    sourceImage = System.Drawing.Image.FromFile(filePath);
+                    newImage.Dispose();
+
                 }
-                else
-                {
-                    height = thumbnailSize;
-                    width = (int)((thumbnailSize * sourceImage.Width) / sourceImage.Height);
-                }*/
+
+                // Create image thumbnail
+                int thumbnailSize = 300;
+
+                int height = (int)((thumbnailSize * sourceImage.Height) / sourceImage.Width);
+                int width = thumbnailSize;
                 
                 System.Drawing.Bitmap thumbnailImage = new System.Drawing.Bitmap(width, height);
                 using (System.Drawing.Graphics gr = System.Drawing.Graphics.FromImage(thumbnailImage))
