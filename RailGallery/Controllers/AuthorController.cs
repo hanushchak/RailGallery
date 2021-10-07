@@ -54,6 +54,15 @@ namespace RailGallery.Controllers
                 .AsNoTracking()
                 .ToListAsync();
 
+            authorModel.RecentAlbums = await _context.Albums
+                .Where(a => a.ApplicationUser.UserName.Equals(user.UserName))
+                .OrderByDescending(a => a.AlbumID)
+                .Take(15)
+                .Include(a => a.Images.OrderByDescending(i => i.ImageID))
+                .AsNoTracking()
+                .ToListAsync();
+
+
             return View(authorModel);
         }
 

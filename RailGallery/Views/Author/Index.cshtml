@@ -36,35 +36,40 @@
     </div>
 
 
-    <div class="col-lg-5 col-md-12 border-left border-right mb-4">
+    <div class="col-lg-5 col-md-12 text-center border-left border-right mb-4">
         <h5 class="text-center">@Model.User.UserName's Recent Albums</h5>
-        @*@if (Model.RecentComments != null)
-        {
-            @foreach (var comment in Model.RecentComments)
+        <div class="d-flex justify-content-center flex-wrap">
+            @if (((IEnumerable<Album>)Model.RecentAlbums).Any())
             {
+                @foreach (Album album in Model.RecentAlbums)
+                {
+                    <div class="d-inline-flex align-self-start p-2">
+                        <a asp-controller="View" asp-action="View" asp-route-id="@album.AlbumID" class="text-decoration-none">
+                            <div class="card btn-light" style="max-width: 302px;">
+                                @if (album.Images.Count > 0)
+                                {
+                                    <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width:contain;" src="/api/Photo/@album.Images.ElementAt(0).ImagePath/Thumbnail" asp-append-version="true" alt="">
+                                }
+                                else
+                                {
+                                    <div class="card-img-top" style="object-fit: cover; width: 300px; height: 200px; min-width: contain; background: repeating-linear-gradient( 45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px ), linear-gradient( to bottom, #eee, #999 );"><h6 class="mt-5">This album is empty.</h6></div>
+                                }
 
-                <div class="card border-primary mb-3">
-                    <div class="card-header">
-                        <div class="row justify-content-between">
-                            <div class="col-auto">
-                                <a href=""><b>@comment.ApplicationUser.UserName</b></a> @if (User.Identity.Name == comment.ApplicationUser.UserName)
-                                {<span class='text-secondary font-weight-bold'>(You)</span>} on @comment.CommentDate
+                                <div class="card-body p-2">
+                                    <h6 class="card-title">@album.AlbumTitle</h6>
+                                    <p class="card-text"><small><b>@album.Images.Count</b> images, @album.AlbumPrivacy.ToString()</small></p>
+                                </div>
                             </div>
-                            <div class="col-auto">
-                                <a asp-controller="View" asp-action="View" asp-route-id="@comment.Image.ImageID">View Photo</a> | <a asp-controller="Comments" asp-action="Delete" asp-route-id="@comment.CommentID">Remove</a>
-                            </div>
-                        </div>
+                        </a>
                     </div>
-                    <div class="card-body">
-                        @comment.CommentText
-                    </div>
-                </div>
+                }
             }
-        }
-        else
-        {
-            <p>No comments to display.</p>
-        }*@
+            else
+            {
+                <p class="text-center mb-5 mt-5">@Model.User.UserName does not have any albums yet.</p>
+            }
+
+        </div>
 
     </div>
 
