@@ -101,13 +101,22 @@ namespace RailGallery.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImageID,ImageTitle,ImageDescription,ImageTakenDate,ImageUploadedDate,ImageStatus,ImagePrivacy,ImageFile,ImageCategoryID,ImageLocomotiveID,ImageLocationID")] Image image)
+        public async Task<IActionResult> Create([Bind("ImageID,ImageTitle,ImageDescription,ImageTakenDate,ImageUploadedDate,ImageStatus,ImagePrivacy,ImageFile,ImageCategoryID,ImageLocomotiveID,ImageLocationID, Albums")] Image image, string[]? ImageAlbums)
         {
             if (ModelState.IsValid)
             {
                 image.Location = await _context.Locations.FirstOrDefaultAsync(l => l.LocationID == Convert.ToInt32(image.ImageLocationID));
                 image.Category = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryID == Convert.ToInt32(image.ImageCategoryID));
                 image.Locomotive = await _context.Locomotives.FirstOrDefaultAsync(l => l.LocomotiveID == Convert.ToInt32(image.ImageLocomotiveID));
+
+                // Add albums
+                if(ImageAlbums.Length > 0)
+                {
+                    foreach(string id in ImageAlbums)
+                    {
+                        image.Albums.Add(await _context.Albums.FirstOrDefaultAsync(a => a.AlbumID == Convert.ToInt32(id)));
+                    }
+                }
 
                 // Upload image to wwwroot folder
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
@@ -121,7 +130,7 @@ namespace RailGallery.Controllers
                     await image.ImageFile.CopyToAsync(fileStream);
                 }
 
-                if(Path.GetExtension(filePath).ToLowerInvariant() != "jpg")
+                if(Path.GetExtension(filePath).ToLowerInvariant() != ".jpg")
                 {
                     System.IO.File.Delete(filePath);
                     return Content("Non-image files are not supported.");

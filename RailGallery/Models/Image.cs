@@ -29,7 +29,7 @@ namespace RailGallery.Models
         public IFormFile ImageFile { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
-        public ICollection<Album> Albums { get; set; }
+        public virtual ICollection<Album> Albums { get; set; }
         public ICollection<Like> Likes { get; set; }
         public ICollection<Favorite> Favorites { get; set; }
 
@@ -52,6 +52,8 @@ namespace RailGallery.Models
         {
             ImageUploadedDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
             ImageStatus = Status.Pending;
+
+            this.Albums = new HashSet<Album>();
         }
     }
 }

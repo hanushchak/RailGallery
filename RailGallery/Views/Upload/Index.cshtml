@@ -44,7 +44,7 @@
                         <span asp-validation-for="Albums" class="text-danger"></span>
                     </div>
                 </div>
-                <select asp-for="Albums" class="form-control" asp-items="@ViewBag.Albums">
+                <select asp-for="Albums" name="ImageAlbums" id="ImageAlbums" class="form-control" asp-items="@ViewBag.Albums" multiple>
                 </select>
             </div>
             <div class="form-group">
