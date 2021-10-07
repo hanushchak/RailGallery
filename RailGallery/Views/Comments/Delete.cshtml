@@ -46,7 +46,7 @@
                     </form>
                 </div>
                 <div class="col-auto">
-                    <a asp-controller="View" asp-action="View" asp-route-id="@Model.Image.ImageID">Back to Photo</a>
+                    <a asp-controller="View" asp-action="View" asp-route-id="@Model.Image.ImageID">Open Photo</a> | <a href="javascript:void(0);" onclick="history.go(-1);">Go Back</a>
                 </div>
             </div>
         </div>
