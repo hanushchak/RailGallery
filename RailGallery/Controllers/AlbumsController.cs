@@ -9,10 +9,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RailGallery.Data;
 using RailGallery.Models;
+using X.PagedList;
 
 namespace RailGallery.Controllers
 {
-    [Authorize]
     public class AlbumsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,9 +25,30 @@ namespace RailGallery.Controllers
         }
 
         // GET: Albums
-        public async Task<IActionResult> Index()
+        [Route("Author/{username}/Albums")]
+        public async Task<IActionResult> Index(string username, int? page)
         {
-            return View(await _context.Albums.ToListAsync());
+            if (username == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.UserName = user.UserName;
+
+            var albums = await _context.Albums.Where(a => a.ApplicationUser == user).Include(a => a.ApplicationUser).Include(a => a.Images).ToListAsync();
+
+            int pageSize = 100; /*TODO*/
+
+            int pageNumber = (int)((!page.HasValue || page == 0) ? 1 : page);
+
+            return View(albums.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Albums/Details/5
@@ -49,6 +70,7 @@ namespace RailGallery.Controllers
         }
 
         // GET: Albums/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -59,6 +81,7 @@ namespace RailGallery.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("AlbumID,AlbumTitle,AlbumPrivacy")] Album album)
         {
             if (ModelState.IsValid)
@@ -66,12 +89,13 @@ namespace RailGallery.Controllers
                 album.ApplicationUser = await _userManager.GetUserAsync(HttpContext.User);
                 _context.Add(album);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Upload");
             }
             return View(album);
         }
 
         // GET: Albums/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,6 +116,7 @@ namespace RailGallery.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("AlbumID,AlbumTitle,AlbumPrivacy")] Album album)
         {
             if (id != album.AlbumID)
@@ -123,6 +148,7 @@ namespace RailGallery.Controllers
         }
 
         // GET: Albums/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -143,6 +169,7 @@ namespace RailGallery.Controllers
         // POST: Albums/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var album = await _context.Albums.FindAsync(id);

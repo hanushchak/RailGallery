@@ -48,7 +48,6 @@ namespace RailGallery.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ReviewPhoto([Bind("decision,ImageID")]IFormCollection collection)
         {

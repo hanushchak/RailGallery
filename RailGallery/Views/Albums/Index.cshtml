@@ -1,42 +1,96 @@
-﻿@model IEnumerable<RailGallery.Models.Album>
+﻿@model IPagedList<RailGallery.Models.Album>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Web.Common;
+
+<link href="/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = ViewBag.UserName + "'s Albums";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
 
-<p>
+@*<p>
     <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.AlbumTitle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AlbumPrivacy)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.AlbumTitle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AlbumPrivacy)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AlbumID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AlbumID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AlbumID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <a asp-action="Edit" asp-route-id="@item.AlbumID">Edit</a>
+    <a asp-action="Details" asp-route-id="@item.AlbumID">Details</a>
+    <a asp-action="Delete" asp-route-id="@item.AlbumID">Delete</a>
+</p>*@
+
+<div class="row">
+    <div class="col text-center">
+        <h4>@ViewData["Title"]</h4>
+
+        @if (!(Model.Where(a => a.AlbumPrivacy == RailGallery.Enums.Privacy.Public).Any() || ((Model.Where(a => a.AlbumPrivacy == RailGallery.Enums.Privacy.Private).Any() && User.Identity.Name == ViewBag.UserName))))
+        {
+            <h5>@ViewBag.UserName does not have any public albums yet.</h5>
+        }
+        else
+        {
+            @*string username = ViewBag.UserName;
+            <div class="mt-4">
+                @Html.PagedListPager(Model, page => Url.Action("Index", "Author", new
+           {
+               page,
+               username = username
+           }), new PagedListRenderOptions
+           {
+               ContainerDivClasses = new string[] { "pagination justify-content-center" },
+               LinkToPreviousPageFormat = "Previous",
+               LinkToNextPageFormat = "Next",
+               LiElementClasses = new string[] { "page-item" },
+               PageClasses = new string[] { "page-link" }
+           })
+            </div>*@
+
+            <div class="d-flex justify-content-center flex-wrap">
+                @foreach (var album in Model)
+                {
+                    string css = "";
+                    bool albumPrivate = album.AlbumPrivacy.Equals(RailGallery.Enums.Privacy.Private);
+                    if (albumPrivate)
+                    {
+                        css = "alert-warning";
+                    }
+                    if (!albumPrivate || (albumPrivate && User.Identity.Name == album.ApplicationUser.UserName))
+                    {
+                    <div class="d-inline-flex align-self-start p-2">
+                        <a asp-controller="Search" asp-action="Results" asp-route-imagealbum="@album.AlbumTitle" asp-route-imageauthor="@album.ApplicationUser.UserName" class="text-decoration-none">
+                            <div class="card btn-light @css" style="max-width: 302px;">
+                                @if (album.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private).Any())
+                                {
+                                    <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width:contain;" src="/api/Photo/@album.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private).ElementAt(0).ImagePath/Thumbnail" asp-append-version="true" alt="">
+                                }
+                                else
+                                {
+                                    <div class="card-img-top" style="object-fit: cover; width: 300px; height: 200px; min-width: contain; background: repeating-linear-gradient( 45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px ), linear-gradient( to bottom, #eee, #999 );"><h6 class="mt-5">This album is empty or only contains private photos.</h6></div>
+                                }
+
+                                <div class="card-body p-2">
+                                    <h6 class="card-title">@album.AlbumTitle</h6>
+                                    <p class="card-text"><small><b>@album.Images.Count</b> images, @album.AlbumPrivacy.ToString()</small></p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    }
+                }
+            </div>
+            @*<div class="mt-4">
+                @Html.PagedListPager(Model, page => Url.Action("Index", new
+                {
+                    page,
+                    username = ViewBag.UserName
+                }), new PagedListRenderOptions
+                {
+                    ContainerDivClasses = new string[] { "pagination justify-content-center" },
+                    LinkToPreviousPageFormat = "Previous",
+                    LinkToNextPageFormat = "Next",
+                    LiElementClasses = new string[] { "page-item" },
+                    PageClasses = new string[] { "page-link" }
+                })
+            </div>*@
+        }
+    </div>
+</div>
