@@ -296,9 +296,17 @@ namespace RailGallery.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var image = await _context.Images.FindAsync(id);
+            string imagePath = image.ImagePath;
 
+            _context.Comments.RemoveRange(await _context.Comments.Include(i => i.Image).Where(c => c.Image.ImageID == image.ImageID).ToListAsync());
+            _context.Favorites.RemoveRange(await _context.Favorites.Include(i => i.Image).Where(c => c.Image.ImageID == image.ImageID).ToListAsync());
+            _context.Likes.RemoveRange(await _context.Likes.Include(i => i.Image).Where(c => c.Image.ImageID == image.ImageID).ToListAsync());
+            _context.Images.Remove(image);
+
+            await _context.SaveChangesAsync();
+            
             // Delete the image from the folder
-            if(image.ImagePath is not null)
+            if (imagePath is not null)
             {
                 string imageFile = Path.Combine(_webHostEnvironment.WebRootPath, "photo", image.ImagePath);
                 if (System.IO.File.Exists(imageFile))
@@ -312,10 +320,7 @@ namespace RailGallery.Controllers
                     System.IO.File.Delete(imageThumbnail);
                 }
             }
-            
 
-            _context.Images.Remove(image);
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -10,7 +10,8 @@
 <table class="table mt-2">
     <thead>
         <tr>
-            <th>
+            <th class="text-center">
+                Thumbnail
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ImageTitle)
@@ -37,8 +38,8 @@
         @foreach (var item in Model)
         {
         <tr>
-            <td>
-                <a asp-controller="View" asp-action="View" asp-route-id="@item.ImageID"><img src="/api/Photo/@item.ImagePath/Thumbnail" asp-append-version="true" /></a>
+            <td class="text-center">
+                <a asp-controller="View" asp-action="View" asp-route-id="@item.ImageID"><img src="/api/Photo/@item.ImagePath/Thumbnail" height="100" class="shadow-lg" asp-append-version="true" /></a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ImageTitle)
