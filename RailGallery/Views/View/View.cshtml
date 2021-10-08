@@ -55,7 +55,7 @@
                     {
                         if (Model.Albums.ElementAt(0).AlbumPrivacy != Privacy.Private || User.Identity.Name == Model.Albums.ElementAt(0).ApplicationUser.UserName)
                         {
-                            <div>Album: <a href="">@Model.Albums.ElementAt(0).AlbumTitle</a></div>
+                            <div>Album: <a asp-controller="Search" asp-action="Results" asp-route-imagealbum="@Model.Albums.ElementAt(0).AlbumTitle" asp-route-imageauthor="@Model.Albums.ElementAt(0).ApplicationUser.UserName">@Model.Albums.ElementAt(0).AlbumTitle</a></div>
                         }
                     }
                     else
@@ -66,7 +66,7 @@
                             {
                                 if (album.AlbumPrivacy != Privacy.Private || User.Identity.Name == album.ApplicationUser.UserName)
                                 {
-                                    <li><a href="">@album.AlbumTitle</a></li>
+                                    <li><a asp-controller="Search" asp-action="Results" asp-route-imagealbum="@album.AlbumTitle" asp-route-imageauthor="@album.ApplicationUser.UserName">@album.AlbumTitle</a></li>
                                 }
                             }
                         </ul>

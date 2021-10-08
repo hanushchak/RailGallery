@@ -67,6 +67,7 @@ namespace RailGallery.Controllers
                 .Include(c => c.Category)
                 .Include(c => c.Location)
                 .Include(c => c.Locomotive)
+                .Include(c => c.Albums)
                 .AsNoTracking();
 
             if (!String.IsNullOrEmpty(ImageTitle))
@@ -94,11 +95,11 @@ namespace RailGallery.Controllers
                 model = model.Where(i => i.Locomotive.LocomotiveBuilt.ToString().Contains(LocomotiveBuilt));
                 ViewBag.LocomotiveBuilt = LocomotiveBuilt;
             }
-            /*if (!String.IsNullOrEmpty(ImageAlbum))
+            if (!String.IsNullOrEmpty(ImageAlbum))
             {
-                model = model.Where(i => i.Albums.Contains(ImageAlbum));
+                model = model.Where(i => i.Albums.Where(a => a.AlbumTitle.Contains(ImageAlbum)).Any());
                 ViewBag.ImageAlbum = ImageAlbum;
-            }*/
+            }
             if (!String.IsNullOrEmpty(ImageCategory))
             {
                 model = model.Where(i => i.Category.CategoryTitle.Contains(ImageCategory));
@@ -116,7 +117,7 @@ namespace RailGallery.Controllers
             }
 
 
-            int pageSize = 15; // TODO
+            int pageSize = 15;
 
             int pageNumber = (int)((!page.HasValue || page == 0) ? 1 : page);
 

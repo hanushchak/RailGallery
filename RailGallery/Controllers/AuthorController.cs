@@ -59,6 +59,7 @@ namespace RailGallery.Controllers
                 .OrderByDescending(a => a.AlbumID)
                 .Take(15)
                 .Include(a => a.Images.OrderByDescending(i => i.ImageID))
+                .Include(a => a.ApplicationUser)
                 .AsNoTracking()
                 .ToListAsync();
 

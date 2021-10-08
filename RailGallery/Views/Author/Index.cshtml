@@ -31,7 +31,7 @@
             }
             <a asp-controller="Search" asp-action="Results" asp-route-imageauthor="@Model.User.UserName">Show all @Model.User.UserName's photos</a>
             <br />
-            <a asp-controller="Admin" asp-action="Statistics">Show all @Model.User.UserName's albums</a> @*TODO*@
+            <a asp-controller="Admin" asp-action="Statistics">Show all @Model.User.UserName's albums</a>
         </div>
     </div>
 
@@ -44,15 +44,15 @@
                 @foreach (Album album in Model.RecentAlbums)
                 {
                     <div class="d-inline-flex align-self-start p-2">
-                        <a asp-controller="View" asp-action="View" asp-route-id="@album.AlbumID" class="text-decoration-none">
+                        <a asp-controller="Search" asp-action="Results" asp-route-imagealbum="@album.AlbumTitle" asp-route-imageauthor="@Model.User.UserName" class="text-decoration-none">
                             <div class="card btn-light" style="max-width: 302px;">
-                                @if (album.Images.Count > 0)
+                                @if (album.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private).Any())
                                 {
-                                    <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width:contain;" src="/api/Photo/@album.Images.ElementAt(0).ImagePath/Thumbnail" asp-append-version="true" alt="">
+                                    <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width:contain;" src="/api/Photo/@album.Images.Where(i=>i.ImagePrivacy != RailGallery.Enums.Privacy.Private).ElementAt(0).ImagePath/Thumbnail" asp-append-version="true" alt="">
                                 }
                                 else
                                 {
-                                    <div class="card-img-top" style="object-fit: cover; width: 300px; height: 200px; min-width: contain; background: repeating-linear-gradient( 45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px ), linear-gradient( to bottom, #eee, #999 );"><h6 class="mt-5">This album is empty.</h6></div>
+                                    <div class="card-img-top" style="object-fit: cover; width: 300px; height: 200px; min-width: contain; background: repeating-linear-gradient( 45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px ), linear-gradient( to bottom, #eee, #999 );"><h6 class="mt-5">This album is empty or only contains private photos.</h6></div>
                                 }
 
                                 <div class="card-body p-2">
