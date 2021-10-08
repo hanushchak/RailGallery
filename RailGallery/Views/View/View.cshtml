@@ -23,7 +23,6 @@
                         <button value="Approve" name="decision" type="submit" class="btn btn-success mr-2">Approve</button>
                         <button value="Reject" name="decision" type="submit" class="btn btn-danger">Decline</button>
                     </form>
-
                 }
             </div>
         }
@@ -41,11 +40,11 @@
         }
         <img src="/api/Photo/@Model.ImagePath" asp-append-version="true" class="img-fluid shadow-sm p-1 bg-white " />
     </div>
-    
-    
-       
-    
-    
+
+
+
+
+
     <div class="col-md-6 offset-md-3">
         <div class="row mt-3 mb-3">
             <div class="col">
@@ -127,6 +126,13 @@
                 @Html.DisplayFor(model => model.ImageDescription)
             </div>
         </div>
+        @if (User.IsInRole("Moderator"))
+        {
+            <div class="alert alert-warning text-center" role="alert">
+                <a asp-controller="Upload" asp-action="Edit" class="btn btn-info" asp-route-id="@Model.ImageID" role="button" aria-pressed="true">Edit Photo</a>&nbsp;&nbsp;
+                <a asp-controller="Upload" asp-action="Delete" class="btn btn-danger" asp-route-id="@Model.ImageID" role="button" aria-pressed="true">Delete Photo</a>
+            </div>
+        }
 
         @if (Model.ImagePrivacy != Privacy.Private && Model.ImageStatus == Status.Published)
         {

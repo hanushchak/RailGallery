@@ -1,64 +1,57 @@
 ﻿@model RailGallery.Models.Image
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete photo";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Delete</h1>
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <h4>Are you sure you want to remove this photo?</h4>
+        <hr />
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Image</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageTitle)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImageTitle)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageDescription)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImageDescription)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageTakenDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImageTakenDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUploadedDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImageUploadedDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageStatus)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImageStatus)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImagePrivacy)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImagePrivacy)
-        </dd>
-        <dt class="col-sm-2">
-            Image
-        </dt>
-        <dd class="col-sm-10">
-            <img src="/api/Photo/@Model.ImagePath/Thumbnail" asp-append-version="true"/>
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="ImageID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+        <div class="row justify-content-center">
+            <img src="/api/Photo/@Model.ImagePath/Thumbnail" asp-append-version="true" />
+        </div>
+        <div class="row justify-content-between">
+            <div class="col-auto font-weight-bold">
+                @Html.DisplayNameFor(model => model.ImageTitle)
+            </div>
+            <div class="col-auto">
+                @Html.DisplayFor(model => model.ImageTitle)
+            </div>
+        </div>
+
+        <div class="row justify-content-between">
+            <div class="col-auto font-weight-bold">
+                @Html.DisplayNameFor(model => model.ImageDescription)
+            </div>
+            <div class="col-auto">
+                @Html.DisplayFor(model => model.ImageDescription)
+            </div>
+        </div>
+
+        <div class="row justify-content-between">
+            <div class="col-auto font-weight-bold">
+                Author
+            </div>
+            <div class="col-auto">
+                <a asp-controller="Author" asp-action="Index" asp-route-username="@Model.ApplicationUser.UserName">@Html.DisplayFor(model => model.ApplicationUser.UserName)</a>
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="row justify-content-between">
+                <div class="col-auto">
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="ImageID" />
+                        <input type="submit" value="Delete" class="btn btn-danger" />
+                    </form>
+                </div>
+                <div class="col-auto">
+                    <a asp-controller="View" asp-action="View" asp-route-id="@Model.ImageID">Open Photo</a> | <a href="javascript:void(0);" onclick="history.go(-1);">Go Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

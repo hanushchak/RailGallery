@@ -222,6 +222,7 @@ namespace RailGallery.Controllers
         }
 
         // GET: Upload/Edit/5
+        [Authorize(Roles = "Moderator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -242,6 +243,7 @@ namespace RailGallery.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Moderator")]
         public async Task<IActionResult> Edit(int id, [Bind("ImageID,ImageTitle,ImageDescription,ImageTakenDate,ImageUploadedDate,ImageStatus,ImagePrivacy")] Image image)
         {
             if (id != image.ImageID)
@@ -273,6 +275,7 @@ namespace RailGallery.Controllers
         }
 
         // GET: Upload/Delete/5
+        [Authorize(Roles = "Moderator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -280,7 +283,7 @@ namespace RailGallery.Controllers
                 return NotFound();
             }
 
-            var image = await _context.Images
+            var image = await _context.Images.Include(c => c.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.ImageID == id);
             if (image == null)
             {
@@ -293,6 +296,7 @@ namespace RailGallery.Controllers
         // POST: Upload/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Moderator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var image = await _context.Images.FindAsync(id);
@@ -321,7 +325,7 @@ namespace RailGallery.Controllers
                 }
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Home");
         }
 
         private bool ImageExists(int id)
