@@ -31,15 +31,15 @@ namespace RailGallery.Controllers
 
             // Most recent images
             adminModel.PendingImages = _context.Images
-                .Take(15)
                 .Where(i => i.ImageStatus == Enums.Status.Pending && i.ImagePrivacy != Enums.Privacy.Private)
                 .OrderBy(i => i.ImageUploadedDate)
+                .Take(15)
                 .Include(c => c.ApplicationUser)
                 .AsNoTracking();
 
             adminModel.RecentComments = _context.Comments
-                .Take(15)
                 .OrderByDescending(c => c.CommentDate)
+                .Take(15)
                 .Include(c => c.ApplicationUser)
                 .Include(c => c.Image)
                 .AsNoTracking();
