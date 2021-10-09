@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RailGallery.Data;
 using RailGallery.Models;
+using RailGallery.Enums;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace RailGallery.Controllers
 {
@@ -244,34 +246,44 @@ namespace RailGallery.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Moderator")]
-        public async Task<IActionResult> Edit(int id, [Bind("ImageID,ImageTitle,ImageDescription,ImageTakenDate,ImageUploadedDate,ImageStatus,ImagePrivacy")] Image image)
+        public async Task<IActionResult> Edit(int id, [Bind("ImageID,ImageTitle,ImageDescription,ImageStatus,ImagePrivacy")] Image image)
         {
             if (id != image.ImageID)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            string newTitle = image.ImageTitle;
+            string newDescription = image.ImageDescription;
+            Status newStatus = image.ImageStatus;
+            Privacy newPrivacy = image.ImagePrivacy;
+
+            var oldImage = await _context.Images.FindAsync(id);
+            
+            if(oldImage.ImageTitle != newTitle) { oldImage.ImageTitle = newTitle; }
+            if (oldImage.ImageDescription != newDescription) { oldImage.ImageDescription = newDescription; }
+            if (oldImage.ImageStatus != newStatus) { oldImage.ImageStatus = newStatus; }
+            if (oldImage.ImagePrivacy != newPrivacy) { oldImage.ImagePrivacy = newPrivacy; }
+
+            image = oldImage;
+
+            try
             {
-                try
-                {
-                    _context.Update(image);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ImageExists(image.ImageID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(image);
+                await _context.SaveChangesAsync();
             }
-            return View(image);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ImageExists(image.ImageID))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction("View", "View", new { @id = image.ImageID });
         }
 
         // GET: Upload/Delete/5

@@ -1,58 +1,82 @@
 ﻿@model RailGallery.Models.Image
+@using RailGallery.Enums;
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Photo";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h1>Edit</h1>
-
-<h4>Image</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 offset-md-4">
         <form asp-action="Edit">
+            <h4>@ViewData["Title"]</h4>
+            <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ImageID" />
+
+            <a asp-controller="View" asp-action="View" asp-route-id="@Model.ImageID">
+                <img src="/api/Photo/@Model.ImagePath" asp-append-version="true" class="img-fluid shadow-sm p-1 bg-white mb-3" />
+            </a>
             <div class="form-group">
-                <label asp-for="ImageTitle" class="control-label"></label>
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <label asp-for="ImageTitle" class="control-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <span asp-validation-for="ImageTitle" class="text-danger"></span>
+                    </div>
+                </div>
                 <input asp-for="ImageTitle" class="form-control" />
-                <span asp-validation-for="ImageTitle" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="ImageDescription" class="control-label"></label>
-                <input asp-for="ImageDescription" class="form-control" />
-                <span asp-validation-for="ImageDescription" class="text-danger"></span>
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <label asp-for="ImageDescription" class="control-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <span asp-validation-for="ImageDescription" class="text-danger"></span>
+                    </div>
+                </div>
+                <textarea asp-for="ImageDescription" class="form-control"></textarea>
             </div>
+
             <div class="form-group">
-                <label asp-for="ImageTakenDate" class="control-label"></label>
-                <input asp-for="ImageTakenDate" class="form-control" />
-                <span asp-validation-for="ImageTakenDate" class="text-danger"></span>
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <label asp-for="ImagePrivacy" class="control-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <span asp-validation-for="ImagePrivacy" class="text-danger"></span>
+                    </div>
+                </div>
+                <select asp-for="ImagePrivacy" class="form-control" asp-items="Html.GetEnumSelectList<Privacy>()"></select>
             </div>
+
             <div class="form-group">
-                <label asp-for="ImageUploadedDate" class="control-label"></label>
-                <input asp-for="ImageUploadedDate" class="form-control" />
-                <span asp-validation-for="ImageUploadedDate" class="text-danger"></span>
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <label asp-for="ImageStatus" class="control-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <span asp-validation-for="ImageStatus" class="text-danger"></span>
+                    </div>
+                </div>
+                <select asp-for="ImageStatus" class="form-control" asp-items="Html.GetEnumSelectList<Status>()"></select>
             </div>
+
+
             <div class="form-group">
-                <label asp-for="ImageStatus" class="control-label"></label>
-                <select asp-for="ImageStatus" class="form-control"></select>
-                <span asp-validation-for="ImageStatus" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImagePrivacy" class="control-label"></label>
-                <select asp-for="ImagePrivacy" class="form-control"></select>
-                <span asp-validation-for="ImagePrivacy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <input type="submit" value="Edit" class="btn btn-primary" />
+                    </div>
+                    <div class="col-auto">
+                        <a asp-controller="View" asp-action="View" asp-route-id="@Model.ImageID">Open Photo</a> | <a href="javascript:void(0);" onclick="history.go(-1);">Go Back</a>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
