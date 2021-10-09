@@ -85,8 +85,18 @@ namespace RailGallery.Controllers
                 return NotFound();
             }
 
-            var album = await _context.Albums.Include(a => a.Images).FirstAsync(a => a.AlbumID == id);
-            if (album == null)
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            IList<string> currentUserRoles = await _userManager.GetRolesAsync(currentUser);
+
+            var album = await _context.Albums.Include(a => a.Images).Include(a => a.ApplicationUser).FirstAsync(a => a.AlbumID == id);
+
+            if (album == null || currentUser == null || (album.ApplicationUser.UserName != currentUser.UserName && !currentUserRoles.Contains(Enums.Roles.Moderator.ToString())))
             {
                 return NotFound();
             }
@@ -102,13 +112,15 @@ namespace RailGallery.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("AlbumID,AlbumTitle,AlbumPrivacy")] Album album)
         {
-            if (id != album.AlbumID)
+            if (id != album.AlbumID )
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                string username = (await _context.Albums.Include(a => a.ApplicationUser).AsNoTracking().FirstAsync(a => a.AlbumID == id)).ApplicationUser.UserName;
+
                 try
                 {
                     _context.Update(album);
@@ -125,7 +137,7 @@ namespace RailGallery.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Author", new { @username = username });
             }
             return View(album);
         }
@@ -139,9 +151,17 @@ namespace RailGallery.Controllers
                 return NotFound();
             }
 
-            var album = await _context.Albums
-                .FirstOrDefaultAsync(m => m.AlbumID == id);
-            if (album == null)
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            IList<string> currentUserRoles = await _userManager.GetRolesAsync(currentUser);
+
+            var album = await _context.Albums.Include(a => a.Images).Include(a => a.ApplicationUser).FirstAsync(a => a.AlbumID == id);
+            if (album == null || currentUser == null || (album.ApplicationUser.UserName != currentUser.UserName && !currentUserRoles.Contains(Enums.Roles.Moderator.ToString())))
             {
                 return NotFound();
             }
@@ -156,9 +176,11 @@ namespace RailGallery.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var album = await _context.Albums.FindAsync(id);
+            string username = (await _context.Albums.Include(a => a.ApplicationUser).AsNoTracking().FirstAsync(a => a.AlbumID == id)).ApplicationUser.UserName;
             _context.Albums.Remove(album);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Index", "Author", new { @username = username });
         }
 
         private bool AlbumExists(int id)

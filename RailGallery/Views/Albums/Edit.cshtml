@@ -50,10 +50,11 @@
             <div class="form-group">
                 <div class="row justify-content-between">
                     <div class="col-auto">
-                        <input type="submit" value="Edit" class="btn btn-primary" />
+                        <input type="submit" value="Apply changes" class="btn btn-primary" />
                     </div>
                     <div class="col-auto">
-                        <a href="javascript:void(0);" onclick="history.go(-1);">Go Back</a>
+                        <a href="javascript:void(0);" onclick="history.go(-1);">Go Back</a>&nbsp;
+                        <a asp-controller="Albums" asp-action="Delete" asp-route-id="@Model.AlbumID" class="btn btn-danger" role="button" aria-pressed="true">Delete album</a>
                     </div>
                 </div>
             </div>
