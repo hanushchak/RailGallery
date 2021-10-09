@@ -1,38 +1,64 @@
 ﻿@model RailGallery.Models.Album
-
+@using RailGallery.Enums;
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Album";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>Album</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 offset-md-4">
         <form asp-action="Edit">
+            <h4>@ViewData["Title"]</h4>
+            <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="AlbumID" />
+            <div class="form-group text-center">
+                @if (Model.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private).Any())
+                {
+                    <img style="object-fit: cover; max-width: 300px; max-height: 200px; " src="/api/Photo/@Model.Images.Where(i=>i.ImagePrivacy != RailGallery.Enums.Privacy.Private).ElementAt(0).ImagePath/Thumbnail" asp-append-version="true" alt="">
+                }
+                else
+                {
+                    <div class="text-center pt-5" style="object-fit: cover; width: 300px; height: 200px; min-width: contain; background: repeating-linear-gradient( 45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px ), linear-gradient( to bottom, #eee, #999 );"><h6>This album is empty or only contains private photos.</h6></div>
+                }
+            </div>
+
             <div class="form-group">
-                <label asp-for="AlbumTitle" class="control-label"></label>
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <label asp-for="AlbumTitle" class="control-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <span asp-validation-for="AlbumTitle" class="text-danger"></span>
+                    </div>
+                </div>
                 <input asp-for="AlbumTitle" class="form-control" />
-                <span asp-validation-for="AlbumTitle" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="AlbumPrivacy" class="control-label"></label>
-                <select asp-for="AlbumPrivacy" class="form-control"></select>
-                <span asp-validation-for="AlbumPrivacy" class="text-danger"></span>
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <label asp-for="AlbumPrivacy" class="control-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <span asp-validation-for="AlbumPrivacy" class="text-danger"></span>
+                    </div>
+                </div>
+                <select asp-for="AlbumPrivacy" class="form-control" asp-items="Html.GetEnumSelectList<Privacy>()"></select>
             </div>
+
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <input type="submit" value="Edit" class="btn btn-primary" />
+                    </div>
+                    <div class="col-auto">
+                        <a href="javascript:void(0);" onclick="history.go(-1);">Go Back</a>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

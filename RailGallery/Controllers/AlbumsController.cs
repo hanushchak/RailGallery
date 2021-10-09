@@ -51,24 +51,6 @@ namespace RailGallery.Controllers
             return View(albums.ToPagedList(pageNumber, pageSize));
         }
 
-        // GET: Albums/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var album = await _context.Albums
-                .FirstOrDefaultAsync(m => m.AlbumID == id);
-            if (album == null)
-            {
-                return NotFound();
-            }
-
-            return View(album);
-        }
-
         // GET: Albums/Create
         [Authorize]
         public IActionResult Create()
@@ -103,11 +85,12 @@ namespace RailGallery.Controllers
                 return NotFound();
             }
 
-            var album = await _context.Albums.FindAsync(id);
+            var album = await _context.Albums.Include(a => a.Images).FirstAsync(a => a.AlbumID == id);
             if (album == null)
             {
                 return NotFound();
             }
+
             return View(album);
         }
 
