@@ -94,12 +94,20 @@ namespace RailGallery.Controllers
 
             IList<string> currentUserRoles = await _userManager.GetRolesAsync(currentUser);
 
-            var album = await _context.Albums.Include(a => a.Images).Include(a => a.ApplicationUser).FirstAsync(a => a.AlbumID == id);
+            var album = await _context.Albums.Include(a => a.Images.OrderByDescending(i => i.ImageID)).Include(a => a.ApplicationUser).FirstAsync(a => a.AlbumID == id);
 
             if (album == null || currentUser == null || (album.ApplicationUser.UserName != currentUser.UserName && !currentUserRoles.Contains(Enums.Roles.Moderator.ToString())))
             {
                 return NotFound();
             }
+
+            ViewBag.Images = await _context.Images.Where(i => i.ApplicationUser.UserName == album.ApplicationUser.UserName).OrderByDescending(i => i.ImageID).Select(i =>
+                                  new SelectListItem
+                                  {
+                                      Value = i.ImageID.ToString(),
+                                      Text = i.ImageTitle,
+                                      Selected = _context.Images.Include(a => a.Albums).Where(a => a.ImageID == i.ImageID && a.Albums.Where(a => a.AlbumID == album.AlbumID).Any()).Any() ? true : false
+                                  }).AsNoTracking().ToListAsync();
 
             return View(album);
         }
@@ -110,7 +118,7 @@ namespace RailGallery.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("AlbumID,AlbumTitle,AlbumPrivacy")] Album album)
+        public async Task<IActionResult> Edit(int id, [Bind("AlbumID,AlbumTitle,AlbumPrivacy")] Album album, string[]? AlbumImages)
         {
             if (id != album.AlbumID )
             {
@@ -121,9 +129,27 @@ namespace RailGallery.Controllers
             {
                 string username = (await _context.Albums.Include(a => a.ApplicationUser).AsNoTracking().FirstAsync(a => a.AlbumID == id)).ApplicationUser.UserName;
 
+                var albumToUpdate = await _context.Albums.Include(a => a.Images).FirstAsync(a => a.AlbumID == id);
+
+                albumToUpdate.AlbumTitle = album.AlbumTitle;
+                albumToUpdate.AlbumPrivacy = album.AlbumPrivacy;
+                
+                var images = await _context.Images.Include(i=>i.ApplicationUser).Where(i => i.ApplicationUser.UserName == username).ToListAsync();
+
+
+                foreach(Image image in images)
+                {
+                    albumToUpdate.Images.Remove(image);
+                }
+
+                foreach (string albumImage in AlbumImages)
+                {
+                    albumToUpdate.Images.Add(await _context.Images.FirstAsync(a => a.ImageID.ToString() == albumImage));
+                }
+
                 try
                 {
-                    _context.Update(album);
+                    _context.Update(albumToUpdate);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
