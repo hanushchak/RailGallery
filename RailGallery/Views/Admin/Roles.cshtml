@@ -1,0 +1,56 @@
+﻿@model List<UserRolesViewModel>
+@{
+    ViewData["Title"] = ViewBag.username + "'s Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <form asp-action="UpdateRole" method="post">
+            <h4>@ViewData["Title"]</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+
+            @for (int i = 0; i < Model.Count; i++)
+            {
+        <div class="form-check mt-3 mb-3">
+            <input type="hidden" asp-for="@Model[i].RoleId" />
+            <input type="hidden" asp-for="@Model[i].RoleName" />
+            @if (Model[i].RoleName == "BasicUser" || (Model[i].RoleName == "Moderator" && ViewBag.username == "Moderator"))
+            {
+                <input asp-for="@Model[i].Selected" class="form-check-input" onclick="return false;" checked/>
+                <label class="form-check-label" asp-for="@Model[i].Selected">
+                    @Model[i].RoleName <small class="text-secondary">(this role cannot be removed for this user)</small>
+                </label>
+            }
+            else
+            {
+                <input asp-for="@Model[i].Selected" class="form-check-input" />
+                <label class="form-check-label" asp-for="@Model[i].Selected">
+                    @Model[i].RoleName
+                </label>
+            }
+
+
+        </div>
+            }
+
+            <input type="hidden" name="username" value="@ViewBag.username" />
+
+            <div class="form-group">
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <input type="submit" value="Update Roles" class="btn btn-primary" />
+                    </div>
+                    <div class="col-auto">
+                        <a href="javascript:void(0);" onclick="history.go(-1);">Go Back</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

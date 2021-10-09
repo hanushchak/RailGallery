@@ -1,0 +1,70 @@
+﻿@model RailGallery.Models.ApplicationUser
+@{
+    ViewData["Title"] = ViewBag.username + "'s Access";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <form asp-action="UpdateAccess" method="post">
+            <h4>@ViewData["Title"]</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            @if (ViewBag.Lockout)
+            {
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="access" id="enabled" value="enabled">
+                    <label class="form-check-label" for="enabled">
+                        Account enabled
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="access" id="disabled" value="disabled" checked>
+                    <label class="form-check-label" for="disabled">
+                        Account disabled
+                    </label>
+                </div>
+            }
+            else
+            {
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="access" id="enabled" value="enabled" checked>
+                    <label class="form-check-label" for="enabled">
+                        Account enabled
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    @if (ViewBag.username == "Moderator")
+                    {
+                        <input class="form-check-input" type="radio" name="access" id="disabled" value="disabled" disabled>
+                        <label class="form-check-label" for="disabled">Account disabled</label> <small class="text-secondary">(this user cannot be locked out)</small>
+                    }
+                    else
+                    {
+                        <input class="form-check-input" type="radio" name="access" id="disabled" value="disabled">
+                        <label class="form-check-label" for="disabled">Account disabled</label>
+                    }
+
+
+                </div>
+            }
+
+            <input type="hidden" name="username" value="@ViewBag.username" />
+
+            <div class="form-group">
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <input type="submit" value="Update Access" class="btn btn-primary" />
+                    </div>
+                    <div class="col-auto">
+                        <a href="javascript:void(0);" onclick="history.go(-1);">Go Back</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

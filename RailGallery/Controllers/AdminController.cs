@@ -21,12 +21,14 @@ namespace RailGallery.Controllers
         private readonly ILogger<AdminController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AdminController(ILogger<AdminController> logger, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public AdminController(ILogger<AdminController> logger, ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _logger = logger;
             _context = context;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public IActionResult Index()
@@ -146,5 +148,128 @@ namespace RailGallery.Controllers
 
             return View(users);
         }
+
+        public async Task<IActionResult> Roles(string username)
+        {
+            if (username == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.username = username;
+
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var model = new List<UserRolesViewModel>();
+            foreach (var role in _roleManager.Roles)
+            {
+                var userRolesViewModel = new UserRolesViewModel
+                {
+                    RoleId = role.Id,
+                    RoleName = role.Name
+                };
+                if (await _userManager.IsInRoleAsync(user, role.Name))
+                {
+                    userRolesViewModel.Selected = true;
+                }
+                else
+                {
+                    userRolesViewModel.Selected = false;
+                }
+                model.Add(userRolesViewModel);
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateRole(string username, List<UserRolesViewModel> model)
+        {
+            if (username == null)
+            {
+                return NotFound();
+            }
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var roles = await _userManager.GetRolesAsync(user);
+            var result = await _userManager.RemoveFromRolesAsync(user, roles);
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Cannot remove user existing roles");
+                return View(model);
+            }
+            result = await _userManager.AddToRolesAsync(user, model.Where(x => x.Selected).Select(y => y.RoleName));
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Cannot add selected roles to user");
+                return View(model);
+            }
+            return RedirectToAction("Users");
+        }
+
+        public async Task<IActionResult> Access(string username)
+        {
+            if (username == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.username = username;
+
+            var user = await _userManager.FindByNameAsync(username);
+
+
+            if (user.LockoutEnabled)
+            {
+                ViewBag.Lockout = true;
+            } else
+            {
+                ViewBag.Lockout = false;
+            }
+            
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateAccess(string username, string access)
+        {
+            if (username == null || access == null)
+            {
+                return NotFound();
+            }
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            if(access == "disabled")
+            {
+                await _userManager.SetLockoutEnabledAsync(user, true);
+                await _userManager.SetLockoutEndDateAsync(user, DateTime.UtcNow.AddYears(1));
+                await _userManager.UpdateAsync(user);
+            } else
+            {
+                await _userManager.SetLockoutEnabledAsync(user, false);
+                await _userManager.SetLockoutEndDateAsync(user, null);
+                await _userManager.UpdateAsync(user);
+            }
+            
+            return RedirectToAction("Users");
+        }
+
     }
 }
