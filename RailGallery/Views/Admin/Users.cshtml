@@ -1,0 +1,75 @@
+﻿@model IEnumerable<RailGallery.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Manage Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+<div class="text-center">
+    <h4>@ViewData["Title"]</h4>
+    <form asp-action="Users" method="get">
+        <div class="input-group mb-3 mt-3 col-md-4 offset-md-4">
+            <input type="text" name="username" value="@ViewBag.SearchString" class="form-control" placeholder="Username or Email" />
+            <div class="input-group-append">
+                <input type="submit" value="Search" class="btn btn-secondary btn-sm" />         
+            </div>
+        </div>
+    </form>
+</div>
+
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Users" asp-route-sortOrder="@ViewBag.UsernameSort" asp-route-username="@ViewBag.SearchString">Username <i class="fa fa-fw fa-sort"></i></a>
+            </th>
+            <th>
+                <a asp-action="Users" asp-route-sortOrder="@ViewBag.EmailSort" asp-route-username="@ViewBag.SearchString">Email <i class="fa fa-fw fa-sort"></i></a>
+            </th>
+            <th>
+                <a asp-action="Users" asp-route-sortOrder="@ViewBag.RegisteredSort" asp-route-username="@ViewBag.SearchString">Registered <i class="fa fa-fw fa-sort"></i></a>
+            </th>
+            <th>
+                <a asp-action="Users" asp-route-sortOrder="@ViewBag.LastActiveSort" asp-route-username="@ViewBag.SearchString">Last Active <i class="fa fa-fw fa-sort"></i></a>
+            </th>
+            <th>
+                <a asp-action="Users" asp-route-sortOrder="@ViewBag.NumberPhotosSort" asp-route-username="@ViewBag.SearchString">Number of photos <i class="fa fa-fw fa-sort"></i></a>
+            </th>
+            <th>
+                <a asp-action="Users" asp-route-sortOrder="@ViewBag.NumberCommentsSort" asp-route-username="@ViewBag.SearchString">Number of comments <i class="fa fa-fw fa-sort"></i></a>
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                <a asp-controller="Author" asp-action="Index" asp-route-username="@item.UserName">@Html.DisplayFor(modelItem => item.UserName)</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegisterationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastActivityDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Images.Count)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comments.Count)
+            </td>
+            <td>
+                <a href="#" class="btn btn-outline-warning" role="button" aria-disabled="true">Edit Roles</a>
+                <a href="#" class="btn btn-outline-danger" role="button" aria-disabled="true">Disable</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
