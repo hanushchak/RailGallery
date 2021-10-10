@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Drawing2D;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RailGallery.Data;
-using RailGallery.Models;
 using RailGallery.Enums;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using RailGallery.Models;
+using System;
+using System.Drawing.Drawing2D;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RailGallery.Controllers
 {
@@ -94,9 +92,9 @@ namespace RailGallery.Controllers
                 image.Locomotive = await _context.Locomotives.FirstOrDefaultAsync(l => l.LocomotiveID == Convert.ToInt32(image.ImageLocomotiveID));
 
                 // Add albums
-                if(ImageAlbums.Length > 0)
+                if (ImageAlbums.Length > 0)
                 {
-                    foreach(string id in ImageAlbums)
+                    foreach (string id in ImageAlbums)
                     {
                         image.Albums.Add(await _context.Albums.FirstOrDefaultAsync(a => a.AlbumID == Convert.ToInt32(id)));
                     }
@@ -107,14 +105,14 @@ namespace RailGallery.Controllers
                 string fileExtenstion = Path.GetExtension(image.ImageFile.FileName);
                 string uniqueFileName = Guid.NewGuid().ToString() + fileExtenstion;
                 string filePath = Path.Combine(wwwRootPath, "photo", uniqueFileName);
-                
 
-                using (FileStream fileStream = new (filePath, FileMode.Create))
+
+                using (FileStream fileStream = new(filePath, FileMode.Create))
                 {
                     await image.ImageFile.CopyToAsync(fileStream);
                 }
 
-                if(Path.GetExtension(filePath).ToLowerInvariant() != ".jpg")
+                if (Path.GetExtension(filePath).ToLowerInvariant() != ".jpg")
                 {
                     System.IO.File.Delete(filePath);
                     return Content("Non-image files are not supported.");
@@ -126,12 +124,12 @@ namespace RailGallery.Controllers
                 int sourceHeight = sourceImage.Height;
                 int maximumAllowedSize = 1380;
 
-                if(sourceWidth > maximumAllowedSize || sourceHeight > maximumAllowedSize)
+                if (sourceWidth > maximumAllowedSize || sourceHeight > maximumAllowedSize)
                 {
                     int newWidth = maximumAllowedSize;
                     int newHeight = maximumAllowedSize;
 
-                    if(sourceWidth > sourceHeight)
+                    if (sourceWidth > sourceHeight)
                     {
 
                         newHeight = (newHeight * sourceHeight) / sourceWidth;
@@ -166,9 +164,9 @@ namespace RailGallery.Controllers
                 // Create image thumbnail
                 int thumbnailSize = 300;
 
-                int height = (int)((thumbnailSize * sourceImage.Height) / sourceImage.Width);
+                int height = (thumbnailSize * sourceImage.Height) / sourceImage.Width;
                 int width = thumbnailSize;
-                
+
                 System.Drawing.Bitmap thumbnailImage = new System.Drawing.Bitmap(width, height);
                 using (System.Drawing.Graphics gr = System.Drawing.Graphics.FromImage(thumbnailImage))
                 {
@@ -188,9 +186,9 @@ namespace RailGallery.Controllers
                 // Get current user
                 var currentUser = await _userManager.GetUserAsync(HttpContext.User);
                 var currentUserRoles = await _userManager.GetRolesAsync(currentUser);
-                
+
                 // If current user is Moderator or the image is private, publish the poto without moderation
-                if(currentUserRoles.Contains(Enums.Roles.Moderator.ToString()) || image.ImagePrivacy == Enums.Privacy.Private)
+                if (currentUserRoles.Contains(Enums.Roles.Moderator.ToString()) || image.ImagePrivacy == Enums.Privacy.Private)
                 {
                     image.ImageStatus = Enums.Status.Published;
                 }
@@ -241,8 +239,8 @@ namespace RailGallery.Controllers
             Privacy newPrivacy = image.ImagePrivacy;
 
             var oldImage = await _context.Images.FindAsync(id);
-            
-            if(oldImage.ImageTitle != newTitle) { oldImage.ImageTitle = newTitle; }
+
+            if (oldImage.ImageTitle != newTitle) { oldImage.ImageTitle = newTitle; }
             if (oldImage.ImageDescription != newDescription) { oldImage.ImageDescription = newDescription; }
             if (oldImage.ImageStatus != newStatus) { oldImage.ImageStatus = newStatus; }
             if (oldImage.ImagePrivacy != newPrivacy) { oldImage.ImagePrivacy = newPrivacy; }
@@ -302,7 +300,7 @@ namespace RailGallery.Controllers
             _context.Images.Remove(image);
 
             await _context.SaveChangesAsync();
-            
+
             // Delete the image from the folder
             if (imagePath is not null)
             {

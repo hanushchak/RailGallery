@@ -55,7 +55,7 @@ namespace RailGallery.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ReviewPhoto([Bind("decision,ImageID")]IFormCollection collection)
+        public async Task<IActionResult> ReviewPhoto([Bind("decision,ImageID")] IFormCollection collection)
         {
             string imageID = collection["ImageID"];
 
@@ -63,7 +63,7 @@ namespace RailGallery.Controllers
             {
                 return Content("Error");
             }
-            
+
             var image = await _context.Images.FirstOrDefaultAsync(m => m.ImageID.ToString() == imageID);
 
             if (collection["decision"] == "Reject")
@@ -210,11 +210,12 @@ namespace RailGallery.Controllers
             if (user.LockoutEnabled)
             {
                 ViewBag.Lockout = true;
-            } else
+            }
+            else
             {
                 ViewBag.Lockout = false;
             }
-            
+
             if (user == null)
             {
                 return NotFound();
@@ -238,18 +239,19 @@ namespace RailGallery.Controllers
             {
                 return NotFound();
             }
-            if(access == "disabled")
+            if (access == "disabled")
             {
                 await _userManager.SetLockoutEnabledAsync(user, true);
                 await _userManager.SetLockoutEndDateAsync(user, DateTime.UtcNow.AddYears(1));
                 await _userManager.UpdateAsync(user);
-            } else
+            }
+            else
             {
                 await _userManager.SetLockoutEnabledAsync(user, false);
                 await _userManager.SetLockoutEndDateAsync(user, null);
                 await _userManager.UpdateAsync(user);
             }
-            
+
             return RedirectToAction("Users");
         }
 

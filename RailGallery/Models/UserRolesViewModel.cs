@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace RailGallery.Models
+﻿namespace RailGallery.Models
 {
     public class UserRolesViewModel
     {

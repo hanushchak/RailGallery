@@ -58,17 +58,17 @@ namespace RailGallery.Controllers
             bool userLoggedIn = currentUser != null;
             bool userIsModerator = userLoggedIn && currentUserRoles.Contains(Enums.Roles.Moderator.ToString());
 
-                var model = _context.Images
-                .Where(i => !((i.ImageStatus == Enums.Status.Pending) || (i.ImageStatus == Enums.Status.Rejected) || (i.ImagePrivacy == Enums.Privacy.Private && !(userLoggedIn && i.ApplicationUser.UserName.Equals(currentUser.UserName)))))
-                .OrderByDescending(i => i.ImageUploadedDate)
-                .Include(c => c.Comments)
-                .Include(c => c.Likes)
-                .Include(c => c.ApplicationUser)
-                .Include(c => c.Category)
-                .Include(c => c.Location)
-                .Include(c => c.Locomotive)
-                .Include(c => c.Albums)
-                .AsNoTracking();
+            var model = _context.Images
+            .Where(i => !((i.ImageStatus == Enums.Status.Pending) || (i.ImageStatus == Enums.Status.Rejected) || (i.ImagePrivacy == Enums.Privacy.Private && !(userLoggedIn && i.ApplicationUser.UserName.Equals(currentUser.UserName)))))
+            .OrderByDescending(i => i.ImageUploadedDate)
+            .Include(c => c.Comments)
+            .Include(c => c.Likes)
+            .Include(c => c.ApplicationUser)
+            .Include(c => c.Category)
+            .Include(c => c.Location)
+            .Include(c => c.Locomotive)
+            .Include(c => c.Albums)
+            .AsNoTracking();
 
             if (!String.IsNullOrEmpty(ImageTitle))
             {

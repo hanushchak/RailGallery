@@ -1,5 +1,4 @@
 ﻿using RailGallery.Enums;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -10,7 +9,7 @@ namespace RailGallery.Models
     {
         public Album()
         {
-            this.Images = new HashSet<Image>();
+            Images = new HashSet<Image>();
         }
         public int AlbumID { get; set; }
         [Required, MaxLength(32), Display(Name = "Album Title")]

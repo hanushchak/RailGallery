@@ -1,5 +1,3 @@
-using System;
-
 namespace RailGallery.Models
 {
     public class ErrorViewModel

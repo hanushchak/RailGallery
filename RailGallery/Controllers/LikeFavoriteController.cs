@@ -35,7 +35,7 @@ namespace RailGallery.Controllers
             {
                 ViewBag.Title = "Photos You've Liked";
                 images = await _context.Images
-                .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private && i.Likes.Where(l=>l.ApplicationUser.UserName == currentUser.UserName).Any())
+                .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private && i.Likes.Where(l => l.ApplicationUser.UserName == currentUser.UserName).Any())
                 .OrderByDescending(i => i.Likes.FirstOrDefault().LikeID)
                 .Include(c => c.Comments)
                 .Include(c => c.Likes)
@@ -85,13 +85,13 @@ namespace RailGallery.Controllers
 
             if (collection["action"] == "Like")
             {
-                if(_context.Likes.Any(l => l.ApplicationUser.UserName == currentUser.UserName && l.Image.ImageID == image.ImageID))
+                if (_context.Likes.Any(l => l.ApplicationUser.UserName == currentUser.UserName && l.Image.ImageID == image.ImageID))
                 {
                     var existingLike = await _context.Likes.FirstOrDefaultAsync(l => l.ApplicationUser.UserName == currentUser.UserName && l.Image.ImageID == image.ImageID);
                     _context.Likes.Remove(existingLike);
                     await _context.SaveChangesAsync();
                     return RedirectToAction("View", "View", new { @id = image.ImageID });
-                } 
+                }
                 else
                 {
                     Like like = new Like

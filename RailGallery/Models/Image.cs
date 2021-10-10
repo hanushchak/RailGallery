@@ -53,7 +53,7 @@ namespace RailGallery.Models
             ImageUploadedDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
             ImageStatus = Status.Pending;
 
-            this.Albums = new HashSet<Album>();
+            Albums = new HashSet<Album>();
         }
     }
 }

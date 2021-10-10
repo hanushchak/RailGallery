@@ -2,12 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RailGallery.Data;
+using RailGallery.Models;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using RailGallery.Models;
 using X.PagedList;
 
 namespace RailGallery.Controllers
@@ -38,7 +37,8 @@ namespace RailGallery.Controllers
                 .Include(c => c.ApplicationUser)
                 .AsNoTracking()
                 .ToListAsync();
-            } else if (time.ToLower() == "week") 
+            }
+            else if (time.ToLower() == "week")
             {
                 images = await _context.Images
                 .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
@@ -48,7 +48,8 @@ namespace RailGallery.Controllers
                 .Include(c => c.ApplicationUser)
                 .AsNoTracking()
                 .ToListAsync();
-            } else if (time.ToLower() == "month")
+            }
+            else if (time.ToLower() == "month")
             {
                 images = await _context.Images
                 .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
@@ -58,7 +59,8 @@ namespace RailGallery.Controllers
                 .Include(c => c.ApplicationUser)
                 .AsNoTracking()
                 .ToListAsync();
-            } else
+            }
+            else
             {
                 return NotFound();
             }

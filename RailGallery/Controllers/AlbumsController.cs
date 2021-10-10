@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RailGallery.Data;
 using RailGallery.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using X.PagedList;
 
 namespace RailGallery.Controllers
@@ -120,7 +119,7 @@ namespace RailGallery.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("AlbumID,AlbumTitle,AlbumPrivacy")] Album album, string[]? AlbumImages)
         {
-            if (id != album.AlbumID )
+            if (id != album.AlbumID)
             {
                 return NotFound();
             }
@@ -133,11 +132,11 @@ namespace RailGallery.Controllers
 
                 albumToUpdate.AlbumTitle = album.AlbumTitle;
                 albumToUpdate.AlbumPrivacy = album.AlbumPrivacy;
-                
-                var images = await _context.Images.Include(i=>i.ApplicationUser).Where(i => i.ApplicationUser.UserName == username).ToListAsync();
+
+                var images = await _context.Images.Include(i => i.ApplicationUser).Where(i => i.ApplicationUser.UserName == username).ToListAsync();
 
 
-                foreach(Image image in images)
+                foreach (Image image in images)
                 {
                     albumToUpdate.Images.Remove(image);
                 }

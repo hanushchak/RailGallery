@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RailGallery.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RailGallery.Data
 {
