@@ -84,7 +84,6 @@ namespace RailGallery.Controllers
                 return RedirectToAction("View", "View", new { @id = image.ImageID });
             }
 
-
             return Content("Error");
         }
 
@@ -106,45 +105,21 @@ namespace RailGallery.Controllers
                 users = users.Where(u => u.UserName.Contains(username) || u.Email.Contains(username)).ToList();
             }
 
-            switch(sortOrder)
+            users = sortOrder switch
             {
-                case "username_desc" :
-                    users = users.OrderByDescending(u => u.UserName).ToList();
-                    break;
-                case "Email":
-                    users = users.OrderBy(u => u.Email).ToList();
-                    break;
-                case "email_desc":
-                    users = users.OrderByDescending(u => u.Email).ToList();
-                    break;
-                case "Registered":
-                    users = users.OrderBy(u => u.RegisterationDate).ToList();
-                    break;
-                case "registered_desc":
-                    users = users.OrderByDescending(u => u.RegisterationDate).ToList();
-                    break;
-                case "LastActive":
-                    users = users.OrderBy(u => u.LastActivityDate).ToList();
-                    break;
-                case "lastactive_desc":
-                    users = users.OrderByDescending(u => u.LastActivityDate).ToList();
-                    break;
-                case "NumberPhotos":
-                    users = users.OrderBy(u => u.Images.Count).ToList();
-                    break;
-                case "numberphotos_desc":
-                    users = users.OrderByDescending(u => u.Images.Count).ToList();
-                    break;
-                case "NumberComments":
-                    users = users.OrderBy(u => u.Comments.Count).ToList();
-                    break;
-                case "numbercomments_desc":
-                    users = users.OrderByDescending(u => u.Comments.Count).ToList();
-                    break;
-                default:
-                    users = users.OrderBy(u => u.UserName).ToList();
-                    break;
-            }
+                "username_desc" => users.OrderByDescending(u => u.UserName).ToList(),
+                "Email" => users.OrderBy(u => u.Email).ToList(),
+                "email_desc" => users.OrderByDescending(u => u.Email).ToList(),
+                "Registered" => users.OrderBy(u => u.RegisterationDate).ToList(),
+                "registered_desc" => users.OrderByDescending(u => u.RegisterationDate).ToList(),
+                "LastActive" => users.OrderBy(u => u.LastActivityDate).ToList(),
+                "lastactive_desc" => users.OrderByDescending(u => u.LastActivityDate).ToList(),
+                "NumberPhotos" => users.OrderBy(u => u.Images.Count).ToList(),
+                "numberphotos_desc" => users.OrderByDescending(u => u.Images.Count).ToList(),
+                "NumberComments" => users.OrderBy(u => u.Comments.Count).ToList(),
+                "numbercomments_desc" => users.OrderByDescending(u => u.Comments.Count).ToList(),
+                _ => users.OrderBy(u => u.UserName).ToList(),
+            };
 
             return View(users);
         }
@@ -166,6 +141,7 @@ namespace RailGallery.Controllers
             }
 
             var model = new List<UserRolesViewModel>();
+
             foreach (var role in _roleManager.Roles)
             {
                 var userRolesViewModel = new UserRolesViewModel
@@ -226,6 +202,10 @@ namespace RailGallery.Controllers
 
             var user = await _userManager.FindByNameAsync(username);
 
+            if (user == null)
+            {
+                return NotFound();
+            }
 
             if (user.LockoutEnabled)
             {
@@ -251,7 +231,9 @@ namespace RailGallery.Controllers
             {
                 return NotFound();
             }
+
             var user = await _userManager.FindByNameAsync(username);
+
             if (user == null)
             {
                 return NotFound();

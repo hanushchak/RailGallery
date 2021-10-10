@@ -62,7 +62,7 @@ namespace RailGallery.Controllers
 
             ViewBag.Action = type;
 
-            int pageSize = 15; // TODO
+            int pageSize = 15;
 
             int pageNumber = (int)((!page.HasValue || page == 0) ? 1 : page);
 

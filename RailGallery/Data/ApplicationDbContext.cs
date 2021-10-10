@@ -15,7 +15,6 @@ namespace RailGallery.Data
         {
         }
 
-        // Image model
         public DbSet<Image> Images { get; set; }
         public DbSet<Album> Albums { get; set; }
         public DbSet<Comment> Comments { get; set; }
