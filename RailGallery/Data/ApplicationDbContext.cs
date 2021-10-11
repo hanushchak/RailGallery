@@ -21,6 +21,7 @@ namespace RailGallery.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Locomotive> Locomotives { get; set; }
         public DbSet<Location> Locations { get; set; }
+        public DbSet<ImageView> ImageViews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

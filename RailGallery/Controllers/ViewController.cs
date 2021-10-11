@@ -83,6 +83,10 @@ namespace RailGallery.Controllers
                 }
             }
 
+            ImageView imageView = new ImageView { DateViewed = System.DateTime.Now, ImageId = image.ImageID };
+            await _context.ImageViews.AddAsync(imageView);
+            await _context.SaveChangesAsync();
+
             return View(image);
         }
     }

@@ -32,6 +32,7 @@ namespace RailGallery.Models
         public virtual ICollection<Album> Albums { get; set; }
         public ICollection<Like> Likes { get; set; }
         public ICollection<Favorite> Favorites { get; set; }
+        public ICollection<ImageView> ImageViews { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
 
