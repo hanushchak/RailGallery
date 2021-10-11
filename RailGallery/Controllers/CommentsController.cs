@@ -22,12 +22,6 @@ namespace RailGallery.Controllers
             _userManager = userManager;
         }
 
-        // GET: Comments
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Comments.ToListAsync());
-        }
-
         // POST: Comments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -112,11 +106,6 @@ namespace RailGallery.Controllers
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
             return RedirectToAction("View", "View", new { @id = comment.Image.ImageID });
-        }
-
-        private bool CommentExists(int id)
-        {
-            return _context.Comments.Any(e => e.CommentID == id);
         }
     }
 }

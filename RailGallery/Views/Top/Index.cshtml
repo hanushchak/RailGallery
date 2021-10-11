@@ -23,7 +23,7 @@
         }
         else
         {
-            <div class="mt-4">
+            <div class="mt-2">
                      @Html.PagedListPager(Model, page => Url.Action("Index","Top", new
                 {
                     page,
@@ -49,35 +49,27 @@
                                 <div class="card-body p-2">
                                     <h6 class="card-title">@image.ImageTitle</h6>
                                     <h6 class="card-subtitle mb-1 text-muted">by <b>@image.ApplicationUser.UserName</b></h6>
-                                    <p class="card-text"><small><b>@image.Comments.Count</b> comments, <b>@image.Likes.Count</b> likes</small></p>
+                                    <p class="card-text"><small><b>0</b> views, <b>@image.Comments.Count</b> comments, <b>@image.Likes.Count</b> likes</small></p>
                                 </div>
                             </div>
                         </a>
                     </div>
                 }
             </div>
-            @*<div class="mt-4">
-                    @Html.PagedListPager(Model, page => Url.Action("Results", new
-                    {
-                        page,
-                        ImageTitle = ViewBag.ImageTitle,
-                        ImageAuthor = ViewBag.ImageAuthor,
-                        ImageDescription = ViewBag.ImageDescription,
-                        LocomotiveModel = ViewBag.LocomotiveModel,
-                        LocomotiveBuilt = ViewBag.LocomotiveBuilt,
-                        ImageAlbum = ViewBag.ImageAlbum,
-                        ImageCategory = ViewBag.ImageCategory,
-                        ImageTakenDate = ViewBag.ImageTakenDate,
-                        ImageLocation = ViewBag.ImageLocation
-                    }), new PagedListRenderOptions
-                    {
-                        ContainerDivClasses = new string[] { "pagination justify-content-center" },
-                        LinkToPreviousPageFormat = "Previous",
-                        LinkToNextPageFormat = "Next",
-                        LiElementClasses = new string[] { "page-item" },
-                        PageClasses = new string[] { "page-link" }
-                    })
-                </div>*@
+            <div class="mt-4">
+                @Html.PagedListPager(Model, page => Url.Action("Index", "Top", new
+           {
+               page,
+               time = ViewBag.Time
+           }), new PagedListRenderOptions
+           {
+               ContainerDivClasses = new string[] { "pagination justify-content-center" },
+               LinkToPreviousPageFormat = "Previous",
+               LinkToNextPageFormat = "Next",
+               LiElementClasses = new string[] { "page-item" },
+               PageClasses = new string[] { "page-link" }
+           })
+            </div>
         }
     </div>
 </div>

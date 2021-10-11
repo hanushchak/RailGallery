@@ -14,7 +14,8 @@
 
         @if (Model.Count() == 0)
         {
-            <h5>No results found :(</h5>
+            <p class="mt-5">No photos found.</p>
+            <a asp-controller="Search" asp-action="Index">New Search</a>
         }
         else
         {

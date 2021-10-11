@@ -51,36 +51,36 @@
                     }
                     if (!albumPrivate || (albumPrivate && User.Identity.Name == album.ApplicationUser.UserName))
                     {
-            <div class="d-inline-flex align-self-start p-2">
-                <a asp-controller="Search" asp-action="Results" asp-route-imagealbum="@album.AlbumTitle" asp-route-imageauthor="@Model.User.UserName" class="text-decoration-none">
-                    <div class="card btn-light @css" style="max-width: 302px;">
-                        @if (album.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private).Any())
-                        {
-                            <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width:contain;" src="/api/Photo/@album.Images.Where(i=>i.ImagePrivacy != RailGallery.Enums.Privacy.Private).ElementAt(0).ImagePath/Thumbnail" asp-append-version="true" alt="">
-                        }
-                        else
-                        {
-                            <div class="card-img-top" style="object-fit: cover; width: 300px; height: 200px; min-width: contain; background: repeating-linear-gradient( 45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px ), linear-gradient( to bottom, #eee, #999 );"><h6 class="mt-5">This album is empty or only contains private photos.</h6></div>
-                        }
+                        <div class="d-inline-flex align-self-start p-2">
+                            <a asp-controller="Search" asp-action="Results" asp-route-imagealbum="@album.AlbumTitle" asp-route-imageauthor="@Model.User.UserName" class="text-decoration-none">
+                                <div class="card btn-light @css" style="max-width: 302px;">
+                                    @if (album.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private).Any())
+                                    {
+                                        <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width:contain;" src="/api/Photo/@album.Images.Where(i=>i.ImagePrivacy != RailGallery.Enums.Privacy.Private).ElementAt(0).ImagePath/Thumbnail" asp-append-version="true" alt="">
+                                    }
+                                    else
+                                    {
+                                        <div class="card-img-top" style="object-fit: cover; width: 300px; height: 200px; min-width: contain; background: repeating-linear-gradient( 45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px ), linear-gradient( to bottom, #eee, #999 );"><h6 class="mt-5">This album is empty or only contains private photos.</h6></div>
+                                    }
 
-                        <div class="card-body p-2">
-                            <h6 class="card-title">@album.AlbumTitle</h6>
-                            <p class="card-text"><small><b>@album.Images.Count</b> images, @album.AlbumPrivacy.ToString()</small></p>
+                                    <div class="card-body p-2">
+                                        <h6 class="card-title">@album.AlbumTitle</h6>
+                                        <p class="card-text"><small><b>@album.Images.Count</b> images, @album.AlbumPrivacy.ToString()</small></p>
+                                    </div>
+                                </div>
+                            </a>
+                            @if (User.Identity.Name == album.ApplicationUser.UserName || User.IsInRole("Moderator"))
+                            {
+                                <a asp-controller="Albums" asp-action="Edit" asp-route-id="@album.AlbumID" class="position-absolute text-decoration-none shadow p-1 bg-white">Edit</a>
+                            }
                         </div>
-                    </div>
-                </a>
-                @if (User.Identity.Name == album.ApplicationUser.UserName || User.IsInRole("Moderator"))
-                {
-                    <a asp-controller="Albums" asp-action="Edit" asp-route-id="@album.AlbumID" class="position-absolute text-decoration-none shadow p-1 bg-white">Edit</a>
-                }
-            </div>
                     }
 
                 }
             }
             else
             {
-                <p class="text-center mb-5 mt-5">@Model.User.UserName does not have any albums yet.</p>
+                <p class="text-center mb-5 mt-5">@Model.User.UserName  does not have any public albums yet.</p>
             }
 
         </div>
@@ -110,7 +110,7 @@
             }
             else
             {
-                <p class="text-center mb-5 mt-5">No photos to display.</p>
+                <p class="text-center mb-5 mt-5">@Model.User.UserName  does not have any public photos yet.</p>
             }
 
         </div>

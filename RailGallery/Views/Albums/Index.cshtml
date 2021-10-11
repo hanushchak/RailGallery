@@ -11,38 +11,31 @@
 }
 
 
-@*<p>
-    <a asp-action="Create">Create New</a>
-    <a asp-action="Edit" asp-route-id="@item.AlbumID">Edit</a>
-    <a asp-action="Details" asp-route-id="@item.AlbumID">Details</a>
-    <a asp-action="Delete" asp-route-id="@item.AlbumID">Delete</a>
-</p>*@
-
 <div class="row">
     <div class="col text-center">
         <h4>@ViewData["Title"]</h4>
 
         @if (!(Model.Where(a => a.AlbumPrivacy == RailGallery.Enums.Privacy.Public).Any() || ((Model.Where(a => a.AlbumPrivacy == RailGallery.Enums.Privacy.Private).Any() && User.Identity.Name == ViewBag.UserName))))
         {
-            <h5>@ViewBag.UserName does not have any public albums yet.</h5>
+            <p class="mt-5">@ViewBag.UserName does not have any public albums yet.</p>
         }
         else
         {
             @*string username = ViewBag.UserName;
-            <div class="mt-4">
-                @Html.PagedListPager(Model, page => Url.Action("Index", "Author", new
-           {
-               page,
-               username = username
-           }), new PagedListRenderOptions
-           {
-               ContainerDivClasses = new string[] { "pagination justify-content-center" },
-               LinkToPreviousPageFormat = "Previous",
-               LinkToNextPageFormat = "Next",
-               LiElementClasses = new string[] { "page-item" },
-               PageClasses = new string[] { "page-link" }
-           })
-            </div>*@
+             <div class="mt-4">
+                 @Html.PagedListPager(Model, page => Url.Action("Index", "Author", new
+            {
+                page,
+                username = username
+            }), new PagedListRenderOptions
+            {
+                ContainerDivClasses = new string[] { "pagination justify-content-center" },
+                LinkToPreviousPageFormat = "Previous",
+                LinkToNextPageFormat = "Next",
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+            })
+             </div>*@
 
             <div class="d-flex justify-content-center flex-wrap">
                 @foreach (var album in Model)
@@ -55,29 +48,29 @@
                     }
                     if (!albumPrivate || (albumPrivate && User.Identity.Name == album.ApplicationUser.UserName))
                     {
-                <div class="d-inline-flex align-self-start p-2">
-                    <a asp-controller="Search" asp-action="Results" asp-route-imagealbum="@album.AlbumTitle" asp-route-imageauthor="@album.ApplicationUser.UserName" class="text-decoration-none">
-                        <div class="card btn-light @css" style="max-width: 302px;">
-                            @if (album.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private).Any())
-                            {
-                                <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width:contain;" src="/api/Photo/@album.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private).ElementAt(0).ImagePath/Thumbnail" asp-append-version="true" alt="">
-                            }
-                            else
-                            {
-                                <div class="card-img-top" style="object-fit: cover; width: 300px; height: 200px; min-width: contain; background: repeating-linear-gradient( 45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px ), linear-gradient( to bottom, #eee, #999 );"><h6 class="mt-5">This album is empty or only contains private photos.</h6></div>
-                            }
+                        <div class="d-inline-flex align-self-start p-2">
+                            <a asp-controller="Search" asp-action="Results" asp-route-imagealbum="@album.AlbumTitle" asp-route-imageauthor="@album.ApplicationUser.UserName" class="text-decoration-none">
+                                <div class="card btn-light @css" style="max-width: 302px;">
+                                    @if (album.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private).Any())
+                                    {
+                                        <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width:contain;" src="/api/Photo/@album.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private).ElementAt(0).ImagePath/Thumbnail" asp-append-version="true" alt="">
+                                    }
+                                    else
+                                    {
+                                        <div class="card-img-top" style="object-fit: cover; width: 300px; height: 200px; min-width: contain; background: repeating-linear-gradient( 45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px ), linear-gradient( to bottom, #eee, #999 );"><h6 class="mt-5">This album is empty or only contains private photos.</h6></div>
+                                    }
 
-                            <div class="card-body p-2">
-                                <h6 class="card-title">@album.AlbumTitle</h6>
-                                <p class="card-text"><small><b>@album.Images.Count</b> images, @album.AlbumPrivacy.ToString()</small></p>
-                            </div>
+                                    <div class="card-body p-2">
+                                        <h6 class="card-title">@album.AlbumTitle</h6>
+                                        <p class="card-text"><small><b>@album.Images.Count</b> images, @album.AlbumPrivacy.ToString()</small></p>
+                                    </div>
+                                </div>
+                            </a>
+                            @if (User.Identity.Name == album.ApplicationUser.UserName || User.IsInRole("Moderator"))
+                            {
+                                <a asp-controller="Albums" asp-action="Edit" asp-route-id="@album.AlbumID" class="position-absolute text-decoration-none shadow p-1 bg-white">Edit</a>
+                            }
                         </div>
-                    </a>
-                    @if (User.Identity.Name == album.ApplicationUser.UserName || User.IsInRole("Moderator"))
-                    {
-                        <a asp-controller="Albums" asp-action="Edit" asp-route-id="@album.AlbumID" class="position-absolute text-decoration-none shadow p-1 bg-white">Edit</a>
-                    }
-                </div>
                     }
                 }
             </div>
