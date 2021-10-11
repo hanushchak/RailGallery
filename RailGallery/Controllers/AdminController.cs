@@ -123,7 +123,7 @@ namespace RailGallery.Controllers
                 _ => users.OrderBy(u => u.UserName).ToList(),
             };
 
-            int pageSize = 15;
+            int pageSize = 2;
 
             int pageNumber = (int)((!page.HasValue || page == 0) ? 1 : page);
 
@@ -259,6 +259,57 @@ namespace RailGallery.Controllers
             }
 
             return RedirectToAction("Users");
+        }
+
+        public async Task<IActionResult> Photos(int? page, string sortOrder)
+        {
+            ViewBag.SortOrder = sortOrder;
+
+            ViewBag.DateUploadedSort = String.IsNullOrEmpty(sortOrder) ? "DateUploaded_desc" : "";
+            ViewBag.DateTakenSort = sortOrder == "DateTaken" ? "DateTaken_desc" : "DateTaken";
+            ViewBag.TitleSort = sortOrder == "Title" ? "Title_desc" : "Title";
+            ViewBag.PrivacySort = sortOrder == "Privacy" ? "Privacy_desc" : "Privacy";
+            ViewBag.StatusSort = sortOrder == "Status" ? "Status_desc" : "Status";
+            ViewBag.AuthorSort = sortOrder == "Author" ? "Author_desc" : "Author";
+            ViewBag.Views24Sort = sortOrder == "Views24" ? "Views24_desc" : "Views24";
+            ViewBag.ViewsWeekSort = sortOrder == "ViewsWeek" ? "ViewsWeek_desc" : "ViewsWeek";
+            ViewBag.ViewsMonthSort = sortOrder == "ViewsMonth" ? "ViewsMonth_desc" : "ViewsMonth";
+            ViewBag.ViewsSort = sortOrder == "Views" ? "Views_desc" : "Views";
+
+            var photos = await _context.Images.Include(u => u.ApplicationUser).Include(u => u.Comments).Include(u => u.ImageViews).ToListAsync();
+
+            DateTime currentTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
+
+            photos = sortOrder switch
+            {
+                "Title" => photos.OrderBy(u => u.ImageTitle).ToList(),
+                "Title_desc" => photos.OrderByDescending(u => u.ImageTitle).ToList(),
+                "DateTaken" => photos.OrderBy(u => u.ImageTakenDate).ToList(),
+                "DateTaken_desc" => photos.OrderByDescending(u => u.ImageTakenDate).ToList(),
+                "DateUploaded" => photos.OrderBy(u => u.ImageUploadedDate).ToList(),
+                "DateUploaded_desc" => photos.OrderByDescending(u => u.ImageUploadedDate).ToList(),
+                "Privacy" => photos.OrderBy(u => u.ImagePrivacy).ToList(),
+                "Privacy_desc" => photos.OrderByDescending(u => u.ImagePrivacy).ToList(),
+                "Status" => photos.OrderBy(u => u.ImageStatus).ToList(),
+                "Status_desc" => photos.OrderByDescending(u => u.ImageStatus).ToList(),
+                "Author" => photos.OrderBy(u => u.ApplicationUser.UserName).ToList(),
+                "Author_desc" => photos.OrderByDescending(u => u.ApplicationUser.UserName).ToList(),
+                "Views24" => photos.OrderBy(u => u.ImageViews.Where(i => i.DateViewed >= currentTime.AddHours(-24)).Count()).ToList(),
+                "Views24_desc" => photos.OrderByDescending(u => u.ImageViews.Where(i => i.DateViewed >= currentTime.AddHours(-24)).Count()).ToList(),
+                "ViewsWeek" => photos.OrderBy(u => u.ImageViews.Where(i => i.DateViewed >= currentTime.AddHours(-168)).Count()).ToList(),
+                "ViewsWeek_desc" => photos.OrderByDescending(u => u.ImageViews.Where(i => i.DateViewed >= currentTime.AddHours(-168)).Count()).ToList(),
+                "ViewsMonth" => photos.OrderBy(u => u.ImageViews.Where(i => i.DateViewed >= currentTime.AddHours(-730)).Count()).ToList(),
+                "ViewsMonth_desc" => photos.OrderByDescending(u => u.ImageViews.Where(i => i.DateViewed >= currentTime.AddHours(-730)).Count()).ToList(),
+                "Views" => photos.OrderBy(u => u.ImageViews.Count()).ToList(),
+                "Views_desc" => photos.OrderByDescending(u => u.ImageViews.Where(i => i.DateViewed >= currentTime.AddHours(-24)).Count()).ToList(),
+                _ => photos.OrderBy(u => u.ImageUploadedDate).ToList(),
+            };
+
+            int pageSize = 15;
+
+            int pageNumber = (int)((!page.HasValue || page == 0) ? 1 : page);
+
+            return View(photos.ToPagedList(pageNumber, pageSize));
         }
 
     }

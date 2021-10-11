@@ -1,0 +1,133 @@
+﻿@model IPagedList<RailGallery.Models.Image>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Web.Common;
+
+@{
+    ViewData["Title"] = "Photo Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DateTime currentTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
+}
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+<div class="text-center">
+    <h4>@ViewData["Title"]</h4>
+</div>
+
+<div class="mt-4">
+    @Html.PagedListPager(Model, page => Url.Action("Photos", "Admin", new
+    {
+        page,
+        sortOrder = ViewBag.SortOrder
+    }), new PagedListRenderOptions
+    {
+        ContainerDivClasses = new string[] { "pagination justify-content-center" },
+        LinkToPreviousPageFormat = "Previous",
+        LinkToNextPageFormat = "Next",
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" }
+    })
+</div>
+
+<table class="table mt-2">
+    <thead>
+        <tr>
+            <th class="text-center">Thumbnail</th>
+            <th>
+                <a asp-action="Photos" asp-route-sortOrder="@ViewBag.TitleSort">Title <i class="fa fa-fw fa-sort"></i></a>
+            </th>
+            <th>
+                <a asp-action="Photos" asp-route-sortOrder="@ViewBag.DateTakenSort">Date Taken <i class="fa fa-fw fa-sort"></i></a>
+            </th>
+            <th>
+                <a asp-action="Photos" asp-route-sortOrder="@ViewBag.DateUploadedSort">Date Uploaded <i class="fa fa-fw fa-sort"></i></a>
+            </th>
+            <th>
+                <a asp-action="Photos" asp-route-sortOrder="@ViewBag.PrivacySort">Privacy <i class="fa fa-fw fa-sort"></i></a>
+            </th>
+            <th>
+                <a asp-action="Photos" asp-route-sortOrder="@ViewBag.StatusSort">Status <i class="fa fa-fw fa-sort"></i></a>
+            </th>
+            <th>
+                <a asp-action="Photos" asp-route-sortOrder="@ViewBag.AuthorSort">Author <i class="fa fa-fw fa-sort"></i></a>
+            </th>
+            <th>
+                <a asp-action="Photos" asp-route-sortOrder="@ViewBag.Views24Sort">Views in 24 hours <i class="fa fa-fw fa-sort"></i></a>
+            </th>
+            <th>
+                <a asp-action="Photos" asp-route-sortOrder="@ViewBag.ViewsWeekSort">Views past week <i class="fa fa-fw fa-sort"></i></a>
+            </th>
+            <th>
+                <a asp-action="Photos" asp-route-sortOrder="@ViewBag.ViewsMonthSort">Views past month <i class="fa fa-fw fa-sort"></i></a>
+            </th>
+            <th>
+                <a asp-action="Photos" asp-route-sortOrder="@ViewBag.ViewsSort">Views total <i class="fa fa-fw fa-sort"></i></a>
+            </th>
+            <th class="text-center">Manage</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            string color;
+            if (item.ImageStatus == RailGallery.Enums.Status.Pending) { color = "text-danger"; }
+            else if (item.ImageStatus == RailGallery.Enums.Status.Rejected) { color = "text-warning"; }
+            else { color = "text-success"; }
+        <tr>
+            <td class="text-center">
+                <a asp-controller="View" asp-action="View" asp-route-id="@item.ImageID"><img src="/api/Photo/@item.ImagePath/Thumbnail" height="100" class="shadow-lg" asp-append-version="true" /></a>
+            </td>
+            <td class="align-middle">
+                <a asp-controller="View" asp-action="View" asp-route-id="@item.ImageID" class="text-decoration-none">@Html.DisplayFor(modelItem => item.ImageTitle)</a>
+            </td>
+            <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.ImageTakenDate)
+            </td>
+            <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.ImageUploadedDate)
+            </td>
+            <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.ImagePrivacy)
+            </td>
+            <td class="align-middle @color">
+                @Html.DisplayFor(modelItem => item.ImageStatus)
+            </td>
+            <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+            </td>
+            <td class="align-middle">
+                @item.ImageViews.Where(i => i.DateViewed >= currentTime.AddHours(-24)).Count()
+            </td>
+            <td class="align-middle">
+                @item.ImageViews.Where(i => i.DateViewed >= currentTime.AddHours(-168)).Count()
+            </td>
+            <td class="align-middle">
+                @item.ImageViews.Where(i => i.DateViewed >= currentTime.AddHours(-730)).Count()
+            </td>
+            <td class="align-middle">
+                @item.ImageViews.Count()
+            </td>
+            <td class="text-center align-middle bg-white">
+                <a asp-controller="Upload" asp-action="Edit" class="btn btn-outline-warning mb-2 w-100" asp-route-id="@item.ImageID" role="button" aria-pressed="true">Edit Photo</a><br />
+                <a asp-controller="Upload" asp-action="Delete" class="btn btn-outline-danger w-100" asp-route-id="@item.ImageID" role="button" aria-pressed="true">Delete Photo</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<div class="mt-4">
+    @Html.PagedListPager(Model, page => Url.Action("Photos", "Admin", new
+    {
+        page,
+        sortOrder = ViewBag.SortOrder
+    }), new PagedListRenderOptions
+    {
+        ContainerDivClasses = new string[] { "pagination justify-content-center" },
+        LinkToPreviousPageFormat = "Previous",
+        LinkToNextPageFormat = "Next",
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" }
+    })
+</div>
