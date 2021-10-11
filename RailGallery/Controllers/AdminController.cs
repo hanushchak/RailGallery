@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace RailGallery.Controllers
 {
@@ -87,9 +88,10 @@ namespace RailGallery.Controllers
             return Content("Error");
         }
 
-        public async Task<IActionResult> Users(string username, string sortOrder)
+        public async Task<IActionResult> Users(int? page, string username, string sortOrder)
         {
             ViewBag.SearchString = username;
+            ViewBag.SortOrder = sortOrder;
 
             ViewBag.UsernameSort = String.IsNullOrEmpty(sortOrder) ? "username_desc" : "";
             ViewBag.EmailSort = sortOrder == "Email" ? "email_desc" : "Email";
@@ -121,7 +123,11 @@ namespace RailGallery.Controllers
                 _ => users.OrderBy(u => u.UserName).ToList(),
             };
 
-            return View(users);
+            int pageSize = 15;
+
+            int pageNumber = (int)((!page.HasValue || page == 0) ? 1 : page);
+
+            return View(users.ToPagedList(pageNumber, pageSize));
         }
 
         public async Task<IActionResult> Roles(string username)

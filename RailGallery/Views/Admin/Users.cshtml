@@ -1,4 +1,7 @@
-﻿@model IEnumerable<RailGallery.Models.ApplicationUser>
+﻿@model IPagedList<RailGallery.Models.ApplicationUser>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Web.Common;
 
 @{
     ViewData["Title"] = "User Management";
@@ -13,13 +16,29 @@
         <div class="input-group mb-3 mt-3 col-md-4 offset-md-4">
             <input type="text" name="username" value="@ViewBag.SearchString" class="form-control" placeholder="Filter by Username or Email" />
             <div class="input-group-append">
-                <input type="submit" value="Apply filter" class="btn btn-secondary btn-sm" />         
+                <input type="submit" value="Apply filter" class="btn btn-secondary btn-sm" />
             </div>
         </div>
     </form>
 </div>
 
-<table class="table mt-4">
+<div class="mt-4">
+    @Html.PagedListPager(Model, page => Url.Action("Users", "Admin", new
+    {
+        page,
+        sortOrder = ViewBag.SortOrder,
+        username = ViewBag.SearchString
+    }), new PagedListRenderOptions
+    {
+        ContainerDivClasses = new string[] { "pagination justify-content-center" },
+        LinkToPreviousPageFormat = "Previous",
+        LinkToNextPageFormat = "Next",
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" }
+    })
+</div>
+
+<table class="table mt-2">
     <thead>
         <tr>
             <th>
@@ -46,30 +65,46 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                <a asp-controller="Author" asp-action="Index" asp-route-username="@item.UserName">@Html.DisplayFor(modelItem => item.UserName)</a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RegisterationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastActivityDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Images.Count)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Comments.Count)
-            </td>
-            <td>
-                <a asp-action="Roles" asp-route-username="@item.UserName" class="btn btn-outline-warning" role="button" aria-disabled="true">Edit Roles</a>
-                <a asp-action="Access" asp-route-username="@item.UserName" class="btn btn-outline-danger" role="button" aria-disabled="true">Access</a>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    <a asp-controller="Author" asp-action="Index" asp-route-username="@item.UserName">@Html.DisplayFor(modelItem => item.UserName)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegisterationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastActivityDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Images.Count)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Comments.Count)
+                </td>
+                <td>
+                    <a asp-action="Roles" asp-route-username="@item.UserName" class="btn btn-outline-warning" role="button" aria-disabled="true">Edit Roles</a>
+                    <a asp-action="Access" asp-route-username="@item.UserName" class="btn btn-outline-danger" role="button" aria-disabled="true">Access</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
+
+<div>
+    @Html.PagedListPager(Model, page => Url.Action("Users", "Admin", new
+    {
+        page,
+        sortOrder = ViewBag.SortOrder,
+        username = ViewBag.SearchString
+    }), new PagedListRenderOptions
+    {
+        ContainerDivClasses = new string[] { "pagination justify-content-center" },
+        LinkToPreviousPageFormat = "Previous",
+        LinkToNextPageFormat = "Next",
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" }
+    })
+</div>
