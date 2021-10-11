@@ -6,6 +6,7 @@ using RailGallery.Models;
 using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
+using System;
 
 namespace RailGallery.Controllers
 {
@@ -23,6 +24,7 @@ namespace RailGallery.Controllers
         public IActionResult Index()
         {
             dynamic homeModel = new ExpandoObject();
+            DateTime currentTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
 
             // Most recent images
             homeModel.LasestImages = _context.Images
@@ -36,7 +38,8 @@ namespace RailGallery.Controllers
 
             homeModel.Top24HoursImages = _context.Images
                 .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
-                .OrderByDescending(i => i.ImageUploadedDate)
+                .Include(i => i.ImageViews.Where(v => v.DateViewed >= currentTime.AddHours(-24)))
+                .OrderByDescending(i => i.ImageViews.Where(v => v.DateViewed >= currentTime.AddHours(-24)).Count()).ThenByDescending(i => i.ImageUploadedDate)
                 .Take(10)
                 .Include(c => c.Comments)
                 .Include(c => c.Likes)

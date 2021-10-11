@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RailGallery.Data;
 using RailGallery.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -46,6 +47,7 @@ namespace RailGallery.Controllers
                 .Include(m => m.ApplicationUser)
                 .Include(m => m.Location)
                 .Include(m => m.Locomotive)
+                .Include(m => m.ImageViews)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ImageID == id);
 
@@ -83,7 +85,8 @@ namespace RailGallery.Controllers
                 }
             }
 
-            ImageView imageView = new ImageView { DateViewed = System.DateTime.Now, ImageId = image.ImageID };
+            DateTime currentTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
+            ImageView imageView = new ImageView { DateViewed = currentTime, ImageId = image.ImageID };
             await _context.ImageViews.AddAsync(imageView);
             await _context.SaveChangesAsync();
 

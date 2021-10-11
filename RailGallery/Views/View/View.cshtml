@@ -114,6 +114,8 @@
         <div class="row mb-3 mt-3">
             <div class="col-4 border-right">
                 <h6>Details</h6>
+                Total Views: @Model.ImageViews.Count
+                <br />
                 Locomotive: <a asp-controller="Search" asp-action="Results" asp-route-locomotivemodel="@Model.Locomotive.LocomotiveModel">@Html.DisplayFor(model => model.Locomotive.LocomotiveModel)</a>
                 <br />
                 Built: <a asp-controller="Search" asp-action="Results" asp-route-locomotivebuilt="@Model.Locomotive.LocomotiveBuilt.ToShortDateString()">@Html.DisplayFor(model => model.Locomotive.LocomotiveBuilt.Year)</a>

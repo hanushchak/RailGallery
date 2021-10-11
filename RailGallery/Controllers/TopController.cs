@@ -27,11 +27,14 @@ namespace RailGallery.Controllers
         {
             List<Image> images = null;
 
+            DateTime currentTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
+
             if (String.IsNullOrEmpty(time) || time.ToLower() == "24hours")
             {
                 images = await _context.Images
                 .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
-                .OrderByDescending(i => i.ImageUploadedDate)
+                .Include(i => i.ImageViews.Where(v => v.DateViewed >= currentTime.AddHours(-24)))
+                .OrderByDescending(i => i.ImageViews.Where(v => v.DateViewed >= currentTime.AddHours(-24)).Count()).ThenByDescending(i => i.ImageUploadedDate)
                 .Include(c => c.Likes)
                 .Include(c => c.Comments)
                 .Include(c => c.ApplicationUser)
@@ -42,7 +45,8 @@ namespace RailGallery.Controllers
             {
                 images = await _context.Images
                 .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
-                .OrderByDescending(i => i.ImageUploadedDate)
+                .Include(i => i.ImageViews.Where(v => v.DateViewed >= currentTime.AddHours(-168)))
+                .OrderByDescending(i => i.ImageViews.Where(v => v.DateViewed >= currentTime.AddHours(-168)).Count()).ThenByDescending(i => i.ImageUploadedDate)
                 .Include(c => c.Likes)
                 .Include(c => c.Comments)
                 .Include(c => c.ApplicationUser)
@@ -53,7 +57,8 @@ namespace RailGallery.Controllers
             {
                 images = await _context.Images
                 .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)
-                .OrderByDescending(i => i.ImageUploadedDate)
+                .Include(i => i.ImageViews.Where(v => v.DateViewed >= currentTime.AddHours(-730)))
+                .OrderByDescending(i => i.ImageViews.Where(v => v.DateViewed >= currentTime.AddHours(-730)).Count()).ThenByDescending(i => i.ImageUploadedDate)
                 .Include(c => c.Likes)
                 .Include(c => c.Comments)
                 .Include(c => c.ApplicationUser)
