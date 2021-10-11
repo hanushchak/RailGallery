@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<RailGallery.Models.ApplicationUser>
 
 @{
-    ViewData["Title"] = "Manage Users";
+    ViewData["Title"] = "User Management";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,9 +11,9 @@
     <h4>@ViewData["Title"]</h4>
     <form asp-action="Users" method="get">
         <div class="input-group mb-3 mt-3 col-md-4 offset-md-4">
-            <input type="text" name="username" value="@ViewBag.SearchString" class="form-control" placeholder="Username or Email" />
+            <input type="text" name="username" value="@ViewBag.SearchString" class="form-control" placeholder="Filter by Username or Email" />
             <div class="input-group-append">
-                <input type="submit" value="Search" class="btn btn-secondary btn-sm" />         
+                <input type="submit" value="Apply filter" class="btn btn-secondary btn-sm" />         
             </div>
         </div>
     </form>
@@ -40,7 +40,7 @@
             <th>
                 <a asp-action="Users" asp-route-sortOrder="@ViewBag.NumberCommentsSort" asp-route-username="@ViewBag.SearchString">Number of comments <i class="fa fa-fw fa-sort"></i></a>
             </th>
-            <th>Action</th>
+            <th>Manage</th>
         </tr>
     </thead>
     <tbody>

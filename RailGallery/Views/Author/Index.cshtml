@@ -11,7 +11,7 @@
         <div class="justify-content-center">
             @if (User.Identity.Name == Model.User.UserName)
             {
-                <a asp-area="Identity" asp-page="/Account/Manage/Index">Edit Profile</a>
+                <a asp-area="Identity" asp-page="/Account/Manage/Index">Account Settings</a>
                 <br />
                 <a asp-controller="Upload" asp-action="Index">Upload Photo</a>
                 <br />
@@ -21,7 +21,7 @@
                 <br />
                 <a asp-controller="Saved" asp-action="Favorite" >Your Favorites</a>
                 <br />
-                <a asp-controller="Upload" asp-action="History">Upload History</a>
+                <a asp-controller="Upload" asp-action="History">Your Upload History</a>
                 <br />
                 @if (User.IsInRole("Moderator"))
                 {

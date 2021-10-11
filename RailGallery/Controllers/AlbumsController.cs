@@ -41,7 +41,7 @@ namespace RailGallery.Controllers
 
             ViewBag.UserName = user.UserName;
 
-            var albums = await _context.Albums.Where(a => a.ApplicationUser == user).Include(a => a.ApplicationUser).Include(a => a.Images).ToListAsync();
+            var albums = await _context.Albums.Where(a => a.ApplicationUser == user).Include(a => a.ApplicationUser).Include(a => a.Images.OrderByDescending(i => i.ImageID)).ToListAsync();
 
             int pageSize = 100; /*TODO*/
 
