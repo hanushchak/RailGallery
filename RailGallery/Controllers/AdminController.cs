@@ -148,7 +148,9 @@ namespace RailGallery.Controllers
 
             var model = new List<UserRolesViewModel>();
 
-            foreach (var role in _roleManager.Roles)
+            var roles = await _roleManager.Roles.ToListAsync();
+
+            foreach (var role in roles)
             {
                 var userRolesViewModel = new UserRolesViewModel
                 {
