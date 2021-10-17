@@ -15,13 +15,13 @@ namespace RailGallery.Models
 
         [Display(Name = "Last Seen")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]
         [Required]
         public DateTime LastActivityDate { get; set; }
 
         [Display(Name = "Registration Date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]
         [Required]
         public DateTime RegisterationDate { get; set; }
 

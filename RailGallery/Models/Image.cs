@@ -15,9 +15,9 @@ namespace RailGallery.Models
         public string ImageTitle { get; set; }
         [Display(Name = "Description"), MaxLength(120), Required]
         public string ImageDescription { get; set; }
-        [Display(Name = "Date Taken"), DataType(DataType.Date), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}"), Required]
+        [Display(Name = "Date Taken"), DataType(DataType.Date), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}"), Required]
         public DateTime ImageTakenDate { get; set; }
-        [Display(Name = "Date Uploaded"), DataType(DataType.Date), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}"), Required]
+        [Display(Name = "Date Uploaded"), DataType(DataType.Date), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}"), Required]
         public DateTime ImageUploadedDate { get; set; }
         [Display(Name = "Status"), Required]
         public Status ImageStatus { get; set; }

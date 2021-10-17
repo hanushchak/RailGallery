@@ -9,7 +9,7 @@ namespace RailGallery.Models
         public int CommentID { get; set; }
         [Required, MaxLength(5000), Display(Name = "Comment Text")]
         public string CommentText { get; set; }
-        [Display(Name = "Comment Date")]
+        [Display(Name = "Comment Date"), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd hh:mm tt}")]
         public DateTime? CommentDate { get; set; }
         [Display(Name = "Comment Author")]
         public ApplicationUser ApplicationUser { get; set; }

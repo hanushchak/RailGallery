@@ -123,7 +123,7 @@ namespace RailGallery.Controllers
                 _ => users.OrderBy(u => u.UserName).ToList(),
             };
 
-            int pageSize = 2;
+            int pageSize = 10;
 
             int pageNumber = (int)((!page.HasValue || page == 0) ? 1 : page);
 
