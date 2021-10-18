@@ -29,6 +29,7 @@ namespace RailGallery
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.User.RequireUniqueEmail = true; // Require unique Email address
+                options.Lockout.AllowedForNewUsers = false;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultUI()
