@@ -8,4 +8,7 @@ $(function () {
         display_selected_options: true,
         display_disabled_options: true
     });
+    $.validator.setDefaults({
+        ignore: []
+    });
 });
