@@ -39,32 +39,32 @@
         @foreach (var item in Model)
         {
             string color;
-            if(item.ImageStatus == RailGallery.Enums.Status.Pending) { color = "bg-warning"; }
-            else if(item.ImageStatus == RailGallery.Enums.Status.Rejected) { color = "bg-danger"; }
+            if (item.ImageStatus == RailGallery.Enums.Status.Pending) { color = "bg-warning"; }
+            else if (item.ImageStatus == RailGallery.Enums.Status.Rejected) { color = "bg-danger"; }
             else { color = "bg-success"; }
-        <tr class="@color text-white">
-            <td class="text-center">
-                <a asp-controller="View" asp-action="View" asp-route-id="@item.ImageID"><img src="/api/Photo/@item.ImagePath/Thumbnail" height="100" class="shadow-lg" asp-append-version="true" /></a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageTitle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageTakenDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageUploadedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImagePrivacy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageStatus)
-            </td>
-        </tr>
+            <tr class="@color text-white">
+                <td class="text-center">
+                    <a asp-controller="View" asp-action="View" asp-route-id="@item.ImageID"><img src="/api/Photo/@item.ImagePath/Thumbnail" height="100" class="shadow-lg" asp-append-version="true" /></a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImageTitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImageDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImageTakenDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImageUploadedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImagePrivacy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImageStatus)
+                </td>
+            </tr>
         }
     </tbody>
 </table>

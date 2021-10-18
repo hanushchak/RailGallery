@@ -21,22 +21,6 @@
         }
         else
         {
-            @*string username = ViewBag.UserName;
-             <div class="mt-4">
-                 @Html.PagedListPager(Model, page => Url.Action("Index", "Author", new
-            {
-                page,
-                username = username
-            }), new PagedListRenderOptions
-            {
-                ContainerDivClasses = new string[] { "pagination justify-content-center" },
-                LinkToPreviousPageFormat = "Previous",
-                LinkToNextPageFormat = "Next",
-                LiElementClasses = new string[] { "page-item" },
-                PageClasses = new string[] { "page-link" }
-            })
-             </div>*@
-
             <div class="d-flex justify-content-center flex-wrap">
                 @foreach (var album in Model)
                 {
@@ -74,20 +58,6 @@
                     }
                 }
             </div>
-            @*<div class="mt-4">
-                @Html.PagedListPager(Model, page => Url.Action("Index", new
-                {
-                    page,
-                    username = ViewBag.UserName
-                }), new PagedListRenderOptions
-                {
-                    ContainerDivClasses = new string[] { "pagination justify-content-center" },
-                    LinkToPreviousPageFormat = "Previous",
-                    LinkToNextPageFormat = "Next",
-                    LiElementClasses = new string[] { "page-item" },
-                    PageClasses = new string[] { "page-link" }
-                })
-            </div>*@
         }
     </div>
 </div>

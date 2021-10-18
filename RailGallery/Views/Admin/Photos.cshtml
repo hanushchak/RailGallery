@@ -74,45 +74,45 @@
             if (item.ImageStatus == RailGallery.Enums.Status.Pending) { color = "text-danger"; }
             else if (item.ImageStatus == RailGallery.Enums.Status.Rejected) { color = "text-warning"; }
             else { color = "text-success"; }
-        <tr>
-            <td class="text-center">
-                <a asp-controller="View" asp-action="View" asp-route-id="@item.ImageID"><img src="/api/Photo/@item.ImagePath/Thumbnail" height="100" class="shadow-lg" asp-append-version="true" /></a>
-            </td>
-            <td class="align-middle">
-                <a asp-controller="View" asp-action="View" asp-route-id="@item.ImageID" class="text-decoration-none">@Html.DisplayFor(modelItem => item.ImageTitle)</a>
-            </td>
-            <td class="align-middle">
-                @Html.DisplayFor(modelItem => item.ImageTakenDate)
-            </td>
-            <td class="align-middle">
-                @Html.DisplayFor(modelItem => item.ImageUploadedDate)
-            </td>
-            <td class="align-middle">
-                @Html.DisplayFor(modelItem => item.ImagePrivacy)
-            </td>
-            <td class="align-middle @color">
-                @Html.DisplayFor(modelItem => item.ImageStatus)
-            </td>
-            <td class="align-middle">
-                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-            </td>
-            <td class="align-middle">
-                @item.ImageViews.Where(i => i.DateViewed >= currentTime.AddHours(-24)).Count()
-            </td>
-            <td class="align-middle">
-                @item.ImageViews.Where(i => i.DateViewed >= currentTime.AddHours(-168)).Count()
-            </td>
-            <td class="align-middle">
-                @item.ImageViews.Where(i => i.DateViewed >= currentTime.AddHours(-730)).Count()
-            </td>
-            <td class="align-middle">
-                @item.ImageViews.Count()
-            </td>
-            <td class="text-center align-middle bg-white">
-                <a asp-controller="Upload" asp-action="Edit" class="btn btn-outline-warning mb-2 w-100" asp-route-id="@item.ImageID" role="button" aria-pressed="true">Edit Photo</a><br />
-                <a asp-controller="Upload" asp-action="Delete" class="btn btn-outline-danger w-100" asp-route-id="@item.ImageID" role="button" aria-pressed="true">Delete Photo</a>
-            </td>
-        </tr>
+            <tr>
+                <td class="text-center">
+                    <a asp-controller="View" asp-action="View" asp-route-id="@item.ImageID"><img src="/api/Photo/@item.ImagePath/Thumbnail" height="100" class="shadow-lg" asp-append-version="true" /></a>
+                </td>
+                <td class="align-middle">
+                    <a asp-controller="View" asp-action="View" asp-route-id="@item.ImageID" class="text-decoration-none">@Html.DisplayFor(modelItem => item.ImageTitle)</a>
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.ImageTakenDate)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.ImageUploadedDate)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.ImagePrivacy)
+                </td>
+                <td class="align-middle @color">
+                    @Html.DisplayFor(modelItem => item.ImageStatus)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                </td>
+                <td class="align-middle">
+                    @item.ImageViews.Where(i => i.DateViewed >= currentTime.AddHours(-24)).Count()
+                </td>
+                <td class="align-middle">
+                    @item.ImageViews.Where(i => i.DateViewed >= currentTime.AddHours(-168)).Count()
+                </td>
+                <td class="align-middle">
+                    @item.ImageViews.Where(i => i.DateViewed >= currentTime.AddHours(-730)).Count()
+                </td>
+                <td class="align-middle">
+                    @item.ImageViews.Count()
+                </td>
+                <td class="text-center align-middle bg-white">
+                    <a asp-controller="Upload" asp-action="Edit" class="btn btn-outline-warning mb-2 w-100" asp-route-id="@item.ImageID" role="button" aria-pressed="true">Edit Photo</a><br />
+                    <a asp-controller="Upload" asp-action="Delete" class="btn btn-outline-danger w-100" asp-route-id="@item.ImageID" role="button" aria-pressed="true">Delete Photo</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
