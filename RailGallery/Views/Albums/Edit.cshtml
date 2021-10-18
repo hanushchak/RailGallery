@@ -5,6 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+
 <div class="row">
     <div class="col-md-4 offset-md-4">
         <form asp-action="Edit">
@@ -50,10 +52,10 @@
             <div class="form-group">
                 <div class="row justify-content-between">
                     <div class="col-auto">
-                        <label for="AlbumImages" class="control-label">Images</label> <small class="text-secondary">(hold CTRL to select multiple)</small>
+                        <label for="AlbumImages" class="control-label">Images</label>
                     </div>
                 </div>
-                <select asp-for="Images" name="AlbumImages" id="AlbumImages" class="form-control" multiple size="@ViewBag.Images.Count">
+                <select asp-for="Images" name="AlbumImages" id="AlbumImages" class="form-control form-control-chosen" multiple size="@ViewBag.Images.Count" data-placeholder="Select Images to Add">
                     @foreach (var value in ViewBag.Images)
                     {
                         @if (value.Selected)
@@ -64,8 +66,6 @@
                         {
                             <option value="@value.Value">@value.Text</option>
                         }
-
-
                     }
                 </select>
             </div>
