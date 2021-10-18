@@ -43,7 +43,7 @@ namespace RailGallery.Controllers
 
             var albums = await _context.Albums.Where(a => a.ApplicationUser == user).Include(a => a.ApplicationUser).Include(a => a.Images.OrderByDescending(i => i.ImageID)).ToListAsync();
 
-            int pageSize = 100; /*TODO*/
+            int pageSize = 100;
 
             int pageNumber = (int)((!page.HasValue || page == 0) ? 1 : page);
 
@@ -104,7 +104,7 @@ namespace RailGallery.Controllers
                                   new SelectListItem
                                   {
                                       Value = i.ImageID.ToString(),
-                                      Text = i.ImageTitle,
+                                      Text = (i.ImageStatus == Enums.Status.Published ? i.ImageTitle : i.ImageTitle + " (photo pending)"),
                                       Selected = _context.Images.Include(a => a.Albums).Where(a => a.ImageID == i.ImageID && a.Albums.Where(a => a.AlbumID == album.AlbumID).Any()).Any() ? true : false
                                   }).AsNoTracking().ToListAsync();
 

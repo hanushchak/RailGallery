@@ -2,6 +2,7 @@
 @using X.PagedList.Mvc.Core;
 @using X.PagedList;
 @using X.PagedList.Web.Common;
+@using RailGallery.Enums;
 
 <link href="/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
@@ -35,9 +36,9 @@
                         <div class="d-inline-flex align-self-start p-2">
                             <a asp-controller="Search" asp-action="Results" asp-route-imagealbum="@album.AlbumTitle" asp-route-imageauthor="@album.ApplicationUser.UserName" class="text-decoration-none">
                                 <div class="card btn-light @css" style="max-width: 302px;">
-                                    @if (album.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private).Any())
+                                    @if (album.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private && i.ImageStatus == Status.Published).Any())
                                     {
-                                        <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width:contain;" src="/api/Photo/@album.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private).ElementAt(0).ImagePath/Thumbnail" asp-append-version="true" alt="">
+                                        <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width:contain;" src="/api/Photo/@album.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private && i.ImageStatus == Status.Published).ElementAt(0).ImagePath/Thumbnail" asp-append-version="true" alt="">
                                     }
                                     else
                                     {

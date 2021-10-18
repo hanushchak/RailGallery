@@ -1,4 +1,5 @@
 ﻿@model RailGallery.Models.Album
+@using RailGallery.Enums;
 
 @{
     ViewData["Title"] = "Delete Album";
@@ -11,9 +12,9 @@
         <hr />
 
         <div class="form-group text-center">
-            @if (Model.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private).Any())
+            @if (Model.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private && i.ImageStatus == Status.Published).Any())
             {
-                <img style="object-fit: cover; max-width: 300px; max-height: 200px; " src="/api/Photo/@Model.Images.Where(i=>i.ImagePrivacy != RailGallery.Enums.Privacy.Private).ElementAt(0).ImagePath/Thumbnail" asp-append-version="true" alt="">
+                <img style="object-fit: cover; max-width: 300px; max-height: 200px; " src="/api/Photo/@Model.Images.Where(i=>i.ImagePrivacy != RailGallery.Enums.Privacy.Private && i.ImageStatus == Status.Published).ElementAt(0).ImagePath/Thumbnail" asp-append-version="true" alt="">
             }
             else
             {
