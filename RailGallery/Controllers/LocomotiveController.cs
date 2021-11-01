@@ -5,24 +5,44 @@ using System.Threading.Tasks;
 
 namespace RailGallery.Controllers
 {
+    /// <summary>
+    /// <c>Locomotive Controller</c>
+    /// Contains a method that allows to add new locomotive to the database.
+    /// 
+    /// Author: Maksym Hanushchak 
+    /// </summary>
     public class LocomotiveController : Controller
     {
         private readonly ApplicationDbContext _context;
 
+        /// <summary>
+        /// Class constructor.
+        /// </summary>
+        /// <param name="context">Reference to the current context.</param>
         public LocomotiveController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Locomotive/Create
+        /// <summary>
+        /// HTTP GET method that displays the Create Locomotive view.
+        /// 
+        /// GET: [host]/Locomotive/Create
+        /// </summary>
+        /// <returns>Redirects to the view.</returns>
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Locomotive/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// HTTP POST method that is called upon the Create Locomotive form submission. 
+        /// Creates a new location object and saves it to the database.
+        /// 
+        /// POST: [host]/Locomotive/Create{FormCollection}
+        /// </summary>
+        /// <param name="location">The new locomotive object submitted by the form.</param>
+        /// <returns>Redirects to the view.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("LocomotiveID,LocomotiveModel,LocomotiveBuilt")] Locomotive locomotive)
