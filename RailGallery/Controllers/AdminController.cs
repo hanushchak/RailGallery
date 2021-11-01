@@ -47,6 +47,8 @@ namespace RailGallery.Controllers
 
         /// <summary>
         /// Index method. Passes an object with pending photos and recent comments to the Admin/Index view.
+        /// 
+        /// GET: [host]/Admin
         /// </summary>
         /// <returns>View (Views/Admin/Index.cshtml)</returns>
         public IActionResult Index()
@@ -76,6 +78,8 @@ namespace RailGallery.Controllers
         /// <summary>
         /// HttpPost method that is called from the photo review form in Views/View.cshtml.
         /// Used to approve or reject a photo.
+        /// 
+        /// POST: [host]/Admin/ReviewPhoto{FormCollection}
         /// </summary>
         /// <param name="collection">Values submitted in the form</param>
         /// <returns>Redirects back to the View or returns error.</returns>
@@ -117,6 +121,8 @@ namespace RailGallery.Controllers
 
         /// <summary>
         /// Method used to to retrieve all users and pass them to the view (Views/Admin/Users.cshtml)
+        /// 
+        /// GET: [host]/Users{parameters}
         /// </summary>
         /// <param name="page">Current page</param>
         /// <param name="username">Username/Email filter</param>
@@ -173,6 +179,8 @@ namespace RailGallery.Controllers
 
         /// <summary>
         /// GET Method to retrieve a list of roles for the user and pass them to the view.
+        /// 
+        /// GET: [host]/Admin/Roles{parameters}
         /// </summary>
         /// <param name="username">Username of the user</param>
         /// <returns>View (Views/Admin/Roles.cshtml)</returns>
@@ -222,6 +230,8 @@ namespace RailGallery.Controllers
 
         /// <summary>
         /// HTTP POST method to update the user's role.
+        /// 
+        /// POST: [host]/Admin/UpdateRole{FormCollection}
         /// </summary>
         /// <param name="username">The user to be updated.</param>
         /// <param name="model">The list with chosen selections sent by the View (Views/Admin/Roles.cshtml)</param>
@@ -272,6 +282,8 @@ namespace RailGallery.Controllers
 
         /// <summary>
         /// HTTP GET method to retrieve the user's current account access state (enabled/disabled).
+        /// 
+        /// GET: [host]/Admin/Access{parameters}
         /// </summary>
         /// <param name="username">The username of the user to update access of.</param>
         /// <returns>View (Views/Admin/Access.cshtml)</returns>
@@ -312,6 +324,8 @@ namespace RailGallery.Controllers
 
         /// <summary>
         /// HTTP POST method to enable or disable user's account.
+        /// 
+        /// POST: [host]/Admin/UpdateAccess{parameters}
         /// </summary>
         /// <param name="username">Username of the user to modify the access of.</param>
         /// <param name="access">String to specify whether the access should be enabled or disabled.</param>
@@ -351,6 +365,8 @@ namespace RailGallery.Controllers
 
         /// <summary>
         /// HTTP GET method to tetrieve a list of all photos to display in the Photo Management view.
+        /// 
+        /// GET: [host]/Admin/Photos{parameters}
         /// </summary>
         /// <param name="page">Page number of the page to display.</param>
         /// <param name="sortOrder">Order in which the list should be sorted.</param>
