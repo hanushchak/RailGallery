@@ -4,9 +4,23 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RailGallery.Models
 {
-
+    /// <summary>
+    /// Model that defines an Album. 
+    /// 
+    /// Properties:
+    ///     - AlbumID - the ID of the album instance
+    ///     - AlbumTitle - the title of the album
+    ///     - AlbumPrivacy - the album's privacy option
+    ///     - Images - a collection of photos that belong to the album
+    ///     - ApplicationUser - the album's owner
+    /// 
+    /// Author: Maksym Hanushchak
+    /// </summary>
     public class Album
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public Album()
         {
             Images = new HashSet<Image>();

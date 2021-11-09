@@ -4,6 +4,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RailGallery.Models
 {
+    /// <summary>
+    /// Model that defines a Locomotive. 
+    /// 
+    /// Properties:
+    ///     - LocomotiveID - the ID of the locomotive instance
+    ///     - LocomotiveModel - the model of the locomotive
+    ///     - LocomotiveBuilt - the date when the locomotive was built
+    ///     - Images - a collection of images that represent this locomotive
+    ///     
+    /// Author: Maksym Hanushchak
+    /// </summary>
     public class Locomotive
     {
         public int LocomotiveID { get; set; }

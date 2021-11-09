@@ -7,6 +7,34 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RailGallery.Models
 {
+    /// <summary>
+    /// Model that defines an Image.  
+    /// Properties:
+    /// 
+    ///     - ImageID - the ID of the image instance
+    ///     - ImageTitle - the title of the photo
+    ///     - ImageDescription - the description of the photo
+    ///     - ImageTakenDate - the date when the photo was taken
+    ///     - ImageUploadedDate - the date when the photo was uploaded
+    ///     - ImageStatus - the status of the photo
+    ///     - ImagePrivacy - the privacy option of the photo
+    ///     - ImagePath - the path to the file in the file system
+    ///     - ApplicationUser - the author of the photo
+    ///     
+    ///     - ImageFile - (Not mapped to a table field) - The file of the photo
+    ///     
+    ///     - Comments - a collection of comments that belong to this photo
+    ///     - Albums - a collection of albums this photo belongs to
+    ///     - Likes - a collection of likes that belong to this photo
+    ///     - Favorites - a collection of favorites that belong to this photo
+    ///     - ImageViews - a collection of views that belong to this photo
+    ///     
+    ///     - Category - the category this photo belongs to
+    ///     - Location - the location of this photo
+    ///     - Locomotive - the locomotive in this photo
+    /// 
+    /// Author: Maksym Hanushchak
+    /// </summary>
     public class Image
     {
         [Display(Name = "ID")]
@@ -49,6 +77,9 @@ namespace RailGallery.Models
         [Display(Name = "Locomotive"), Required, NotMapped]
         public string ImageLocomotiveID { get; set; }
 
+        /// <summary>
+        /// Constructor. Initially sets the uploaded date to the date of creation of Image object and sets the status to Pending.
+        /// </summary>
         public Image()
         {
             ImageUploadedDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
