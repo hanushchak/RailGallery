@@ -11,19 +11,19 @@
             <div asp-validation-summary="All" class="text-danger"></div>
 
 
-            @for (int i = 0; i < Model.Count - 1; i++)
+            @for (int i = 0; i < Model.Count - 1; i++) // Display a radio button control for each role
             {
                 <div class="form-check mt-3 mb-3">
                     <input type="hidden" asp-for="@Model[i].RoleId" />
                     <input type="hidden" asp-for="@Model[i].RoleName" />
-                    @if (Model[i].RoleName == "Moderator" && ViewBag.username == "Moderator")
+                    @if (Model[i].RoleName == "Moderator" && ViewBag.username == "Moderator") // Disable the radio button if the user is Moderator to prevent chaning role for master account
                     {
                         <input asp-for="@Model[i].Selected" class="form-check-input" onclick="return false;" checked />
                         <label class="form-check-label" asp-for="@Model[i].Selected">
                             @Model[i].RoleName <small class="text-secondary">(this role cannot be removed for this user)</small>
                         </label>
                     }
-                    else
+                    else // If the user is not moderator, check the radio button with the current user role
                     {
                         <input asp-for="@Model[i].Selected" class="form-check-input" />
                         <label class="form-check-label" asp-for="@Model[i].Selected">

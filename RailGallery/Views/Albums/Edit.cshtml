@@ -15,11 +15,11 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="AlbumID" />
             <div class="form-group text-center">
-                @if (Model.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private && i.ImageStatus == Status.Published).Any())
+                @if (Model.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private && i.ImageStatus == Status.Published).Any()) // If the album contains a published public photo(s), display the most recent one as the album thumbnail
                 {
                     <img style="object-fit: cover; max-width: 300px; max-height: 200px; " src="/api/Photo/@Model.Images.Where(i=>i.ImagePrivacy != RailGallery.Enums.Privacy.Private && i.ImageStatus == Status.Published).ElementAt(0).ImagePath/Thumbnail" asp-append-version="true" alt="">
                 }
-                else
+                else // If the album does not contain any published public photos, display the message
                 {
                     <div class="text-center pt-5" style="object-fit: cover; width: 300px; height: 200px; min-width: contain; background: repeating-linear-gradient( 45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px ), linear-gradient( to bottom, #eee, #999 );"><h6>This album is empty or only contains private photos.</h6></div>
                 }
@@ -56,9 +56,9 @@
                     </div>
                 </div>
                 <select asp-for="Images" name="AlbumImages" id="AlbumImages" class="form-control form-control-chosen" multiple size="@ViewBag.Images.Count" data-placeholder="Select Images to Add">
-                    @foreach (var value in ViewBag.Images)
+                    @foreach (var value in ViewBag.Images) // Display current user's images in the select list to allow to add them to the edited album
                     {
-                        @if (value.Selected)
+                        @if (value.Selected) // Check if the image is already in the album and if so, mark it selected
                         {
                             <option value="@value.Value" selected>@value.Text</option>
                         }

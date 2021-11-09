@@ -9,9 +9,9 @@
         <h4>Most viewed</h4>
         <h6 class="card-subtitle mb-2 text-muted">in past 24 hours</h6>
         <div class="d-flex justify-content-center flex-wrap">
-            @if (((IEnumerable<Image>)Model.Top24HoursImages).Any())
+            @if (((IEnumerable<Image>)Model.Top24HoursImages).Any()) // If there are any top photos to display
             {
-                @foreach (var image in Model.Top24HoursImages)
+                @foreach (var image in Model.Top24HoursImages) // Iterate thorugh the collection of the photos to display them
                 {
                     <div class="d-inline-flex align-self-start p-2">
                         <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
@@ -27,7 +27,7 @@
                     </div>
                 }
             }
-            else
+            else // If there are no photos to display, display the message
             {
                 <p class="mt-5 mb-5">No photos to display.</p>
             }
@@ -39,9 +39,9 @@
     <div class="col-xl-9 col-lg-6 text-center border-left">
         <h4>Most recent</h4>
         <div class="d-flex justify-content-center flex-wrap">
-            @if (((IEnumerable<Image>)Model.LasestImages).Any())
+            @if (((IEnumerable<Image>)Model.LasestImages).Any()) // If there are any recent photos to display
             {
-                @foreach (var image in Model.LasestImages)
+                @foreach (var image in Model.LasestImages) // Iterate thorugh the collection of the photos to display them
                 {
                     <div class="d-inline-flex align-self-start p-2">
                         <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
@@ -57,7 +57,7 @@
                     </div>
                 }
             }
-            else
+            else // If there are no photos to display, display the message
             {
                 <p class="mt-5 mb-5">No photos to display.</p>
             }

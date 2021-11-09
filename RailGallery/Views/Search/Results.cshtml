@@ -12,17 +12,18 @@
     <div class="col text-center">
         <h4>@ViewData["Title"]</h4>
 
-        @if (Model.Count() == 0)
+        @if (Model.Count() == 0) // If there are no search results available, display the message
         {
             <p class="mt-5">No photos found.</p>
             <a asp-controller="Search" asp-action="Index">New Search</a>
         }
-        else
+        else // If the search returned any results, render the following HTML
         {
             <div class="mt-4">
-                @Html.PagedListPager(Model, page => Url.Action("Results", new
+                @Html.PagedListPager(Model, page => Url.Action("Results", new // Pagination controls
                 {
-                    page,
+                    page, // Current page
+                    // Applied search filters
                     ImageTitle = ViewBag.ImageTitle,
                     ImageAuthor = ViewBag.ImageAuthor,
                     ImageDescription = ViewBag.ImageDescription,
@@ -43,13 +44,13 @@
             </div>
 
             <div class="d-flex justify-content-center flex-wrap">
-                @foreach (var image in Model)
+                @foreach (var image in Model) // Iterate thorugh the collection of search results to display them
                 {
                     string css = "";
                     bool imgPrivate = image.ImagePrivacy.Equals(RailGallery.Enums.Privacy.Private);
                     if (imgPrivate)
                     {
-                        css = "alert-warning";
+                        css = "alert-warning"; // If the photo is private, display it with a yellow background
                     }
                     <div class="d-inline-flex align-self-start p-2">
                         <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
@@ -58,11 +59,11 @@
                                 <div class="card-body p-2">
                                     <h6 class="card-title">@image.ImageTitle</h6>
                                     <h6 class="card-subtitle mb-1 text-muted">by <b>@image.ApplicationUser.UserName</b></h6>
-                                    @if (!imgPrivate)
+                                    @if (!imgPrivate) // If the photo is not private, display the number of comments and likes
                                     {
                                         <p class="card-text"><small><b>@image.Comments.Count</b> comments, <b>@image.Likes.Count</b> likes</small></p>
                                     }
-                                    else
+                                    else // If the photo is private, do not display the number of comments and likes
                                     {
                                         <p class="card-text text-muted"><small>(private photo)</small></p>
                                     }
@@ -74,9 +75,10 @@
                 }
             </div>
             <div class="mt-4">
-                @Html.PagedListPager(Model, page => Url.Action("Results", new
+                @Html.PagedListPager(Model, page => Url.Action("Results", new // Pagination
                 {
-                    page,
+                    page, // Current page
+                    // Applied search filters
                     ImageTitle = ViewBag.ImageTitle,
                     ImageAuthor = ViewBag.ImageAuthor,
                     ImageDescription = ViewBag.ImageDescription,

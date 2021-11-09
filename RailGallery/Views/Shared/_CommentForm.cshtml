@@ -1,7 +1,7 @@
 ﻿@model RailGallery.Models.Comment
 <h4>New Comment</h4>
 <hr />
-@if (User.Identity.IsAuthenticated)
+@if (User.Identity.IsAuthenticated) // Check if the user is authenticated, render the following HTML
 {
     <div class="row">
         <div class="col-xl">
@@ -20,7 +20,7 @@
         </div>
     </div>
 }
-else
+else // If the user is not authenticated, display the message
 {
     <div><p><a asp-area="Identity" asp-page="/Account/Login">Log in</a> to post a comment.</p></div>
 }

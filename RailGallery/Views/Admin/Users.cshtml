@@ -23,7 +23,7 @@
 </div>
 
 <div class="mt-4">
-    @Html.PagedListPager(Model, page => Url.Action("Users", "Admin", new
+    @Html.PagedListPager(Model, page => Url.Action("Users", "Admin", new // Pagination
     {
         page,
         sortOrder = ViewBag.SortOrder,
@@ -63,7 +63,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model) // Display each user as a row in the table
         {
             <tr>
                 <td>
@@ -94,7 +94,7 @@
 </table>
 
 <div>
-    @Html.PagedListPager(Model, page => Url.Action("Users", "Admin", new
+    @Html.PagedListPager(Model, page => Url.Action("Users", "Admin", new // Pagination
     {
         page,
         sortOrder = ViewBag.SortOrder,

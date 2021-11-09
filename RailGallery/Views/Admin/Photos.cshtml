@@ -6,6 +6,7 @@
 @{
     ViewData["Title"] = "Photo Management";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    // Get the current date and time to display photo statistics for a time period
     DateTime currentTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
 }
 
@@ -16,7 +17,7 @@
 </div>
 
 <div class="mt-4">
-    @Html.PagedListPager(Model, page => Url.Action("Photos", "Admin", new
+    @Html.PagedListPager(Model, page => Url.Action("Photos", "Admin", new // Pagination
     {
         page,
         sortOrder = ViewBag.SortOrder
@@ -68,12 +69,12 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model) // Display each photo as a row in the table
         {
             string color;
-            if (item.ImageStatus == RailGallery.Enums.Status.Pending) { color = "text-danger"; }
-            else if (item.ImageStatus == RailGallery.Enums.Status.Rejected) { color = "text-warning"; }
-            else { color = "text-success"; }
+            if (item.ImageStatus == RailGallery.Enums.Status.Pending) { color = "text-danger"; } // Set the text color to yellow if photo is pending
+            else if (item.ImageStatus == RailGallery.Enums.Status.Rejected) { color = "text-warning"; } // Set the color to red if photo is rejected
+            else { color = "text-success"; } // Set the color to green if photo is approved
             <tr>
                 <td class="text-center">
                     <a asp-controller="View" asp-action="View" asp-route-id="@item.ImageID"><img src="/api/Photo/@item.ImagePath/Thumbnail" height="100" class="shadow-lg" asp-append-version="true" /></a>
@@ -118,7 +119,7 @@
 </table>
 
 <div class="mt-4">
-    @Html.PagedListPager(Model, page => Url.Action("Photos", "Admin", new
+    @Html.PagedListPager(Model, page => Url.Action("Photos", "Admin", new // Pagination
     {
         page,
         sortOrder = ViewBag.SortOrder

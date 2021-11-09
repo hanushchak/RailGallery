@@ -10,7 +10,7 @@
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
 
-            @if (ViewBag.Lockout)
+            @if (ViewBag.Lockout) // If the account is currently locked out, check the Disabled radio button
             {
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="access" id="enabled" value="enabled">
@@ -25,7 +25,7 @@
                     </label>
                 </div>
             }
-            else
+            else // If the account is not locked out, check the Enabled radio button
             {
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="access" id="enabled" value="enabled" checked>
@@ -34,7 +34,7 @@
                     </label>
                 </div>
                 <div class="form-check mb-3">
-                    @if (ViewBag.username == "Moderator")
+                    @if (ViewBag.username == "Moderator") // If the username is moderator, disable the controls (prevents from disabling the master account)
                     {
                         <input class="form-check-input" type="radio" name="access" id="disabled" value="disabled" disabled>
                         <label class="form-check-label" for="disabled">Account disabled</label> <small class="text-secondary">(this account cannot be disabled)</small>

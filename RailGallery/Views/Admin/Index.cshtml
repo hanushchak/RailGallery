@@ -17,9 +17,9 @@
 
     <div class="col-5 border-left border-right">
         <h5 class="text-center">Recent Comments</h5>
-        @if (((IEnumerable<Comment>)Model.RecentComments).Any())
+        @if (((IEnumerable<Comment>)Model.RecentComments).Any()) // If there are any recent comments available to display
         {
-            @foreach (var comment in Model.RecentComments)
+            @foreach (var comment in Model.RecentComments) // Display each comment
             {
 
                 <div class="card border-primary mb-3">
@@ -40,7 +40,7 @@
                 </div>
             }
         }
-        else
+        else // If there are no comments to display, display the message
         {
             <p class="text-center mt-5 mb-5">No comments to display.</p>
         }
@@ -51,9 +51,9 @@
     <div class="col-5 text-center border-left">
         <h5>Pending Uploads</h5>
         <div class="d-flex justify-content-center flex-wrap">
-            @if (((IEnumerable<Image>)Model.PendingImages).Any())
+            @if (((IEnumerable<Image>)Model.PendingImages).Any()) // If there are any pending photos to review, display them
             {
-                @foreach (var image in Model.PendingImages)
+                @foreach (var image in Model.PendingImages) // Display pending photos
                 {
                     <div class="d-inline-flex align-self-start p-2">
                         <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
@@ -68,7 +68,7 @@
                     </div>
                 }
             }
-            else
+            else // If there are no pending photos to display, display the message
             {
                 <p class="text-center mt-5 mb-5">All photos have been reviewed.</p>
             }

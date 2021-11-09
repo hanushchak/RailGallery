@@ -3,15 +3,15 @@
 @inject UserManager<ApplicationUser> UserManager
 
 <ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
+    @if (SignInManager.IsSignedIn(User)) // Check if the user is signed in and siplay the greetings
     {
         <li class="nav-item">
             <a class="nav-link text-dark" asp-controller="Author" asp-action="Index" asp-route-username="@User.Identity.Name" title="User Profile">Hi @User.Identity.Name!</a>
         </li>
-        @if (User.IsInRole("Moderator"))
+        @if (User.IsInRole("Moderator")) // If the user is moderator, display the link to admin panel
         {
             <li class="nav-item">
-                <a class="nav-link text-danger" asp-area="" asp-controller="Admin" asp-action="Index">Admin Panel</a> @*TODO*@
+                <a class="nav-link text-danger" asp-area="" asp-controller="Admin" asp-action="Index">Admin Panel</a>
             </li>
         }
         <li class="nav-item">
@@ -23,7 +23,7 @@
             </form>
         </li>
     }
-    else
+    else // If the user is not authenticated, display sign up and log in links
     {
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>

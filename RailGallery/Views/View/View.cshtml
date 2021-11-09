@@ -11,11 +11,11 @@
 
     <div class="w-100 text-center mb-2">
 
-        @if (ViewBag.isPending)
+        @if (ViewBag.isPending) // If the photo has pending status, display the message that it hasn't been reviewed yet
         {
             <div class="alert alert-warning" role="alert">
                 This photo has not been reviewed yet.
-                @if (User.IsInRole("Moderator"))
+                @if (User.IsInRole("Moderator")) // If the current user is moderator, display the review options to Approve or Reject photo
                 {
                     <br />
                     <form asp-controller="Admin" asp-action="ReviewPhoto" method="post">
@@ -26,13 +26,13 @@
                 }
             </div>
         }
-        else if (ViewBag.isRejected)
+        else if (ViewBag.isRejected) // If the photo is rejected, display the message to inform the user
         {
             <div class="alert alert-danger" role="alert">
                 This photo has been rejected.
             </div>
         }
-        else if (ViewBag.isPrivate)
+        else if (ViewBag.isPrivate) // If the photo is private, display the message to inform the user
         {
             <div class="alert alert-warning" role="alert">
                 This photo is uploaded as <b>private</b> and only visible to you.
@@ -45,21 +45,23 @@
     <div class="col-md-6 offset-md-3">
         <div class="row mt-3 mb-3">
             <div class="col">
-                @if (Model.Albums.Count > 0)
+                @if (Model.Albums.Count > 0) // If the photo belongs to any albums, display them as links
                 {
-                    if (Model.Albums.Count == 1)
+                    if (Model.Albums.Count == 1) // If there is only one album the photo belongs to,
                     {
+                        // If the current user has the permission to view this album, display the album name
                         if (Model.Albums.ElementAt(0).AlbumPrivacy != Privacy.Private || User.Identity.Name == Model.Albums.ElementAt(0).ApplicationUser.UserName)
                         {
                             <div>Album: <a asp-controller="Search" asp-action="Results" asp-route-imagealbum="@Model.Albums.ElementAt(0).AlbumTitle" asp-route-imageauthor="@Model.Albums.ElementAt(0).ApplicationUser.UserName">@Model.Albums.ElementAt(0).AlbumTitle</a></div>
                         }
                     }
-                    else
+                    else // If the photo belongs to multiple albums, display them in a list
                     {
                         <div>Albums:</div>
                         <ul>
-                            @foreach (Album album in Model.Albums)
+                            @foreach (Album album in Model.Albums) // Iterate through the list of albums
                             {
+                                // If the current user has the permission to view this album, display the album name in the list
                                 if (album.AlbumPrivacy != Privacy.Private || User.Identity.Name == album.ApplicationUser.UserName)
                                 {
                                     <li><a asp-controller="Search" asp-action="Results" asp-route-imagealbum="@album.AlbumTitle" asp-route-imageauthor="@album.ApplicationUser.UserName">@album.AlbumTitle</a></li>
@@ -79,14 +81,14 @@
                 in <a asp-controller="Search" asp-action="Results" asp-route-imagelocation="@Model.Location.LocationName">@Html.DisplayFor(model => model.Location.LocationName)</a> on <a asp-controller="Search" asp-action="Results" asp-route-imagetakendate="@Model.ImageTakenDate.ToShortDateString()">@Html.DisplayFor(model => model.ImageTakenDate)</a>
             </div>
         </div>
-        @if (Model.ImagePrivacy != Privacy.Private && Model.ImageStatus == Status.Published && User.Identity.IsAuthenticated)
+        @if (Model.ImagePrivacy != Privacy.Private && Model.ImageStatus == Status.Published && User.Identity.IsAuthenticated) // If the photo is public and the user is authenticated, allow the user to add this photo to the Liked/Favorited collection
         {
             <form asp-controller="LikeFavorite" asp-action="LikeOrFavorite" method="post">
                 <input type="hidden" name="ImageID" value="@Model.ImageID" />
                 <div class="row mt-2 mb-2">
                     <div class="col text-center">
                         <button value="Like" name="action" type="submit" class="btn btn-link text-decoration-none">
-                            @if (ViewBag.isLiked)
+                            @if (ViewBag.isLiked) // Conditional rendering, displays a control based on whether the current user has already liked this photo
                             {
                                 <h5><i class="fas fa-heart"></i> Remove Like</h5>
                             }
@@ -98,7 +100,7 @@
                     </div>
                     <div class="col text-center">
                         <button value="Favorite" name="action" type="submit" class="btn btn-link text-decoration-none">
-                            @if (ViewBag.isFavorited)
+                            @if (ViewBag.isFavorited) // Conditional rendering, displays a control based on whether the current user has already favorited this photo
                             {
                                 <h5><i class="fas fa-star"></i> Remove from Favorites</h5>
                             }
@@ -125,7 +127,7 @@
                 @Html.DisplayFor(model => model.ImageDescription)
             </div>
         </div>
-        @if (User.IsInRole("Moderator"))
+        @if (User.IsInRole("Moderator")) // If the current user is a moderator, display links to edit and delete this photo
         {
             <div class="alert alert-warning text-center" role="alert">
                 <a asp-controller="Upload" asp-action="Edit" class="btn btn-info" asp-route-id="@Model.ImageID" role="button" aria-pressed="true">Edit Photo</a>&nbsp;&nbsp;
@@ -133,17 +135,18 @@
             </div>
         }
 
-        @if (Model.ImagePrivacy != Privacy.Private && Model.ImageStatus == Status.Published)
+        @if (Model.ImagePrivacy != Privacy.Private && Model.ImageStatus == Status.Published) // If the photo is not private and has status published, display the comments form
         {
             <partial name="_CommentForm" model="new Comment { Image = Model }" />
 
             <h5>Comments <span class="text-secondary">(@Model.Comments.Count)</span></h5>
             <hr />
-            @if (Model.Comments.Count > 0)
+            @if (Model.Comments.Count > 0) // If the photo has any comments, display them
             {
-                @foreach (var comment in Model.Comments)
+                @foreach (var comment in Model.Comments) // Iterate through the collection of comments to display them
                 {
-                    bool authorOrModerator = false;
+                    bool authorOrModerator = false; 
+                    // If the current user is the author of the comment or a moderator, set the boolean value to true
                     if (User.Identity.Name == comment.ApplicationUser.UserName || User.IsInRole("Moderator"))
                     {
                         authorOrModerator = true;
@@ -156,7 +159,7 @@
                                     <a asp-controller="Author" asp-action="Index" asp-route-username="@comment.ApplicationUser.UserName"><b>@comment.ApplicationUser.UserName</b></a> @if (User.Identity.Name == comment.ApplicationUser.UserName)
                                     {<span class='text-secondary font-weight-bold'>(You)</span>} on @comment.CommentDate
                                 </div>
-                                @if (authorOrModerator)
+                                @if (authorOrModerator) // If the current user is author of the comment or a moderator, display the remove link 
                                 {
                                     <div class="col-auto">
                                         <a asp-controller="Comments" asp-action="Delete" asp-route-id="@comment.CommentID">Remove</a>
@@ -171,7 +174,7 @@
                     </div>
                 }
             }
-            else
+            else // If there is no comments to display, display the message
             {
                 <p>This photo does not have any comments.</p>
             }

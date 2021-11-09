@@ -10,7 +10,7 @@
         <h4>@ViewData["Title"]</h4>
         <hr />
         <div class="justify-content-center">
-            @if (User.Identity.Name == Model.User.UserName)
+            @if (User.Identity.Name == Model.User.UserName) // Conditional rendering. The following HTML will render if the current user is the owner of the profile
             {
                 <a asp-area="Identity" asp-page="/Account/Manage/Index">Account Settings</a>
                 <br />
@@ -24,7 +24,7 @@
                 <br />
                 <a asp-controller="Upload" asp-action="History">Your Upload History</a>
                 <br />
-                @if (User.IsInRole("Moderator"))
+                @if (User.IsInRole("Moderator")) // Conditional rendering. The following HTML will render if the current user is Moderator
                 {
                     <a asp-controller="Admin" asp-action="" class="text-danger">Admin Panel</a>
                 }
@@ -41,25 +41,26 @@
         <h5 class="text-center">@Model.User.UserName's Recent Albums</h5>
         <div class="d-flex justify-content-center flex-wrap">
             @if (((IEnumerable<Album>)Model.RecentAlbums).Where(a => a.AlbumPrivacy == RailGallery.Enums.Privacy.Public).Any() || (((IEnumerable<Album>)Model.RecentAlbums).Where(a => a.AlbumPrivacy == RailGallery.Enums.Privacy.Private).Any() && User.Identity.Name == Model.User.UserName))
+                //The following will render if the user has any public albums or private albums of which they are the owner
             {
-                @foreach (Album album in Model.RecentAlbums)
+                @foreach (Album album in Model.RecentAlbums) // Iterate through all user's albums
                 {
                     string css = "";
                     bool albumPrivate = album.AlbumPrivacy.Equals(RailGallery.Enums.Privacy.Private);
-                    if (albumPrivate)
+                    if (albumPrivate) // f the album is private, set the background color to yellow
                     {
                         css = "alert-warning";
                     }
-                    if (!albumPrivate || (albumPrivate && User.Identity.Name == album.ApplicationUser.UserName))
+                    if (!albumPrivate || (albumPrivate && User.Identity.Name == album.ApplicationUser.UserName)) // If the album is public or the user is the owner of the album
                     {
                         <div class="d-inline-flex align-self-start p-2">
                             <a asp-controller="Search" asp-action="Results" asp-route-imagealbum="@album.AlbumTitle" asp-route-imageauthor="@Model.User.UserName" class="text-decoration-none">
                                 <div class="card btn-light @css" style="max-width: 302px;">
-                                    @if (album.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private && i.ImageStatus == Status.Published).Any())
+                                    @if (album.Images.Where(i => i.ImagePrivacy != RailGallery.Enums.Privacy.Private && i.ImageStatus == Status.Published).Any()) // If the album contains a published public photo(s), display the most recent one as the album thumbnail 
                                     {
                                         <img class="card-img-top" style="object-fit: cover; max-width: 300px; max-height: 200px; min-width:contain;" src="/api/Photo/@album.Images.Where(i=>i.ImagePrivacy != RailGallery.Enums.Privacy.Private && i.ImageStatus == Status.Published).ElementAt(0).ImagePath/Thumbnail" asp-append-version="true" alt="">
                                     }
-                                    else
+                                    else // If the album does not contain any published public photos, display the message
                                     {
                                         <div class="card-img-top" style="object-fit: cover; width: 300px; height: 200px; min-width: contain; background: repeating-linear-gradient( 45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px ), linear-gradient( to bottom, #eee, #999 );"><h6 class="mt-5">This album is empty or only contains private photos.</h6></div>
                                     }
@@ -70,7 +71,7 @@
                                     </div>
                                 </div>
                             </a>
-                            @if (User.Identity.Name == album.ApplicationUser.UserName || User.IsInRole("Moderator"))
+                            @if (User.Identity.Name == album.ApplicationUser.UserName || User.IsInRole("Moderator")) // If the current user is the author of the album or a moderator, display the edit link
                             {
                                 <a asp-controller="Albums" asp-action="Edit" asp-route-id="@album.AlbumID" class="position-absolute text-decoration-none shadow p-1 bg-white">Edit</a>
                             }
@@ -79,7 +80,7 @@
 
                 }
             }
-            else
+            else // If the user does not have any public albums, display the message
             {
                 <p class="text-center mb-5 mt-5">@Model.User.UserName  does not have any public albums yet.</p>
             }
@@ -92,9 +93,9 @@
     <div class="col-lg-5 col-md-12 text-center border-left">
         <h5>@Model.User.UserName's Recent Photos</h5>
         <div class="d-flex justify-content-center flex-wrap">
-            @if (((IEnumerable<Image>)Model.RecentPhotos).Any())
+            @if (((IEnumerable<Image>)Model.RecentPhotos).Any()) // If the user has any published photos,
             {
-                @foreach (var image in Model.RecentPhotos)
+                @foreach (var image in Model.RecentPhotos) // Iterate through the collection of photos and siplay them
                 {
                     <div class="d-inline-flex align-self-start p-2">
                         <a asp-controller="View" asp-action="View" asp-route-id="@image.ImageID" class="text-decoration-none">
@@ -109,7 +110,7 @@
                     </div>
                 }
             }
-            else
+            else // If the user does not have any public photos, display the message
             {
                 <p class="text-center mb-5 mt-5">@Model.User.UserName  does not have any public photos yet.</p>
             }

@@ -36,12 +36,12 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model) // Iterate through the collection of uploaded photos to display them
         {
             string color;
-            if (item.ImageStatus == RailGallery.Enums.Status.Pending) { color = "bg-warning"; }
-            else if (item.ImageStatus == RailGallery.Enums.Status.Rejected) { color = "bg-danger"; }
-            else { color = "bg-success"; }
+            if (item.ImageStatus == RailGallery.Enums.Status.Pending) { color = "bg-warning"; } // If the status of photo is pending, set the background color to yellow
+            else if (item.ImageStatus == RailGallery.Enums.Status.Rejected) { color = "bg-danger"; } // If the status of photo is rejected, set the background color to red
+            else { color = "bg-success"; } // If the status of photo is published, set the background color to green
             <tr class="@color text-white">
                 <td class="text-center">
                     <a asp-controller="View" asp-action="View" asp-route-id="@item.ImageID"><img src="/api/Photo/@item.ImagePath/Thumbnail" height="100" class="shadow-lg" asp-append-version="true" /></a>
