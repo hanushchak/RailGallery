@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RailGallery.Data;
 using RailGallery.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -81,7 +80,7 @@ namespace RailGallery.Controllers
         {
 
             // Retrieve the currently authenticated user
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
             // Delare a list that will store the current user's roles
             IList<string> currentUserRoles = null;
@@ -91,7 +90,7 @@ namespace RailGallery.Controllers
                 // Retireve the roles of the current user
                 currentUserRoles = await _userManager.GetRolesAsync(currentUser);
             }
-            
+
             // Boolean to indicate if the user is logged in at the moment
             bool userLoggedIn = currentUser != null;
 
@@ -99,7 +98,7 @@ namespace RailGallery.Controllers
             bool userIsModerator = userLoggedIn && currentUserRoles.Contains(Enums.Roles.Moderator.ToString());
 
             // Retrieve a list of images to search among
-            var model = _context.Images
+            IQueryable<Image>? model = _context.Images
             .Where(i => !((i.ImageStatus == Enums.Status.Pending) || (i.ImageStatus == Enums.Status.Rejected) || (i.ImagePrivacy == Enums.Privacy.Private && !(userLoggedIn && i.ApplicationUser.UserName.Equals(currentUser.UserName)))))
             .OrderByDescending(i => i.ImageUploadedDate)
             .Include(c => c.Comments)
@@ -112,7 +111,7 @@ namespace RailGallery.Controllers
             .AsNoTracking();
 
             // If the Image Title search string is received, filter the image list using this parameter
-            if (!String.IsNullOrEmpty(ImageTitle))
+            if (!string.IsNullOrEmpty(ImageTitle))
             {
                 // Filter the list of images using the receinved parameter
                 model = model.Where(i => i.ImageTitle.Contains(ImageTitle));
@@ -122,42 +121,42 @@ namespace RailGallery.Controllers
 
             // For the remaining IF statements below, please refer to the above description of the similar code ^
 
-            if (!String.IsNullOrEmpty(ImageAuthor))
+            if (!string.IsNullOrEmpty(ImageAuthor))
             {
                 model = model.Where(i => i.ApplicationUser.UserName.Contains(ImageAuthor));
                 ViewBag.ImageAuthor = ImageAuthor;
             }
-            if (!String.IsNullOrEmpty(ImageDescription))
+            if (!string.IsNullOrEmpty(ImageDescription))
             {
                 model = model.Where(i => i.ImageDescription.Contains(ImageDescription));
                 ViewBag.ImageDescription = ImageDescription;
             }
-            if (!String.IsNullOrEmpty(LocomotiveModel))
+            if (!string.IsNullOrEmpty(LocomotiveModel))
             {
                 model = model.Where(i => i.Locomotive.LocomotiveModel.Contains(LocomotiveModel));
                 ViewBag.LocomotiveModel = LocomotiveModel;
             }
-            if (!String.IsNullOrEmpty(LocomotiveBuilt))
+            if (!string.IsNullOrEmpty(LocomotiveBuilt))
             {
                 model = model.Where(i => i.Locomotive.LocomotiveBuilt.ToString().Contains(LocomotiveBuilt));
                 ViewBag.LocomotiveBuilt = LocomotiveBuilt;
             }
-            if (!String.IsNullOrEmpty(ImageAlbum))
+            if (!string.IsNullOrEmpty(ImageAlbum))
             {
                 model = model.Where(i => i.Albums.Where(a => a.AlbumTitle.Contains(ImageAlbum)).Any());
                 ViewBag.ImageAlbum = ImageAlbum;
             }
-            if (!String.IsNullOrEmpty(ImageCategory))
+            if (!string.IsNullOrEmpty(ImageCategory))
             {
                 model = model.Where(i => i.Category.CategoryTitle.Contains(ImageCategory));
                 ViewBag.ImageCategory = ImageCategory;
             }
-            if (!String.IsNullOrEmpty(ImageTakenDate))
+            if (!string.IsNullOrEmpty(ImageTakenDate))
             {
                 model = model.Where(i => i.ImageTakenDate.ToString().Contains(ImageTakenDate));
                 ViewBag.ImageTakenDate = ImageTakenDate;
             }
-            if (!String.IsNullOrEmpty(ImageLocation))
+            if (!string.IsNullOrEmpty(ImageLocation))
             {
                 model = model.Where(i => i.Location.LocationName.Contains(ImageLocation));
                 ViewBag.ImageLocation = ImageLocation;

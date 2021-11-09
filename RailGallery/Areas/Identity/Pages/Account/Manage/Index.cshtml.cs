@@ -36,7 +36,7 @@ namespace RailGallery.Areas.Identity.Pages.Account.Manage
 
         private async Task LoadAsync(ApplicationUser user)
         {
-            var userName = await _userManager.GetUserNameAsync(user);
+            string userName = await _userManager.GetUserNameAsync(user);
 
             Username = userName;
 
@@ -48,7 +48,7 @@ namespace RailGallery.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
+            ApplicationUser user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -60,7 +60,7 @@ namespace RailGallery.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
+            ApplicationUser user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -72,10 +72,10 @@ namespace RailGallery.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var userName = await _userManager.GetPhoneNumberAsync(user);
+            string userName = await _userManager.GetPhoneNumberAsync(user);
             if (Input.UserName != userName)
             {
-                var setUserNameResult = await _userManager.SetUserNameAsync(user, Input.UserName);
+                IdentityResult setUserNameResult = await _userManager.SetUserNameAsync(user, Input.UserName);
                 if (!setUserNameResult.Succeeded)
                 {
                     StatusMessage = "Unexpected error when trying to set new username.";

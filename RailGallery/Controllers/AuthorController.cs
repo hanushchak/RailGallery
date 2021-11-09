@@ -49,7 +49,7 @@ namespace RailGallery.Controllers
             }
 
             // Find the user in the database using the User Manager
-            var user = await _userManager.FindByNameAsync(username);
+            ApplicationUser user = await _userManager.FindByNameAsync(username);
 
             // If the user is not found, display the not found error
             if (user == null)

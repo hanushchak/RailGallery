@@ -43,7 +43,7 @@ namespace RailGallery.Data
         {
 
             // Define the moderator user
-            var moderatorUser = new ApplicationUser
+            ApplicationUser moderatorUser = new ApplicationUser
             {
                 UserName = "Moderator",
                 Email = "moderator@railgallery.org",
@@ -55,7 +55,7 @@ namespace RailGallery.Data
             if (userManager.Users.All(u => u.Id != moderatorUser.Id))
             {
                 // Make sure the email is not used by another user
-                var user = await userManager.FindByEmailAsync(moderatorUser.Email);
+                ApplicationUser user = await userManager.FindByEmailAsync(moderatorUser.Email);
                 // If the user with this email is not found, save the user in the database
                 if (user == null)
                 {
@@ -68,7 +68,7 @@ namespace RailGallery.Data
             }
 
             // Define the Basic User user
-            var basicUser = new ApplicationUser
+            ApplicationUser basicUser = new ApplicationUser
             {
                 UserName = "User",
                 Email = "user@railgallery.org",
@@ -80,7 +80,7 @@ namespace RailGallery.Data
             if (userManager.Users.All(u => u.Id != basicUser.Id))
             {
                 // Make sure the email is not used by another user
-                var user = await userManager.FindByEmailAsync(basicUser.Email);
+                ApplicationUser user = await userManager.FindByEmailAsync(basicUser.Email);
                 // If the user with this email is not found, save the user in the database
                 if (user == null)
                 {

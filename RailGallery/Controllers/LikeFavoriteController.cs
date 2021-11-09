@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RailGallery.Data;
 using RailGallery.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,10 +50,10 @@ namespace RailGallery.Controllers
             List<Image> images = null;
 
             // Retrieve the currently authenticated user
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            ApplicationUser currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
             // If the requested type are liked photos, retrieve the user's liked photos and store them in the list
-            if (String.IsNullOrEmpty(type) || type.ToLower() == "liked")
+            if (string.IsNullOrEmpty(type) || type.ToLower() == "liked")
             {
                 // The title to display on the view page
                 ViewBag.Title = "Photos You've Liked";
@@ -118,15 +117,15 @@ namespace RailGallery.Controllers
             string imageID = collection["ImageID"];
 
             // Retireve the currently authenticated user
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            ApplicationUser currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
-            if (String.IsNullOrEmpty(imageID) || currentUser == null)
+            if (string.IsNullOrEmpty(imageID) || currentUser == null)
             {
                 return Content("Error");
             }
 
             // Retrieve the Image object from the database
-            var image = await _context.Images.FirstOrDefaultAsync(m => m.ImageID.ToString() == imageID);
+            Image image = await _context.Images.FirstOrDefaultAsync(m => m.ImageID.ToString() == imageID);
 
             // If the submitted action is to like the image...
             if (collection["action"] == "Like")
@@ -135,7 +134,7 @@ namespace RailGallery.Controllers
                 if (_context.Likes.Any(l => l.ApplicationUser.UserName == currentUser.UserName && l.Image.ImageID == image.ImageID))
                 {
                     // Find the like object in the database for this user and image
-                    var existingLike = await _context.Likes.FirstOrDefaultAsync(l => l.ApplicationUser.UserName == currentUser.UserName && l.Image.ImageID == image.ImageID);
+                    Like existingLike = await _context.Likes.FirstOrDefaultAsync(l => l.ApplicationUser.UserName == currentUser.UserName && l.Image.ImageID == image.ImageID);
                     // Remove the like object from the database
                     _context.Likes.Remove(existingLike);
                     await _context.SaveChangesAsync();
@@ -166,7 +165,7 @@ namespace RailGallery.Controllers
                 if (_context.Favorites.Any(f => f.ApplicationUser.UserName == currentUser.UserName && f.Image.ImageID == image.ImageID))
                 {
                     // Find the Favorite object in the database for this user and image
-                    var existingFavorite = await _context.Favorites.FirstOrDefaultAsync(f => f.ApplicationUser.UserName == currentUser.UserName && f.Image.ImageID == image.ImageID);
+                    Favorite existingFavorite = await _context.Favorites.FirstOrDefaultAsync(f => f.ApplicationUser.UserName == currentUser.UserName && f.Image.ImageID == image.ImageID);
                     // Remove the like object from the database
                     _context.Favorites.Remove(existingFavorite);
                     await _context.SaveChangesAsync();

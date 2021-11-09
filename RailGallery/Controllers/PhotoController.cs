@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RailGallery.Data;
-using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -52,7 +51,7 @@ namespace RailGallery.Controllers
             }
 
             // Retrieve the image that references the requested path
-            var image = await _context.Images
+            Models.Image image = await _context.Images
                 .FirstOrDefaultAsync(m => m.ImagePath == ImagePath);
 
             // If the image is not found in the database, return the Not Found error
@@ -68,7 +67,7 @@ namespace RailGallery.Controllers
             string filePath = Path.Combine(wwwRootPath, "photo", image.ImagePath);
 
             // Create an image file and read the image from the file system
-            Byte[] imageFile = System.IO.File.ReadAllBytes(filePath);
+            byte[] imageFile = System.IO.File.ReadAllBytes(filePath);
 
             // Send back the image jpg file
             return File(imageFile, "image/jpeg");
@@ -91,7 +90,7 @@ namespace RailGallery.Controllers
             }
 
             // Retrieve the image that references the requested path
-            var image = await _context.Images
+            Models.Image image = await _context.Images
                 .FirstOrDefaultAsync(m => m.ImagePath == ImagePath);
 
             // If the image is not found in the database, return the Not Found error
@@ -107,7 +106,7 @@ namespace RailGallery.Controllers
             string filePath = Path.Combine(wwwRootPath, "photo/thumbnail", "s_" + image.ImagePath);
 
             // Create an image file and read the image from the file system
-            Byte[] imageFile = System.IO.File.ReadAllBytes(filePath);
+            byte[] imageFile = System.IO.File.ReadAllBytes(filePath);
 
             // Send back the image jpg file
             return File(imageFile, "image/jpeg");

@@ -52,7 +52,7 @@ namespace RailGallery.Controllers
         public async Task<IActionResult> Index()
         {
             // Retrieve the currently authenticated user
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            ApplicationUser currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
             // Retrieve the categories to display in the upload form select list
             ViewBag.Categories = await _context.Categories.Select(c =>
@@ -99,10 +99,10 @@ namespace RailGallery.Controllers
         public async Task<IActionResult> History()
         {
             // Retrieve the currently authenticated user
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            ApplicationUser user = await _userManager.GetUserAsync(HttpContext.User);
 
             // Only retrieve the uploaded images that belong to current user
-            var history = await _context.Images.Where(i => i.ApplicationUser.UserName.Equals(user.UserName)).OrderByDescending(i => i.ImageUploadedDate).AsNoTracking().ToListAsync();
+            System.Collections.Generic.List<Image> history = await _context.Images.Where(i => i.ApplicationUser.UserName.Equals(user.UserName)).OrderByDescending(i => i.ImageUploadedDate).AsNoTracking().ToListAsync();
 
             // Redirect to the Upload History view
             return View(history);
@@ -249,8 +249,8 @@ namespace RailGallery.Controllers
                 image.ImagePath = uniqueFileName;
 
                 // Get the currently authenticated user and their roles
-                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                var currentUserRoles = await _userManager.GetRolesAsync(currentUser);
+                ApplicationUser currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                System.Collections.Generic.IList<string> currentUserRoles = await _userManager.GetRolesAsync(currentUser);
 
                 // If current user is Moderator or the image is private, publish the poto without moderation
                 if (currentUserRoles.Contains(Enums.Roles.Moderator.ToString()) || image.ImagePrivacy == Enums.Privacy.Private)
@@ -289,7 +289,7 @@ namespace RailGallery.Controllers
             }
 
             // Retrieve the image object from the database
-            var image = await _context.Images.FindAsync(id);
+            Image image = await _context.Images.FindAsync(id);
 
             if (image == null)
             {
@@ -325,7 +325,7 @@ namespace RailGallery.Controllers
             Privacy newPrivacy = image.ImagePrivacy;
 
             // Retrieve the current image object from the database
-            var oldImage = await _context.Images.FindAsync(id);
+            Image oldImage = await _context.Images.FindAsync(id);
 
             // Change the fields being updated in the old image object
             if (oldImage.ImageTitle != newTitle) { oldImage.ImageTitle = newTitle; }
@@ -372,9 +372,9 @@ namespace RailGallery.Controllers
             }
 
             // Retrieve the image object from the database
-            var image = await _context.Images.Include(c => c.ApplicationUser)
+            Image image = await _context.Images.Include(c => c.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.ImageID == id);
-           
+
             if (image == null)
             {
                 return NotFound();
@@ -396,7 +396,7 @@ namespace RailGallery.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             // Retrieve the image object to be deleted
-            var image = await _context.Images.FindAsync(id);
+            Image image = await _context.Images.FindAsync(id);
 
             // Store the path of the image file
             string imagePath = image.ImagePath;

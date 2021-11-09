@@ -49,7 +49,7 @@ namespace RailGallery.Controllers
             DateTime currentTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
 
             // If the requested time range is 24 hours, retrieve the most viewed images in the past 24 hours from the current date
-            if (String.IsNullOrEmpty(time) || time.ToLower() == "24hours")
+            if (string.IsNullOrEmpty(time) || time.ToLower() == "24hours")
             {
                 images = await _context.Images
                 .Where(i => i.ImageStatus == Enums.Status.Published && i.ImagePrivacy != Enums.Privacy.Private)

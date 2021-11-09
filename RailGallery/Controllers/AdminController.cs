@@ -89,12 +89,12 @@ namespace RailGallery.Controllers
         {
             string imageID = collection["ImageID"];
 
-            if (String.IsNullOrEmpty(imageID))
+            if (string.IsNullOrEmpty(imageID))
             {
                 return Content("Error");
             }
 
-            var image = await _context.Images.FirstOrDefaultAsync(m => m.ImageID.ToString() == imageID);
+            Image image = await _context.Images.FirstOrDefaultAsync(m => m.ImageID.ToString() == imageID);
 
             // If the submitted decision is to reject the photo - change the photo status to Rejected
             if (collection["decision"] == "Reject")
@@ -135,7 +135,7 @@ namespace RailGallery.Controllers
             ViewBag.SortOrder = sortOrder;
 
             // Ternary operators to store sort order in the view bag that corresponds to the received GET parameter
-            ViewBag.UsernameSort = String.IsNullOrEmpty(sortOrder) ? "username_desc" : "";
+            ViewBag.UsernameSort = string.IsNullOrEmpty(sortOrder) ? "username_desc" : "";
             ViewBag.EmailSort = sortOrder == "Email" ? "email_desc" : "Email";
             ViewBag.RegisteredSort = sortOrder == "Registered" ? "registered_desc" : "Registered";
             ViewBag.LastActiveSort = sortOrder == "LastActive" ? "lastactive_desc" : "LastActive";
@@ -143,10 +143,10 @@ namespace RailGallery.Controllers
             ViewBag.NumberCommentsSort = sortOrder == "NumberComments" ? "numbercomments_desc" : "NumberComments";
 
             // Get list of users
-            var users = await _userManager.Users.Include(u => u.Images).Include(u => u.Comments).ToListAsync();
+            List<ApplicationUser> users = await _userManager.Users.Include(u => u.Images).Include(u => u.Comments).ToListAsync();
 
             // Filter the list of users if the GET filter parameter is not empty
-            if (!String.IsNullOrEmpty(username))
+            if (!string.IsNullOrEmpty(username))
             {
                 users = users.Where(u => u.UserName.Contains(username) || u.Email.Contains(username)).ToList();
             }
@@ -194,7 +194,7 @@ namespace RailGallery.Controllers
             ViewBag.username = username; // Store username in the view bag to reference in the UI
 
             // Retrieve the user
-            var user = await _userManager.FindByNameAsync(username);
+            ApplicationUser user = await _userManager.FindByNameAsync(username);
 
             if (user == null)
             {
@@ -202,15 +202,15 @@ namespace RailGallery.Controllers
             }
 
             // Create a viewmodel to display the roles
-            var model = new List<UserRolesViewModel>();
+            List<UserRolesViewModel> model = new List<UserRolesViewModel>();
 
             // Get all roles
-            var roles = await _roleManager.Roles.ToListAsync();
+            List<IdentityRole> roles = await _roleManager.Roles.ToListAsync();
 
             // Iterate through all roles and add them to a list to display in the UI <select> component
-            foreach (var role in roles)
+            foreach (IdentityRole role in roles)
             {
-                var userRolesViewModel = new UserRolesViewModel
+                UserRolesViewModel userRolesViewModel = new UserRolesViewModel
                 {
                     RoleId = role.Id,
                     RoleName = role.Name
@@ -245,20 +245,20 @@ namespace RailGallery.Controllers
                 return NotFound();
             }
 
-            var user = await _userManager.FindByNameAsync(username);
-            
+            ApplicationUser user = await _userManager.FindByNameAsync(username);
+
             if (user == null)
             {
                 return NotFound();
-            
+
             }
 
             // Retrieve the user's current roles
-            var roles = await _userManager.GetRolesAsync(user);
+            IList<string> roles = await _userManager.GetRolesAsync(user);
 
             // Remove the user's current roles
-            var result = await _userManager.RemoveFromRolesAsync(user, roles);
-            
+            IdentityResult result = await _userManager.RemoveFromRolesAsync(user, roles);
+
             // If removal fails, display the error message
             if (!result.Succeeded)
             {
@@ -268,7 +268,7 @@ namespace RailGallery.Controllers
 
             // Add new selected roles to the user
             result = await _userManager.AddToRolesAsync(user, model.Where(x => x.Selected).Select(y => y.RoleName));
-            
+
             // If update fails, display the error message
             if (!result.Succeeded)
             {
@@ -297,7 +297,7 @@ namespace RailGallery.Controllers
             // Store the username in the view bag to reference in the UI
             ViewBag.username = username;
 
-            var user = await _userManager.FindByNameAsync(username);
+            ApplicationUser user = await _userManager.FindByNameAsync(username);
 
             if (user == null)
             {
@@ -339,7 +339,7 @@ namespace RailGallery.Controllers
                 return NotFound();
             }
 
-            var user = await _userManager.FindByNameAsync(username);
+            ApplicationUser user = await _userManager.FindByNameAsync(username);
 
             if (user == null)
             {
@@ -377,7 +377,7 @@ namespace RailGallery.Controllers
             ViewBag.SortOrder = sortOrder;
 
             // Ternary operators to store sort order in the view bag that corresponds to the received GET parameter
-            ViewBag.DateUploadedSort = String.IsNullOrEmpty(sortOrder) ? "DateUploaded_desc" : "";
+            ViewBag.DateUploadedSort = string.IsNullOrEmpty(sortOrder) ? "DateUploaded_desc" : "";
             ViewBag.DateTakenSort = sortOrder == "DateTaken" ? "DateTaken_desc" : "DateTaken";
             ViewBag.TitleSort = sortOrder == "Title" ? "Title_desc" : "Title";
             ViewBag.PrivacySort = sortOrder == "Privacy" ? "Privacy_desc" : "Privacy";
@@ -389,7 +389,7 @@ namespace RailGallery.Controllers
             ViewBag.ViewsSort = sortOrder == "Views" ? "Views_desc" : "Views";
 
             // Retrieve all photos
-            var photos = await _context.Images.Include(u => u.ApplicationUser).Include(u => u.Comments).Include(u => u.ImageViews).ToListAsync();
+            List<Image> photos = await _context.Images.Include(u => u.ApplicationUser).Include(u => u.Comments).Include(u => u.ImageViews).ToListAsync();
 
             // Retrieve current time in EST timezone
             DateTime currentTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));

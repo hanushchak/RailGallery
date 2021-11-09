@@ -44,7 +44,7 @@ namespace RailGallery.Controllers
         public async Task<IActionResult> View(int? id)
         {
             // Try to retrieve the currently athenticated user
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            ApplicationUser currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
             // Retrieve a list of user roles of the current user if authenticated
             IList<string> currentUserRoles = null;
@@ -59,7 +59,7 @@ namespace RailGallery.Controllers
             }
 
             // Retrieve the requested image object and all corresponding objects that are related to this image
-            var image = await _context.Images
+            Image image = await _context.Images
                 .Include(m => m.Comments.OrderBy(c => c.CommentDate)).ThenInclude(c => c.ApplicationUser)
                 .Include(m => m.Likes)
                 .Include(m => m.Albums).ThenInclude(u => u.ApplicationUser)

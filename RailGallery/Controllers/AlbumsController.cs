@@ -51,7 +51,7 @@ namespace RailGallery.Controllers
             }
 
             // Retrieve the user
-            var user = await _userManager.FindByNameAsync(username);
+            ApplicationUser user = await _userManager.FindByNameAsync(username);
 
             if (user == null)
             {
@@ -62,7 +62,7 @@ namespace RailGallery.Controllers
             ViewBag.UserName = user.UserName;
 
             // Retrieve the albums that belong to the user
-            var albums = await _context.Albums.Where(a => a.ApplicationUser == user).Include(a => a.ApplicationUser).Include(a => a.Images.OrderByDescending(i => i.ImageID)).ToListAsync();
+            List<Album> albums = await _context.Albums.Where(a => a.ApplicationUser == user).Include(a => a.ApplicationUser).Include(a => a.Images.OrderByDescending(i => i.ImageID)).ToListAsync();
 
             // Size of the list on one page
             int pageSize = 100;
@@ -128,7 +128,7 @@ namespace RailGallery.Controllers
             }
 
             // Retrieve the currently authenticated user
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            ApplicationUser currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
             if (currentUser == null)
             {
@@ -139,7 +139,7 @@ namespace RailGallery.Controllers
             IList<string> currentUserRoles = await _userManager.GetRolesAsync(currentUser);
 
             // Retrieve the album to edit
-            var album = await _context.Albums.Include(a => a.Images.OrderByDescending(i => i.ImageID)).Include(a => a.ApplicationUser).FirstAsync(a => a.AlbumID == id);
+            Album album = await _context.Albums.Include(a => a.Images.OrderByDescending(i => i.ImageID)).Include(a => a.ApplicationUser).FirstAsync(a => a.AlbumID == id);
 
             // In case retrieval fails - display NotFound error
             if (album == null || currentUser == null || (album.ApplicationUser.UserName != currentUser.UserName && !currentUserRoles.Contains(Enums.Roles.Moderator.ToString())))
@@ -184,14 +184,14 @@ namespace RailGallery.Controllers
                 string username = (await _context.Albums.Include(a => a.ApplicationUser).AsNoTracking().FirstAsync(a => a.AlbumID == id)).ApplicationUser.UserName;
 
                 // Retrieve the album that will be updated
-                var albumToUpdate = await _context.Albums.Include(a => a.Images).FirstAsync(a => a.AlbumID == id);
+                Album albumToUpdate = await _context.Albums.Include(a => a.Images).FirstAsync(a => a.AlbumID == id);
 
                 // Update the values in the retrieved album object with the new values
                 albumToUpdate.AlbumTitle = album.AlbumTitle;
                 albumToUpdate.AlbumPrivacy = album.AlbumPrivacy;
 
                 // Retrieve all images that belong to the current user
-                var images = await _context.Images.Include(i => i.ApplicationUser).Where(i => i.ApplicationUser.UserName == username).ToListAsync();
+                List<Image> images = await _context.Images.Include(i => i.ApplicationUser).Where(i => i.ApplicationUser.UserName == username).ToListAsync();
 
                 // Loop through all of the images and remove them from the album
                 foreach (Image image in images)
@@ -245,7 +245,7 @@ namespace RailGallery.Controllers
             }
 
             // Retrieve the currently authenticated user
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            ApplicationUser currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
             if (currentUser == null)
             {
@@ -256,7 +256,7 @@ namespace RailGallery.Controllers
             IList<string> currentUserRoles = await _userManager.GetRolesAsync(currentUser);
 
             // Retrieve the album object to be deleted
-            var album = await _context.Albums.Include(a => a.Images).Include(a => a.ApplicationUser).FirstAsync(a => a.AlbumID == id);
+            Album album = await _context.Albums.Include(a => a.Images).Include(a => a.ApplicationUser).FirstAsync(a => a.AlbumID == id);
 
             // If any of the above retrievals fails - display Not Found error message.
             if (album == null || currentUser == null || (album.ApplicationUser.UserName != currentUser.UserName && !currentUserRoles.Contains(Enums.Roles.Moderator.ToString())))
@@ -280,7 +280,7 @@ namespace RailGallery.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             // Retrieve the album object to be deleted
-            var album = await _context.Albums.FindAsync(id);
+            Album album = await _context.Albums.FindAsync(id);
 
             // Retrieve the album author's username
             string username = (await _context.Albums.Include(a => a.ApplicationUser).AsNoTracking().FirstAsync(a => a.AlbumID == id)).ApplicationUser.UserName;

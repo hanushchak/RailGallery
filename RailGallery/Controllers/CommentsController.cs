@@ -6,7 +6,6 @@ using RailGallery.Data;
 using RailGallery.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace RailGallery.Controllers
@@ -50,10 +49,10 @@ namespace RailGallery.Controllers
             {
                 // Retrieve the photo to which the comment is posted and reference it in the new comment object
                 comment.Image = await _context.Images.FirstOrDefaultAsync(i => i.ImageID == Convert.ToInt32(comment.CommentImageID));
-                
+
                 // Retrieve the currently authenticated user
-                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                
+                ApplicationUser currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
                 // If the user retrieval fails - display error
                 if (currentUser == null)
                 {
@@ -65,7 +64,7 @@ namespace RailGallery.Controllers
                 }
 
                 // Retrieve the image to which the comment is added
-                var image = await _context.Images.FirstOrDefaultAsync(m => m.ImageID == comment.Image.ImageID);
+                Image image = await _context.Images.FirstOrDefaultAsync(m => m.ImageID == comment.Image.ImageID);
 
                 // Retrieve the photo to which the comment is posted and reference it in the new comment object
                 if (image == null)
@@ -104,7 +103,7 @@ namespace RailGallery.Controllers
             }
 
             // Retrieve the comment to be deleted and its metadata
-            var comment = await _context.Comments
+            Comment comment = await _context.Comments
                 .Include(c => c.Image)
                 .Include(c => c.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.CommentID == id);
@@ -115,7 +114,7 @@ namespace RailGallery.Controllers
             }
 
             // Retrieve the currently authentcated user
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            ApplicationUser currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
             // Declare a list to store user roles
             IList<string> currentUserRoles = null;
@@ -149,7 +148,7 @@ namespace RailGallery.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             // Retrieve the comment to be deleted
-            var comment = await _context.Comments.Include(c => c.Image).FirstAsync(m => m.CommentID == id);
+            Comment comment = await _context.Comments.Include(c => c.Image).FirstAsync(m => m.CommentID == id);
 
             // Remove the comment from the database
             _context.Comments.Remove(comment);

@@ -53,7 +53,7 @@ namespace RailGallery
                 app.UseHsts();
             }
 
-            var cultureInfo = new CultureInfo("en-CA");
+            CultureInfo cultureInfo = new CultureInfo("en-CA");
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
