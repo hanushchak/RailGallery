@@ -6,13 +6,23 @@ using System;
 
 namespace RailGallery.Data
 {
+    /// <summary>
+    /// DB context class that allows interaction with the database and converts the database data to model objects.
+    /// 
+    /// Author: Maksym Hanushchak
+    /// </summary>
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        /// <summary>
+        /// Register default DB context options.
+        /// </summary>
+        /// <param name="options">DB context options</param>
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
+        // Register model classes as DB Sets
         public DbSet<Image> Images { get; set; }
         public DbSet<Album> Albums { get; set; }
         public DbSet<Comment> Comments { get; set; }
@@ -23,10 +33,15 @@ namespace RailGallery.Data
         public DbSet<Location> Locations { get; set; }
         public DbSet<ImageView> ImageViews { get; set; }
 
+        /// <summary>
+        /// Pre-populate the database with data on the start of the application.
+        /// </summary>
+        /// <param name="modelBuilder">Model Builder reference.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            // Populate the Category table
             modelBuilder.Entity<Category>().HasData(
                     new Category { CategoryID = 1, CategoryTitle = "Night Shots" },
                     new Category { CategoryID = 2, CategoryTitle = "Golden Hour" },
@@ -38,6 +53,7 @@ namespace RailGallery.Data
                     new Category { CategoryID = 8, CategoryTitle = "Bridges" }
             );
 
+            // Populate the Locomotive table
             modelBuilder.Entity<Locomotive>().HasData(
                     new Locomotive { LocomotiveID = 1, LocomotiveModel = "Steam 4-6-0", LocomotiveBuilt = new DateTime(1964, 8, 14) },
                     new Locomotive { LocomotiveID = 2, LocomotiveModel = "GE ES44AC", LocomotiveBuilt = new DateTime(1997, 3, 9) },
@@ -49,6 +65,7 @@ namespace RailGallery.Data
                     new Locomotive { LocomotiveID = 8, LocomotiveModel = "AMT 1325", LocomotiveBuilt = new DateTime(2009, 6, 20) }
             );
 
+            // Populate the location table
             modelBuilder.Entity<Location>().HasData(
                     new Location { LocationID = 1, LocationName = "Ontario, Canada" },
                     new Location { LocationID = 2, LocationName = "New York, USA" },
@@ -60,6 +77,7 @@ namespace RailGallery.Data
                     new Location { LocationID = 8, LocationName = "Alberta, Canada" }
             );
 
+            // Rename Identity tables to make them more readable
             modelBuilder.Entity<ApplicationUser>(entity =>
             {
                 entity.ToTable(name: "Users");
